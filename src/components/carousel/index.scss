@@ -1,0 +1,28 @@
+
+  .carousel {
+    padding-top: 80px;
+    width: 100%;
+    height: 100%;
+  
+  
+  .swiper-slide {
+    background: #ffffff;
+    height: 80dvh;
+  }
+  
+  .swiper-slide img {
+    padding: 50px 50px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+.carousel {
+
+  &.multi{
+    img{
+      height: 300px;
+    }
+  }
+} 
