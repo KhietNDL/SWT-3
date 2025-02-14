@@ -199,19 +199,6 @@ const RegistrationForm: React.FC = () => {
                   {errors.phone && <p className="error-message">{errors.phone}</p>}
                 </div>
 
-                <div className="form-group">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      name="acceptTerms"
-                      checked={formData.acceptTerms}
-                      onChange={handleChange}
-                    />
-                    Tôi đồng ý với điều khoản và điều kiện
-                  </label>
-                  {errors.acceptTerms && <p className="error-message">{errors.acceptTerms}</p>}
-                </div>
-
                 <button type="submit" disabled={isLoading} className="submit-button">
                   {isLoading ? "Đang đăng ký..." : "Đăng ký"}
                 </button>
