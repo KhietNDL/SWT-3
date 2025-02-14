@@ -1,0 +1,44 @@
+.doctor-carousel {
+  .swiper-slide {
+    background: #4caf50;
+    height: 100dvh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .doctor-card {
+    display: flex;
+    gap: 20px;
+    color: white;
+    align-items: center;
+    .doctor-image {
+      height: 80dvh;
+      width: 80dvh;
+      aspect-ratio: 1/1;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .doctor-info {
+      h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .title {
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+
+      .description {
+        font-size: 14px;
+      }
+      .doctor-button {
+        margin-top: 20px;
+        border-radius: 20px;
+      }
+    }
+  }
+}
