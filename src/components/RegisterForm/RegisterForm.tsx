@@ -11,7 +11,6 @@ interface FormData {
   password: string;
   role: string;
   phone: string;
-  acceptTerms: boolean;
 }
 
 interface FormErrors {
@@ -20,7 +19,6 @@ interface FormErrors {
   password?: string;
   role?: string;
   phone?: string;
-  acceptTerms?: string;
 }
 
 const RegistrationForm: React.FC = () => {
@@ -30,7 +28,6 @@ const RegistrationForm: React.FC = () => {
     password: "",
     role: "",
     phone: "",
-    acceptTerms: false
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -67,9 +64,6 @@ const RegistrationForm: React.FC = () => {
     if (!formData.phone) {
       newErrors.phone = "Vui lòng nhập số điện thoại";
     }
-    if (!formData.acceptTerms) {
-      newErrors.acceptTerms = "Bạn phải đồng ý với điều khoản và điều kiện";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -90,7 +84,6 @@ const RegistrationForm: React.FC = () => {
           password: "",
           role: "",
           phone: "",
-          acceptTerms: false
         });
       } catch (error) {
         alert("Registration failed. Please try again.");
