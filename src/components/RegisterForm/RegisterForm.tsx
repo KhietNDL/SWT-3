@@ -3,6 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import "./RegisterForm.scss";
+import loginBg from "../../images/login.jpg";
 
 // Định nghĩa kiểu dữ liệu cho form
 interface FormData {
@@ -49,7 +50,7 @@ const RegistrationForm: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!/^[A-Za-z\s]{2,}$/.test(formData.fullName)) {
+    if (!/^[A-Za-zÀ-ỹ\s]{2,}$/.test(formData.fullName)) {
       newErrors.fullName = "Tên chỉ được chứa chữ cái và ít nhất 2 ký tự";
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -109,7 +110,12 @@ const RegistrationForm: React.FC = () => {
   return (
     <div className="registration-container">
       <div className="registration-wrapper">
-        <div className="registration-background"></div>
+        <div className="registration-background">
+        <img
+          src={loginBg}
+          alt="Supportive Psychology"
+        />
+        </div>
         <div className="registration-form-container">
           <div className="registration-form-wrapper">
             <div className="registration-form-content">
@@ -204,4 +210,4 @@ const RegistrationForm: React.FC = () => {
   );
 };
 
-export default RegistrationForm;
+      export default RegistrationForm;
