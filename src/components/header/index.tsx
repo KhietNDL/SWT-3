@@ -41,10 +41,22 @@ function Header() {
             <Link to="/dat-lich">Đặt lịch</Link>
             <ul className="dropdown-content">
               <li>
-                <Link to="/dat-lich/1">Đặt lịch 1</Link>
+                <Link to="/dat-lich/1">Lo âu, trầm cảm, stress</Link>
               </li>
               <li>
-                <Link to="/dat-lich/2">Đặt lịch 2</Link>
+                <Link to="/dat-lich/2">Rối loạn cảm xúc</Link>
+              </li>
+              <li>
+                <Link to="/dat-lich/1">Tăng động giảm chú ý</Link>
+              </li>
+              <li>
+                <Link to="/dat-lich/2">Áp lực học đường</Link>
+              </li>
+              <li>
+                <Link to="/dat-lich/1">Rối loạn nhân cách</Link>
+              </li>
+              <li>
+                <Link to="/dat-lich/2">Rối loạn hưng trầm cảm</Link>
               </li>
             </ul>
           </li>
@@ -65,9 +77,11 @@ function Header() {
         </ul>
       </nav>
 
-      <Button type="primary" className="login-button">
-        Đăng nhập
-      </Button>
+      <Link to="/login">
+        <Button type="primary" className="login-button">
+          Đăng nhập
+        </Button>
+      </Link>
     </div>
   );
 }

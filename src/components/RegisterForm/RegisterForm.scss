@@ -1,0 +1,214 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.registration-container {
+  min-height: 100vh;
+  width: 100vw;
+  background: url("../assets/background/windows-11-floating-3840x2160-20797.png") no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registration-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 450px; // Đảm bảo form không quá rộng
+  margin: 0 auto;
+}
+
+.registration-form-container {
+  backdrop-filter: blur(10px);
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  width: 100%;
+}
+
+.registration-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../images/login.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.registration-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 1rem;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-input {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.input-error {
+  border-color: #ef4444;
+}
+
+.error-message {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 0.25rem;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle-button {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background-color: #2563eb;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.social-login {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.social-login-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+
+  .social-button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      background-color: #f9fafb;
+    }
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 480px) {
+  .registration-form-container {
+    padding: 1rem;
+  }
+
+  .registration-title {
+    font-size: 1.25rem;
+  }
+
+  .submit-button {
+    font-size: 0.875rem;
+  }
+
+  .social-login-buttons {
+    flex-direction: column;
+  }
+}
+
+.password-strength {
+  margin-top: 5px;
+
+  .strength-meter {
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 5px;
+
+    &.strength-1 {
+      width: 25%;
+      background: #ff4d4d;
+    }
+
+    &.strength-2 {
+      width: 50%;
+      background: #ffa64d;
+    }
+
+    &.strength-3 {
+      width: 75%;
+      background: #99cc33;
+    }
+
+    &.strength-4 {
+      width: 100%;
+      background: #33cc33;
+    }
+  }
+
+  span {
+    font-size: 12px;
+    color: #666;
+  }
+}
