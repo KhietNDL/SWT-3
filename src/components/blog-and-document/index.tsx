@@ -15,8 +15,8 @@ function BlogAndDocument() {
     setPoster(response.data);
   };
   useEffect(() => {
-    fetchMovies();
-  }, []);
+    fetchMovies(); 
+  }, []); 
   return (
     <div className="blog-document">
       <div className="blog-document__container">
