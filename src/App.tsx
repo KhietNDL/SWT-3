@@ -4,6 +4,8 @@ import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register/register";
 import "./main.css"
 import Info from "./pages/info-user";
+import Booking from "./pages/Booking";
+import BookingDetail from "./pages/Booking-detail";
 
 function MG() {
   const router = createBrowserRouter([
@@ -22,7 +24,16 @@ function MG() {
     {
       path: "/register",
       element: <RegisterPage/>
+    },
+    {
+      path: "/booking",
+      element: <Booking/>
+    },
+    {
+      path: "/booking-detail/:id",
+      element: <BookingDetail/>
     }
+
   ]);
   return (
     <RouterProvider router={router} />

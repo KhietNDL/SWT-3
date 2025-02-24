@@ -1,19 +1,75 @@
+.title-doctor{
+  padding-top: 20px;
+  background-color: #A1C73E;
+  display: block;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+}
 .doctor-carousel {
+  &.multi {
+    .swiper-slide {
+      height: 400px;
+      padding-bottom: 40px;
+
+      .doctor-card {
+        flex-direction: column;
+        text-align: center;
+        background: white;
+        border-radius: 8px;
+
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        .doctor-image {
+          width: 350px;
+          height: 200px;
+        }
+
+        .doctor-info {
+          color: #333;
+
+          h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+          }
+
+          .title {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #666;
+          }
+
+          .info {
+            font-size: 13px;
+          }
+
+          .doctor-button {
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  // Styles for single slide view
   .swiper-slide {
-    background: #4caf50;
-    height: 100dvh;
+    background: #A1C73E;
+    height: 70dvh;
     padding: 20px;
     display: flex;
     justify-content: center;
   }
+
   .doctor-card {
     display: flex;
     gap: 20px;
     color: white;
     align-items: center;
     .doctor-image {
-      height: 80dvh;
-      width: 80dvh;
+      height: 60dvh;
+      width: 60dvh;
       aspect-ratio: 1/1;
       img {
         width: 100%;
