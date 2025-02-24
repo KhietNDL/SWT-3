@@ -1,8 +1,10 @@
-.footer{
+.footer {
     background-color: #1e6ba8;
     color: white;
     padding: 40px 40px;
     width: 100%;
+    margin-top: auto;
+
     &__content {
         max-width: 1200px;
         margin: 0 auto;
@@ -49,12 +51,10 @@
                 }
             }
         }
+        
         &__icon {
             display: flex;
             flex-direction: column;
-            
         }
     }
-
 }
-

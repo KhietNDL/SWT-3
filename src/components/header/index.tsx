@@ -28,14 +28,14 @@ function Header() {
           </li>
           <li className="dropdown">
             <Link to="/test">Test</Link>
-            <ul className="dropdown-content">
+            {/* <ul className="dropdown-content">
               <li>
                 <Link to="/test/1">Test 1</Link>
               </li>
               <li>
                 <Link to="/test/2">Test 2</Link>
               </li>
-            </ul>
+            </ul> */}
           </li>
           <li className="dropdown">
             <Link to="/dat-lich">Đặt lịch</Link>
@@ -65,9 +65,11 @@ function Header() {
         </ul>
       </nav>
 
-      <Button type="primary" className="login-button">
-        Đăng nhập
-      </Button>
+      <Link to="/login">
+        <Button type="primary" className="login-button">
+          Đăng nhập
+        </Button>
+      </Link>
     </div>
   );
 }
