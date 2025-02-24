@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import "./index.scss";
 
 // import required modules
-import { Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "antd";
