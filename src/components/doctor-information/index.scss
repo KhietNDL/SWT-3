@@ -1,0 +1,221 @@
+.doctor-information {
+  display: flex;
+  gap: 30px;
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-bottom: 20px;
+  background: #F8F6F7;
+  min-height: 100vh;
+  min-width: 50vh;
+  .doctor-profile {
+    flex: 0 0 400px;
+    background: #005792;
+    color: white;
+    padding: 20px;
+    height: auto;
+    .doctor-image{
+        width: 500px;
+        height: 350px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+    }
+    .doctor-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #7FBA00;
+    }
+
+    .doctor-position {
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    .profile-section {
+      margin-bottom: 25px;
+
+      .section-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #7FBA00;
+      }
+
+      .info-item {
+        margin-bottom: 10px;
+        display: flex;
+        .label {
+          color: #ccc;
+          margin-bottom: 5px;
+          margin-right: 5px;
+        }
+        
+        .value {
+          color: white;
+        }
+      }
+    }
+  }
+
+  .doctor-details {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom: 60px;
+    height: auto;
+
+    .section {
+      margin-bottom: 30px;
+
+      .section-title {
+        font-size: 24px;
+        color: #7FBA00;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .content {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+      }
+    }
+  }
+
+  .book-button {
+    
+    display: flex;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    bottom: 0;
+    background: #005792;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    &:hover {
+      background: #004272;
+    }
+  }
+}
+
+// Add booking modal styles
+.booking-modal {
+
+  .booking-form {
+    padding: 20px;
+    .doctor-info {
+      display: flex;
+      align-items: center;
+
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+
+      img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+      }
+
+      .info {
+        h2 {
+          font-size: 20px;
+          margin-bottom: 5px;
+          color: #333;
+        }
+
+        p {
+          color: #666;
+          margin: 0;
+        }
+      }
+    }
+
+    .booking-dates,
+    .booking-times {
+      margin-bottom: 25px;
+
+      h3 {
+        font-size: 16px;
+        margin-bottom: 15px;
+        color: #333;
+      }
+
+      .date-buttons,
+      .time-buttons {
+        display: flex;
+        gap: 10px;
+
+        button {
+          padding: 8px 16px;
+          border: 1px solid #ddd;
+          border-radius: 20px;
+          background: white;
+          cursor: pointer;
+          transition: all 0.3s;
+
+          &:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+          }
+
+          &.selected {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+          }
+        }
+      }
+    }
+
+    .booking-note {
+      margin-bottom: 25px;
+
+      h3 {
+        font-size: 16px;
+        margin-bottom: 15px;
+        color: #333;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        resize: none;
+
+        &:focus {
+          outline: none;
+          border-color: #1890ff;
+        }
+      }
+    }
+
+    .submit-button {
+      display: flex;
+      margin: 0 auto;
+      width: 100px;
+      height: 40px;
+      border-radius: 20px;
+      font-size: 16px;
+      
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

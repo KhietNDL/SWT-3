@@ -2,9 +2,26 @@ import { Link } from "react-router-dom";
 import logo from "../../images/Logo.png";
 import "./index.scss";
 import { Button } from "antd";
+import { useEffect, useState } from 'react';
+
 function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="header">
+    <header className={`header ${isScrolled ? 'fixed' : ''}`}>
       <div className="header__logo">
         <Link to="/">
           <img src={logo} width={80} alt="Logo" />
@@ -38,27 +55,8 @@ function Header() {
             </ul>
           </li>
           <li className="dropdown">
-            <Link to="/dat-lich">Đặt lịch</Link>
-            <ul className="dropdown-content">
-              <li>
-                <Link to="/dat-lich/1">Lo âu, trầm cảm, stress</Link>
-              </li>
-              <li>
-                <Link to="/dat-lich/2">Rối loạn cảm xúc</Link>
-              </li>
-              <li>
-                <Link to="/dat-lich/1">Tăng động giảm chú ý</Link>
-              </li>
-              <li>
-                <Link to="/dat-lich/2">Áp lực học đường</Link>
-              </li>
-              <li>
-                <Link to="/dat-lich/1">Rối loạn nhân cách</Link>
-              </li>
-              <li>
-                <Link to="/dat-lich/2">Rối loạn hưng trầm cảm</Link>
-              </li>
-            </ul>
+            <Link to="/booking">Đặt lịch</Link>
+            
           </li>
           <li className="dropdown">
             <Link to="/blog">Blog và tài liệu</Link>
@@ -82,7 +80,7 @@ function Header() {
           Đăng nhập
         </Button>
       </Link>
-    </div>
+    </header>
   );
 }
 
