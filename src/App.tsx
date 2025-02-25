@@ -14,7 +14,9 @@ import "./main.css"
 import AssessmentList from "./pages/AssessmentList";
 import GAD7Form from "./pages/Form";
 import SurveyResult from "./components/SurveyResult/SurveyResult";
-import "./main.css";
+import Program from "./pages/Program/Program";
+import ProgramDetail from "./pages/ProgramDetail/ProgramDetail";
+import "./main.css"
 
 function MG() {
   const router = createBrowserRouter([
@@ -78,6 +80,14 @@ function MG() {
     {
       path: "/survey_result",
       element: <SurveyResult />
+    },
+    {
+      path: "/dich-vu",
+      element: <Program/>
+    },
+    {
+      path: "/danh-gia/:id",
+      element: <ProgramDetail />
     }
   ]);
   return (

@@ -14,7 +14,7 @@ interface Errors {
   password?: string;
 }
 
-const LoginForm: React.FC = () => {
+const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -73,15 +73,15 @@ const LoginForm: React.FC = () => {
         />
         <div className="overlay"></div>
         <div className="content">
-          <h1>Tâm lý học học đường</h1>
-          <p>Hỗ trợ sức khỏe tinh thần và phúc lợi trong môi trường giáo dục</p>
+          <h1>School Psychology</h1>
+          <p>Supporting mental health and well-being in educational environments</p>
         </div>
       </div>
 
       <div className="login-form-side">
         <div className="form-wrapper">
           <div className="header">
-            <h2>Chào mừng trở lại</h2>
+            <h2>Welcome Back</h2>
             <p>Đăng nhập để tiếp tục</p>
           </div>
           
@@ -146,7 +146,7 @@ const LoginForm: React.FC = () => {
               className="submit-button"
               disabled={isLoading}
             >
-              {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
 
             <div className="register-section">
@@ -162,4 +162,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default LoginPage;

@@ -19,7 +19,7 @@ function DocumentDetail() {
   const { id } = useParams();
 
   // Mock data - sau này sẽ lấy từ API dựa vào id
-  const documentContent = {
+  const documentContent: { [key: string]: string } = {
     "1": `
       <h2>Rối loạn tăng động giảm chú ý (ADHD) là gì?</h2>
       <p>ADHD là một trong những rối loạn phát triển tâm thần kinh phổ biến nhất ở trẻ em. Đây là tình trạng ảnh hưởng đến khả năng tập trung, kiểm soát hành vi và ngồi yên của trẻ.</p>
