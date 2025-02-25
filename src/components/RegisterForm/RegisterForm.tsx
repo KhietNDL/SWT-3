@@ -71,6 +71,7 @@ const RegistrationForm: React.FC = () => {
         });
         navigate("/login");
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         alert("Đăng ký thất bại. Vui lòng thử lại.");
       } finally {
