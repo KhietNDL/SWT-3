@@ -2,25 +2,9 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useNavigate } from "react-router-dom";
 import "./RegisterForm.scss";
-import loginBg from "../../images/login.jpg";
-
-// Định nghĩa kiểu dữ liệu cho form
-interface FormData {
-  fullName: string;
-  email: string;
-  password: string;
-  role: string;
-  phone: string;
-}
-
-interface FormErrors {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  role?: string;
-  phone?: string;
-}
+import { FormData, FormErrors } from "../../types/RegisterForm";
 
 const RegistrationForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -36,7 +20,8 @@ const RegistrationForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
 
-  // Hàm kiểm tra độ mạnh của mật khẩu
+  const navigate = useNavigate();
+
   const validatePassword = (password: string): number => {
     let strength = 0;
     if (password.length >= 8) strength += 1;
@@ -46,7 +31,6 @@ const RegistrationForm: React.FC = () => {
     return strength;
   };
 
-  // Kiểm tra dữ liệu nhập vào form
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -70,15 +54,14 @@ const RegistrationForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Xử lý khi submit form
+  //này tạo thử coi chuyển trang đc ko khi nào có API tính tiếp
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
       setIsLoading(true);
       try {
-        // Giả lập gọi API
         await new Promise(resolve => setTimeout(resolve, 2000));
-        alert("Registration successful!");
+        alert("Đăng ký thành công!");
         setFormData({
           fullName: "",
           email: "",
@@ -86,15 +69,16 @@ const RegistrationForm: React.FC = () => {
           role: "",
           phone: "",
         });
+        navigate("/login");
+
       } catch (error) {
-        alert("Registration failed. Please try again.");
+        alert("Đăng ký thất bại. Vui lòng thử lại.");
       } finally {
         setIsLoading(false);
       }
     }
   };
 
-  // Xử lý khi thay đổi input
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData(prev => ({
@@ -111,10 +95,6 @@ const RegistrationForm: React.FC = () => {
     <div className="registration-container">
       <div className="registration-wrapper">
         <div className="registration-background">
-        <img
-          src={loginBg}
-          alt="Supportive Psychology"
-        />
         </div>
         <div className="registration-form-container">
           <div className="registration-form-wrapper">
@@ -210,4 +190,4 @@ const RegistrationForm: React.FC = () => {
   );
 };
 
-      export default RegistrationForm;
+export default RegistrationForm;

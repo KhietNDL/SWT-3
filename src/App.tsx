@@ -11,6 +11,10 @@ import BlogDetail from "./pages/BlogDetail/BlogDetail";
 import Document from "./pages/Document/Document";
 import DocumentDetail from "./pages/DocumentDetail/DocumentDetail";
 import "./main.css"
+import AssessmentList from "./pages/AssessmentList";
+import GAD7Form from "./pages/Form";
+import SurveyResult from "./components/SurveyResult/SurveyResult";
+import "./main.css";
 
 function MG() {
   const router = createBrowserRouter([
@@ -54,11 +58,31 @@ function MG() {
     {
       path: "/tai-lieu/:id",
       element: <DocumentDetail/>
+    },
+    {
+      path: "/login",
+      element: <LoginPage />
+    },
+    {
+      path: "/register",
+      element: <RegisterPage />
+    },
+    {
+      path: "/test",
+      element: <AssessmentList />
+    },
+    {
+      path: "/quiz/:id",
+      element: <GAD7Form />
+    },
+    {
+      path: "/survey_result",
+      element: <SurveyResult />
     }
   ]);
   return (
     <RouterProvider router={router} />
-  )
+  );
 }
 
-export default MG
+export default MG;
