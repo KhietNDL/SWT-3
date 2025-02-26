@@ -65,6 +65,7 @@
 
     .form-group {
       margin-bottom: 1.5rem;
+      position: relative;
 
       label {
         display: block;
@@ -75,11 +76,22 @@
 
       .input-container {
         position: relative;
+        display: flex;
+        align-items: center;
+
+        .icon {
+          position: absolute;
+          left: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #666;
+          z-index: 1;
+          pointer-events: none;
+        }
 
         input {
           width: 100%;
-          padding: 0.75rem 1rem;
-          padding-left: 2.5rem;
+          padding: 0.75rem 2.5rem;
           border: 1.5px solid #e0e0e0;
           border-radius: 8px;
           transition: all 0.3s ease;
@@ -96,14 +108,6 @@
           }
         }
 
-        .icon {
-          position: absolute;
-          left: 0.75rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #666;
-        }
-
         .toggle-password {
           position: absolute;
           right: 0.75rem;
@@ -114,6 +118,7 @@
           color: #666;
           cursor: pointer;
           padding: 0.25rem;
+          z-index: 1;
 
           &:hover {
             color: #0077B6;
@@ -122,9 +127,11 @@
       }
 
       .error-message {
+        position: absolute;
+        bottom: -1.5rem;
+        left: 0;
         color: #FF4C4C;
         font-size: 0.875rem;
-        margin-top: 0.5rem;
       }
     }
 
