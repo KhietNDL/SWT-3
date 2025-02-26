@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import logo from "../../images/Logo.png";
 import "./index.scss";
 import { Button } from "antd";
-
 function Header() {
   return (
     <div className="header">
@@ -28,13 +27,13 @@ function Header() {
             </ul>
           </li>
           <li className="dropdown">
-            <Link to="/test">Quiz</Link>
+            <Link to="/test">Test</Link>
             <ul className="dropdown-content">
               <li>
-                <Link to="/test/1">Quiz 1</Link>
+                <Link to="/test/1">Test 1</Link>
               </li>
               <li>
-                <Link to="/test/2">Quiz 2</Link>
+                <Link to="/test/2">Test 2</Link>
               </li>
             </ul>
           </li>
@@ -50,7 +49,7 @@ function Header() {
             </ul>
           </li>
           <li className="dropdown">
-            <span>Blog và tài liệu</span>
+            <Link to="/blog">Blog và tài liệu</Link>
             <ul className="dropdown-content">
               <li>
                 <Link to="/blog">Blog</Link>

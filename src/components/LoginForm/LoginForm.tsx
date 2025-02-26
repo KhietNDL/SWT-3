@@ -4,20 +4,19 @@ import loginBg from "../../images/login.jpg";
 import './LoginForm.scss';
 
 interface FormData {
-  username: string;
+  email: string;
   password: string;
   rememberMe: boolean;
 }
 
 interface Errors {
-  username?: string;
+  email?: string;
   password?: string;
-  auth?: string;
 }
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
-    username: "",
+    email: "",
     password: "",
     rememberMe: false,
   });
@@ -27,13 +26,15 @@ const LoginPage: React.FC = () => {
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
-    if (!formData.username) {
-      newErrors.username = "Vui lòng nhập tên đăng nhập";
+    if (!formData.email) {
+      newErrors.email = "Tên đăng nhập bắt buộc ";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Hãy nhập địa chỉ email hợp lệ";
     }
     if (!formData.password) {
-      newErrors.password = "Vui lòng nhập mật khẩu";
+      newErrors.password = "Mật khẩu bắt buộc";
     } else if (formData.password.length < 6) {
-      newErrors.password = "Mật khẩu phải có ít nhất 6 kí tự";
+      newErrors.password = "Mật khẩu phải có ít nhất 6 kí tự.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -44,22 +45,11 @@ const LoginPage: React.FC = () => {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        // Giả lập API call
+        // Simulated API call
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        
-        // Giả lập kiểm tra đăng nhập
-        if (formData.username !== "admin") {
-          setErrors({ username: "Tên đăng nhập không tồn tại" });
-          return;
-        }
-        if (formData.password !== "123456") {
-          setErrors({ password: "Mật khẩu không đúng" });
-          return;
-        }
-
         console.log("Đăng nhập thành công", formData);
       } catch (error) {
-        setErrors({ auth: "Đăng nhập thất bại. Vui lòng thử lại." });
+        console.error("Đăng nhập thất bại", error);
       } finally {
         setIsLoading(false);
       }
@@ -72,19 +62,15 @@ const LoginPage: React.FC = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // Xóa lỗi khi user bắt đầu nhập
-    if (errors[name as keyof Errors]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: undefined
-      }));
-    }
   };
 
   return (
     <div className="login-container">
       <div className="login-image-side">
-        <img src={loginBg} alt="Supportive Psychology" />
+        <img
+          src={loginBg}
+          alt="Supportive Psychology"
+        />
         <div className="overlay"></div>
         <div className="content">
           <h1>School Psychology</h1>
@@ -101,20 +87,20 @@ const LoginPage: React.FC = () => {
           
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="username">Tên đăng nhập</label>
+              <label htmlFor="email">Tên đăng nhập</label>
               <div className="input-container">
-                <span className="icon">👤</span>
+                <span className="icon">📧</span>
                 <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  className={errors.username ? 'error' : ''}
-                  placeholder="Nhập tên đăng nhập/SĐT"
+                  className={errors.email ? 'error' : ''}
+                  placeholder="Nhập email"
                 />
+                {errors.email && <div className="error-message">{errors.email}</div>}
               </div>
-              {errors.username && <div className="error-message">{errors.username}</div>}
             </div>
 
             <div className="form-group">
@@ -137,11 +123,9 @@ const LoginPage: React.FC = () => {
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
+                {errors.password && <div className="error-message">{errors.password}</div>}
               </div>
-              {errors.password && <div className="error-message">{errors.password}</div>}
             </div>
-
-            {errors.auth && <div className="auth-error">{errors.auth}</div>}
 
             <div className="form-footer">
               <div className="remember-me">
@@ -152,7 +136,7 @@ const LoginPage: React.FC = () => {
                   checked={formData.rememberMe}
                   onChange={handleChange}
                 />
-                <label htmlFor="remember">Ghi nhớ đăng nhập</label>
+                <label htmlFor="remember">Ghi nhớ đăng nhập </label>
               </div>
               <a href="#" className="forgot-password">Quên mật khẩu?</a>
             </div>
@@ -162,7 +146,7 @@ const LoginPage: React.FC = () => {
               className="submit-button"
               disabled={isLoading}
             >
-              {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
 
             <div className="register-section">
