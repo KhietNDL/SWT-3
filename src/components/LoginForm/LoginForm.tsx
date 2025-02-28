@@ -2,6 +2,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import loginBg from "../../images/login.jpg";
 import './LoginForm.scss';
+import { Link } from "react-router-dom";
 
 interface FormData {
   email: string;
@@ -80,7 +81,7 @@ const LoginPage: React.FC = () => {
 
       <div className="login-form-side">
         <div className="form-wrapper">
-          <div className="header">
+          <div className="header-login">
             <h2>Welcome Back</h2>
             <p>Đăng nhập để tiếp tục</p>
           </div>
@@ -138,7 +139,8 @@ const LoginPage: React.FC = () => {
                 />
                 <label htmlFor="remember">Ghi nhớ đăng nhập </label>
               </div>
-              <a href="#" className="forgot-password">Quên mật khẩu?</a>
+              <Link to="/reset-password" className="forgot-password">Quên mật khẩu?</Link>
+              
             </div>
 
             <button
