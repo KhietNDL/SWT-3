@@ -1,23 +1,23 @@
 .container {
   margin: auto;
-    max-width: 1200px;
-    margin-top: 80px;
-    margin-bottom: 7.5%;
-    padding: 20px;
-    text-align: center;
-    height: calc(100% - 120px);
-}
+  max-width: 1200px;
+  margin-top: 80px;
+  margin-bottom: 7.5%;
+  padding: 20px;
+  text-align: center;
+  height: calc(100% - 120px);
 
-.title {
+
+  .title {
     font-size: 2rem;
     margin-bottom: 20px;
-}
+  }
 
-.list {
+  .list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-  
+  }
+
   .card {
     margin-left: 10px;
     margin-right: 10px;
@@ -31,30 +31,30 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-  
+
     &:hover {
       transform: translateY(-5px);
     }
   }
-  
+
   .cardTitle {
     font-size: 1.5rem;
     margin-bottom: 10px;
-    align-content: center ;
+    align-content: center;
   }
-  
+
   .cardDescription {
     font-size: 1rem;
     color: #555;
     margin-bottom: 10px;
   }
-  
+
   .cardDuration {
     font-size: 0.9rem;
     color: #777;
     margin-bottom: 15px;
   }
-  
+
   .startButton {
     background: #007bff;
     color: white;
@@ -65,9 +65,9 @@
     transition: background 0.3s;
     margin-top: auto;
     align-self: center;
-  
+
     &:hover {
       background: #0056b3;
     }
   }
-  
+}
