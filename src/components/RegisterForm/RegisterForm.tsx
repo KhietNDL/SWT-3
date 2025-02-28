@@ -123,6 +123,7 @@ const RegistrationForm: React.FC = () => {
             theme: "dark",
           });
         }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error("Đăng ký thất bại. Vui lòng thử lại.", {
           position: "top-center",
