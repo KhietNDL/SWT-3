@@ -2,22 +2,22 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import loginBg from "../../images/login.jpg";
 import './LoginForm.scss';
-import { Link } from "react-router-dom";
 
 interface FormData {
-  email: string;
+  username: string;
   password: string;
   rememberMe: boolean;
 }
 
 interface Errors {
-  email?: string;
+  username?: string;
   password?: string;
+  auth?: string;
 }
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
-    email: "",
+    username: "",
     password: "",
     rememberMe: false,
   });
@@ -27,15 +27,11 @@ const LoginPage: React.FC = () => {
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
-    if (!formData.email) {
-      newErrors.email = "Tên đăng nhập bắt buộc ";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Hãy nhập địa chỉ email hợp lệ";
+    if (!formData.username) {
+      newErrors.username = "Vui lòng nhập tên đăng nhập";
     }
     if (!formData.password) {
-      newErrors.password = "Mật khẩu bắt buộc";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Mật khẩu phải có ít nhất 6 kí tự.";
+      newErrors.password = "Vui lòng nhập mật khẩu";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -46,11 +42,23 @@ const LoginPage: React.FC = () => {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        // Simulated API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        // Giả lập API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Giả lập kiểm tra đăng nhập
+        if (formData.username !== "admin") {
+          setErrors({ username: "Tên đăng nhập không tồn tại" });
+          return;
+        }
+        if (formData.password !== "123456") {
+          setErrors({ password: "Mật khẩu không đúng" });
+          return;
+        }
+
         console.log("Đăng nhập thành công", formData);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Đăng nhập thất bại", error);
+        setErrors({ auth: "Đăng nhập thất bại. Vui lòng thử lại." });
       } finally {
         setIsLoading(false);
       }
@@ -81,27 +89,27 @@ const LoginPage: React.FC = () => {
 
       <div className="login-form-side">
         <div className="form-wrapper">
-          <div className="header-login">
+          <div className="header">
             <h2>Welcome Back</h2>
             <p>Đăng nhập để tiếp tục</p>
           </div>
           
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="email">Tên đăng nhập</label>
+              <label htmlFor="username">Tên đăng nhập</label>
               <div className="input-container">
-                <span className="icon">📧</span>
+                <span className="icon">👤</span>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
+                  id="username"
+                  name="username"
+                  type="text"
+                  value={formData.username}
                   onChange={handleChange}
-                  className={errors.email ? 'error' : ''}
-                  placeholder="Nhập email"
+                  className={errors.username ? 'error' : ''}
+                  placeholder="Nhập tên đăng nhập/SĐT"
                 />
-                {errors.email && <div className="error-message">{errors.email}</div>}
               </div>
+              {errors.username && <div className="error-message">{errors.username}</div>}
             </div>
 
             <div className="form-group">
@@ -124,8 +132,8 @@ const LoginPage: React.FC = () => {
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
-                {errors.password && <div className="error-message">{errors.password}</div>}
               </div>
+              {errors.password && <div className="error-message">{errors.password}</div>}
             </div>
 
             <div className="form-footer">
@@ -139,8 +147,7 @@ const LoginPage: React.FC = () => {
                 />
                 <label htmlFor="remember">Ghi nhớ đăng nhập </label>
               </div>
-              <Link to="/reset-password" className="forgot-password">Quên mật khẩu?</Link>
-              
+              <a href="#" className="forgot-password">Quên mật khẩu?</a>
             </div>
 
             <button
