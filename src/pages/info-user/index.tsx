@@ -6,8 +6,6 @@ function Info() {
     <div>
       <Header/>
       <UserInformation/>
-
-
       <Footer />
     </div>
   )
