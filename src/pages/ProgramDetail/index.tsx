@@ -1,7 +1,7 @@
-import ProgramDetailComponent from '../../components/ProgramDetail/ProgramDetail';
+import ProgramDetail from '../../components/ProgramDetail/ProgramDetail';
 
 function ProgramDetailPage() {
-  return <ProgramDetailComponent />;
+  return <ProgramDetail />;
 }
 
 export default ProgramDetailPage;
