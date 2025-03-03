@@ -3,6 +3,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Zoom } from "react-toastify";
+import { toastConfig } from "../../types/toastConfig";
 import "react-toastify/dist/ReactToastify.css";
 import "./RegisterForm.scss";
 import { FormData, FormErrors } from "../../types/RegisterForm";
@@ -127,15 +128,7 @@ const RegistrationForm: React.FC = () => {
 
         if (response.ok) {
           const result = await response.json();
-          toast.success(result.message, {
-            position: "top-center",
-            autoClose: 3000,
-            theme: "dark",
-            pauseOnHover: false,
-            pauseOnFocusLoss: false,
-            closeOnClick: true,
-            transition: Zoom,
-          });
+          toast.success(result.message, { ...toastConfig, transition: Zoom });
           setFormData({
             fullName: "",
             username: "",
@@ -147,28 +140,15 @@ const RegistrationForm: React.FC = () => {
             phone: "",
             address: "",
           });
-          setTimeout(() => navigate("/login"), 3000);
+          setTimeout(() => navigate("/register-valid"), 3000);
         } else {
           const errorData = await response.json();
-          toast.error(errorData.message, {
-            position: "top-center",
-            autoClose: 3000,
-            theme: "dark",
-            pauseOnHover: false,
-            pauseOnFocusLoss: false,
-            closeOnClick: true,
-            transition: Zoom,
-          });
+          toast.error(errorData.message, { ...toastConfig, transition: Zoom });
         }
       } catch (error: any) {
         console.error("Đăng ký lỗi:", error);
         toast.error(error.message || "Đăng ký thất bại. Vui lòng thử lại.", {
-          position: "top-center",
-          autoClose: 3000,
-          theme: "dark",
-          pauseOnHover: false,
-          pauseOnFocusLoss: false,
-          closeOnClick: true,
+          ...toastConfig,
           transition: Zoom,
         });
       } finally {
@@ -176,12 +156,7 @@ const RegistrationForm: React.FC = () => {
       }
     } else {
       toast.error("Hãy kiểm tra lại thông tin bạn nhập", {
-        position: "top-center",
-        autoClose: 3000,
-        theme: "dark",
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        closeOnClick: true,
+        ...toastConfig,
         transition: Zoom,
       });
     }

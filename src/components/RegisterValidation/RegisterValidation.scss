@@ -1,0 +1,128 @@
+.verification-page {
+    padding-top: 5%;
+    padding-bottom: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    background-color: #f9fafb;
+
+
+    .container {
+        max-width: 400px;
+        width: 100%;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .icon-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1rem;
+        background-color: #e0f2fe;
+        border-radius: 50%;
+    }
+
+    .icon {
+        color: #2563eb;
+        font-size: 32px;
+    }
+
+    .code-inputs {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        margin: 1rem 0;
+
+        input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+
+            &:focus {
+                border-color: #2563eb;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+            }
+        }
+    }
+
+    .error {
+        color: #ef4444;
+        margin-top: 0.5rem;
+    }
+
+    .success {
+        color: #10b981;
+        margin-top: 0.5rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 0.75rem;
+        margin-top: 1rem;
+        border: none;
+        border-radius: 4px;
+        background-color: #2563eb;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:disabled {
+            background-color: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+
+        &:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    }
+
+    .resend-button {
+        margin-top: 0.5rem;
+        background: none;
+        border: none;
+        color: #2563eb;
+        cursor: pointer;
+        transition: color 0.3s;
+
+        &:hover {
+            color: white;
+        }
+
+        &:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    }
+
+    .loading-icon {
+        animation: spin 1s linear infinite;
+        will-change: transform;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotateZ(0deg);
+        }
+
+        100% {
+            transform: rotateZ(360deg);
+        }
+    }
+}
