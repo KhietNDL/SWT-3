@@ -6,16 +6,16 @@ import "./main.css"
 import Info from "./pages/info-user";
 import Booking from "./pages/Booking";
 import BookingDetail from "./pages/Booking-detail";
-import Blog from "./pages/Blog/Blog";
-import BlogDetail from "./pages/BlogDetail/BlogDetail";
-import Document from "./pages/Document/Document";
-import DocumentDetail from "./pages/DocumentDetail/DocumentDetail";
+import Blog from "./pages/Blog/index";
+import BlogDetail from "./pages/BlogDetail/index";
+import Document from "./pages/Document/index";
+import DocumentDetail from "./pages/DocumentDetail/index";
 import "./main.css"
 import AssessmentList from "./pages/AssessmentList";
 import GAD7Form from "./pages/Form";
 import SurveyResult from "./components/SurveyResult/SurveyResult";
 import Program from "./pages/Program/Program";
-import ProgramDetail from "./pages/ProgramDetail/ProgramDetail";
+import ProgramDetail from "./pages/ProgramDetail/index";
 import "./main.css"
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";

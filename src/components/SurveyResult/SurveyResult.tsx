@@ -1,6 +1,7 @@
 import React from 'react';
 import './SurveyResult.scss';
 import { SurveyResultData } from '../../types/QuizResult';
+import { Link } from 'react-router-dom';
 
 
 const SurveyResult: React.FC = () => {
@@ -54,7 +55,9 @@ const SurveyResult: React.FC = () => {
             </section>
 
             <section className="result-explanation">
+                <Link to="/Booking">
                 <button>Đặt lịch hẹn với chuyên gia</button>
+                </Link>
             </section>
         </div>
     );

@@ -104,102 +104,105 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-image-side">
-        <img src={loginBg} alt="Supportive Psychology" />
-        <div className="overlay"></div>
-        <div className="content">
-          <h1>School Psychology</h1>
-          <p>
-            Supporting mental health and well-being in educational environments
-          </p>
-        </div>
-      </div>
-
-      <div className="login-form-side">
-        <div className="form-wrapper">
-          <div className="header">
+    <div className="page-container">
+      <div className="page-header">
+        <div className="header-content">
+          <div className="header-left">
             <h2>Welcome Back</h2>
+          </div>
+          <div className="header-right">
             <p>Đăng nhập để tiếp tục</p>
           </div>
+        </div>
+      </div>
+      
+      <div className="login-container">
+        <div className="login-image-side">
+          <img
+            src={loginBg}
+            alt="Supportive Psychology"
+          />
+          <div className="overlay"></div>
+          <div className="content">
+            <h1>School Psychology</h1>
+            <p>Supporting mental health and well-being in educational environments</p>
+          </div>
+        </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="username">Tên đăng nhập</label>
-              <div className="input-container">
-                <span className="icon">👤</span>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className={errors.username ? "error" : ""}
-                  placeholder="Nhập tên đăng nhập/SĐT"
-                />
+        <div className="login-form-side">
+          <div className="form-wrapper">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="username">Tên đăng nhập</label>
+                <div className="input-container">
+                  <span className="icon">👤</span>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className={errors.username ? 'error' : ''}
+                    placeholder="Nhập tên đăng nhập/SĐT"
+                  />
+                </div>
+                {errors.username && <div className="error-message">{errors.username}</div>}
               </div>
-              {errors.username && (
-                <div className="error-message">{errors.username}</div>
-              )}
-            </div>
 
-            <div className="form-group">
-              <label htmlFor="password">Mật khẩu</label>
-              <div className="input-container">
-                <span className="icon">🔒</span>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={errors.password ? "error" : ""}
-                  placeholder="Nhập mật khẩu"
-                />
-                <button
-                  type="button"
-                  className="toggle-password"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FiEyeOff /> : <FiEye />}
-                </button>
+              <div className="form-group">
+                <label htmlFor="password">Mật khẩu</label>
+                <div className="input-container">
+                  <span className="icon">🔒</span>
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={errors.password ? 'error' : ''}
+                    placeholder="Nhập mật khẩu"
+                  />
+                  <button
+                    type="button"
+                    className="toggle-password"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                  </button>
+                </div>
+                {errors.password && <div className="error-message">{errors.password}</div>}
               </div>
-              {errors.password && (
-                <div className="error-message">{errors.password}</div>
-              )}
-            </div>
 
-            <div className="form-footer">
-              <div className="remember-me">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
-                />
-                <label htmlFor="remember">Ghi nhớ đăng nhập </label>
+              <div className="form-footer">
+                <div className="remember-me">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    name="rememberMe"
+                    checked={formData.rememberMe}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="remember">Ghi nhớ đăng nhập </label>
+                </div>
+                <a href="#" className="forgot-password">Quên mật khẩu?</a>
               </div>
-              <a href="#" className="forgot-password">
-                Quên mật khẩu?
-              </a>
-            </div>
 
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={isLoading}
-            >
-              {isLoading ? "Signing in..." : "Sign in"}
-            </button>
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing in..." : "Sign in"}
+              </button>
 
-            <div className="register-section">
-              <p>
-                Chưa có tài khoản?
-                <a href="/register">Đăng ký ngay</a>
-              </p>
-            </div>
-          </form>
+              <div className="register-section">
+                <p>
+                  Chưa có tài khoản?
+                  <a href="/register">Đăng ký ngay</a>
+                </p>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
