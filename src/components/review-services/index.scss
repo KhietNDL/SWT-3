@@ -1,0 +1,66 @@
+.service-intro {
+    padding: 60px 20px;
+    background-color: #A1C73E;
+  
+    .main-title {
+      text-align: center;
+      color: white;
+      font-size: 32px;
+      margin-bottom: 40px;
+      font-weight: bold;
+    }
+  
+    .service-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      
+      
+    }
+  
+    .service-card {
+      padding: 20px 20px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-5px);
+      }
+  
+      .service-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+      }
+  
+      .service-title {
+        color: #2E7D32;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 20px 20px 10px;
+      }
+  
+      .service-description {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+        padding: 0 20px;
+        margin-bottom: 20px;
+        height: 70px;
+        overflow: hidden;
+      }
+  
+      .login-button {
+        border-radius: 20px;
+        height: 30px;
+        padding: 0 20px;
+        font-weight: 500;
+        
+        justify-content: flex-end;
+      }
+    }
+  }

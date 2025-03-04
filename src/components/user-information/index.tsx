@@ -2,22 +2,24 @@ import { useState } from "react";
 import "./index.scss";
 import UserLogo from "../../images/User.png";
 import { Button } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
 
 function UserInformation() {
   const [isChangePassword, setIsChangePassword] = useState(false);
-
+  const user = useSelector((state: RootState) => state.user);
   const renderUserInfoForm = () => (
     <>
       <div className="user-information__content">
         <div className="user-information__form">
           <div className="form-group">
             <label>Tên Đăng Nhập</label>
-            <input type="text" />
+            <input type="text" value={user.first_name} />
           </div>
 
           <div className="form-group">
             <label>Gmail</label>
-            <input type="email" />
+            <input type="email" value={user.email} />
           </div>
 
           <div className="form-group">
@@ -35,7 +37,7 @@ function UserInformation() {
           <div className="avatar-section">
             <label>Hình đại diện</label>
             <div className="avatar-container">
-              <img src={UserLogo} alt="User avatar" />
+            <img src={user.avatar} alt={user.first_name} />
             </div>
           </div>
 

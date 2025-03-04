@@ -4,6 +4,8 @@ import axios from "axios";
 import { Button, Modal } from "antd";
 import { DoctorType } from "../../types/doctor";
 import { useParams } from "react-router-dom";
+import { format, addDays, startOfWeek } from "date-fns";
+import { vi } from "date-fns/locale"; // Import locale tiếng Việt
 
 function DoctorInfo() {
   const [doctor, setDoctor] = useState<DoctorType | null>(null);
@@ -11,7 +13,6 @@ function DoctorInfo() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const { id } = useParams();
-  const dates = ["19/2", "20/2", "21/2", "22/2", "23/2", "24/2", "25/2"];
   const times = ["8:00 AM", "10:00 AM", "13:00 PM", "15:00 PM", "17:00 PM"];
 
   useEffect(() => {
@@ -24,6 +25,32 @@ function DoctorInfo() {
 
     fetchDoctor();
   }, [id]);
+
+  // Thay thế mảng dates cứng
+  const generateDates = () => {
+    const today = new Date();
+    const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 }); // Bắt đầu từ thứ 2
+
+    return Array.from({ length: 7 }).map((_, index) => {
+      const date = addDays(startOfCurrentWeek, index);
+      return {
+        fullDate: date, // Lưu full date để xử lý
+        displayDate: format(date, "dd/MM"), // Hiển thị ngày/tháng
+        dayName: format(date, "EEEE", { locale: vi }), // Tên thứ tiếng Việt
+      };
+    });
+  };
+
+  const [dates, setDates] = useState(generateDates());
+
+  // Cập nhật dates mỗi khi sang tuần mới
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDates(generateDates());
+    }, 1000 * 60 * 60); // Cập nhật mỗi giờ
+
+    return () => clearInterval(timer);
+  }, []);
 
   const handleSubmit = () => {
     console.log("Đặt lịch:", { selectedDate, selectedTime });
@@ -149,13 +176,14 @@ function DoctorInfo() {
             <div className="date-buttons">
               {dates.map((date) => (
                 <button
-                  key={date}
+                  key={date.displayDate}
                   className={`date-button ${
-                    selectedDate === date ? "selected" : ""
+                    selectedDate === date.displayDate ? "selected" : ""
                   }`}
-                  onClick={() => setSelectedDate(date)}
+                  onClick={() => setSelectedDate(date.displayDate)}
                 >
-                  {date}
+                  <div className="date-day">{date.dayName}</div>
+                  <div className="date-number">{date.displayDate}</div>
                 </button>
               ))}
             </div>
