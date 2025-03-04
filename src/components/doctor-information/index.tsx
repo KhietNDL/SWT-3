@@ -6,6 +6,9 @@ import { DoctorType } from "../../types/doctor";
 import { useParams } from "react-router-dom";
 import { format, addDays, startOfWeek } from "date-fns";
 import { vi } from "date-fns/locale"; // Import locale tiếng Việt
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
+import { useNavigate } from "react-router-dom";
 
 function DoctorInfo() {
   const [doctor, setDoctor] = useState<DoctorType | null>(null);
@@ -14,7 +17,8 @@ function DoctorInfo() {
   const [selectedTime, setSelectedTime] = useState("");
   const { id } = useParams();
   const times = ["8:00 AM", "10:00 AM", "13:00 PM", "15:00 PM", "17:00 PM"];
-
+  const user = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchDoctor = async () => {
       const response = await axios.get(
@@ -56,7 +60,18 @@ function DoctorInfo() {
     console.log("Đặt lịch:", { selectedDate, selectedTime });
     setIsBookingOpen(false);
   };
-
+  const handleBookingClick = () => {
+    if (!user) {
+      Modal.warning({
+        title: "Yêu cầu đăng nhập",
+        content: "Vui lòng đăng nhập để đặt lịch khám.",
+        okText: "Đăng nhập ngay",
+        onOk: () => navigate("/login"),
+      });
+    } else {
+      setIsBookingOpen(true);
+    }
+  };
   return (
     <>
       <div className="doctor-information">
@@ -145,7 +160,7 @@ function DoctorInfo() {
 
           <button
             className="book-button"
-            onClick={() => setIsBookingOpen(true)}
+            onClick={handleBookingClick} // Thay đổi ở đây
           >
             Đặt lịch
           </button>
