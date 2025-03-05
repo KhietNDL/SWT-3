@@ -8,19 +8,19 @@ import "react-toastify/dist/ReactToastify.css";
 import "./RegisterForm.scss";
 import { FormData, FormErrors } from "../../types/RegisterForm";
 
-const vietnamPhoneRegex = /^0[35789][0-9]{8,9}$/;
+const vietnamPhoneRegex = /^0[35789][0-9]{8}$/;
 
 const RegistrationForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
-    fullName: "",
-    username: "",
-    DoB: "",
+    userName: "",
+    fullname: "",
+    //DoB: "",
     email: "",
-    password: "",
-    passwordConfirmation: "",
-    role: "",
     phone: "",
     address: "",
+    passwordHash: "",
+    confirmPassword: "",
+    roleName: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -45,59 +45,60 @@ const RegistrationForm: React.FC = () => {
     const newErrors: FormErrors = {};
 
     const {
-      fullName,
-      username,
-      DoB,
+      userName,
+      fullname,
+      //DoB,
       email,
-      password,
-      passwordConfirmation,
-      role,
       phone,
       address,
+      passwordHash,
+      confirmPassword,
+      roleName,
+
     } = formData;
 
-    if (!/^[A-Za-zÀ-ỹ\s]{2,}$/.test(fullName)) {
-      newErrors.fullName = "Tên chỉ được chứa chữ cái và ít nhất 2 ký tự";
+    if (!/^[A-Za-zÀ-ỹ\s]{2,}$/.test(fullname)) {
+      newErrors.fullname = "Tên chỉ được chứa chữ cái và ít nhất 2 ký tự";
     }
-    if (!/^[a-zA-Z0-9_]{4,}$/.test(username)) {
-      newErrors.username =
+    if (!/^[a-zA-Z0-9_]{4,}$/.test(userName)) {
+      newErrors.userName =
         "Tên người dùng phải có ít nhất 4 ký tự (không dấu, không khoảng trắng)";
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Vui lòng nhập địa chỉ email hợp lệ";
     }
-    if (password.length < 8) {
-      newErrors.password = "Mật khẩu phải có ít nhất 8 ký tự";
+    if (passwordHash.length < 6) {
+      newErrors.passwordHash = "Mật khẩu phải có ít nhất 8 ký tự";
     }
-    if (password !== passwordConfirmation) {
-      newErrors.passwordConfirmation = "Mật khẩu xác nhận không khớp";
+    if (passwordHash !== confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
     }
-    if (!role) {
-      newErrors.role = "Vui lòng chọn vai trò";
+    if (!roleName) {
+      newErrors.roleName = "Vui lòng chọn vai trò";
     }
     if (!phone || !vietnamPhoneRegex.test(phone)) {
-      newErrors.phone = "Số điện thoại không hợp lệ (phải có 10 hoặc 11 chữ số)";
+      newErrors.phone = "Số điện thoại không hợp lệ (phải có 10 chữ số)";
     }
     if (address.length < 5) {
       newErrors.address = "Địa chỉ phải có ít nhất 5 ký tự";
     }
-    if (!DoB) {
-      newErrors.DoB = "Vui lòng nhập ngày sinh";
-    } else {
-      const today = new Date();
-      const birthDate = new Date(DoB);
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const monthDifference = today.getMonth() - birthDate.getMonth();
-      if (
-        monthDifference < 0 ||
-        (monthDifference === 0 && today.getDate() < birthDate.getDate())
-      ) {
-        age--;
-      }
-      if (age < 6) {
-        newErrors.DoB = "Bạn phải ít nhất 6 tuổi";
-      }
-    }
+    // if (!DoB) {
+    //   newErrors.DoB = "Vui lòng nhập ngày sinh";
+    // } else {
+    //   const today = new Date();
+    //   const birthDate = new Date(DoB);
+    //   let age = today.getFullYear() - birthDate.getFullYear();
+    //   const monthDifference = today.getMonth() - birthDate.getMonth();
+    //   if (
+    //     monthDifference < 0 ||
+    //     (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    //   ) {
+    //     age--;
+    //   }
+    //   if (age < 6) {
+    //     newErrors.DoB = "Bạn phải ít nhất 6 tuổi";
+    //   }
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -108,42 +109,50 @@ const RegistrationForm: React.FC = () => {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        const apiUrl = formData.username.includes("test")
-          ? "https://f113a0ea-c6c6-48f4-b55b-e526c80aefaa.mock.pstmn.io/api/registerfail"
-          : "https://f113a0ea-c6c6-48f4-b55b-e526c80aefaa.mock.pstmn.io/api/register";
+        const apiUrl = "http://localhost:5199/Account/Register";  // Updated API URL
 
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            fullName: formData.fullName,
-            username: formData.username,
+            fullname: formData.fullname,
+            username: formData.userName,
             email: formData.email,
-            password: formData.password,
             phone: formData.phone,
             address: formData.address,
-            role: formData.role,
+            passwordHash: formData.passwordHash,        // Đổi 'password' thành 'passwordHash'
+            confirmPassword: formData.confirmPassword,  // Giữ nguyên
+            roleName: formData.roleName,
+            // DoB: formData.DoB,  // Make sure DoB is included if required by API
           }),
         });
 
         if (response.ok) {
-          const result = await response.json();
-          toast.success(result.message, { ...toastConfig, transition: Zoom });
+          const result = await response.clone().json();
+          toast.success(result.message || "Đăng ký thành công!", { ...toastConfig, transition: Zoom });
+          localStorage.setItem("email", formData.email);
           setFormData({
-            fullName: "",
-            username: "",
-            DoB: "",
+            userName: "",
+            fullname: "",
+            //DoB: "",
             email: "",
-            password: "",
-            passwordConfirmation: "",
-            role: "",
             phone: "",
             address: "",
+            passwordHash: "",
+            confirmPassword: "",
+            roleName: "",
           });
           setTimeout(() => navigate("/register-valid"), 3000);
-        } else {
-          const errorData = await response.json();
-          toast.error(errorData.message, { ...toastConfig, transition: Zoom });
+        }
+        if (!response.ok) {
+          const errorText = await response.clone().json();
+          console.error("Error details:", errorText);
+          toast.error(errorText);
+        }
+
+        else {
+          const errorData = await response.clone().json();
+          toast.error(errorData.message || "Đăng ký thất bại!", { ...toastConfig, transition: Zoom });
         }
       } catch (error: any) {
         console.error("Đăng ký lỗi:", error);
@@ -172,33 +181,33 @@ const RegistrationForm: React.FC = () => {
     let error = "";
 
     switch (name) {
-      case "fullName":
+      case "fullname":
         if (!/^[A-Za-zÀ-ỹ\s]{2,}$/.test(value)) {
           error = "Tên chỉ được chứa chữ cái và ít nhất 2 ký tự";
         }
         break;
-      case "username":
+      case "userName":
         if (!/^[a-zA-Z0-9_]{4,}$/.test(value)) {
           error = "Tên người dùng phải có ít nhất 4 ký tự (không dấu, không khoảng trắng)";
         }
         break;
       case "email":
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        if (!/^[^\s@]+\@[^\s@]+\.[^\s@]+$/.test(value)) {
           error = "Vui lòng nhập địa chỉ email hợp lệ";
         }
         break;
-      case "password":
+      case "passwordHash":
         setPasswordStrength(validatePassword(value));
-        if (value.length < 8) {
+        if (value.length < 6) {
           error = "Mật khẩu phải có ít nhất 8 ký tự";
         }
         break;
-      case "passwordConfirmation":
-        if (value !== formData.password) {
+      case "confirmPassword":
+        if (value !== formData.passwordHash) {
           error = "Mật khẩu xác nhận không khớp";
         }
         break;
-      case "role":
+      case "roleName":
         if (!value) {
           error = "Vui lòng chọn vai trò";
         }
@@ -213,28 +222,28 @@ const RegistrationForm: React.FC = () => {
           error = "Địa chỉ phải có ít nhất 5 ký tự";
         }
         break;
-      case "DoB":
-        if (!value) {
-          error = "Vui lòng nhập ngày sinh";
-        } else {
-          const today = new Date();
-          const birthDate = new Date(value);
-          let age = today.getFullYear() - birthDate.getFullYear();
-          const monthDifference = today.getMonth() - birthDate.getMonth();
-          if (
-            monthDifference < 0 ||
-            (monthDifference === 0 && today.getDate() < birthDate.getDate())
-          ) {
-            age--;
-          }
-          if (age < 6) {
-            error = "Bạn phải ít nhất 6 tuổi";
-          }
-          if (age > 100) {
-            error = "Really? Are you sure you are over 100 years old?";
-          }
-        }
-        break;
+      // case "DoB":
+      //   if (!value) {
+      //     error = "Vui lòng nhập ngày sinh";
+      //   } else {
+      //     const today = new Date();
+      //     const birthDate = new Date(value);
+      //     let age = today.getFullYear() - birthDate.getFullYear();
+      //     const monthDifference = today.getMonth() - birthDate.getMonth();
+      //     if (
+      //       monthDifference < 0 ||
+      //       (monthDifference === 0 && today.getDate() < birthDate.getDate())
+      //     ) {
+      //       age--;
+      //     }
+      //     if (age < 6) {
+      //       error = "Bạn phải ít nhất 6 tuổi";
+      //     }
+      //     if (age > 100) {
+      //       error = "Really? Are you sure you are over 100 years old?";
+      //     }
+      //   }
+      //   break;
       default:
         break;
     }
@@ -246,207 +255,214 @@ const RegistrationForm: React.FC = () => {
   };
 
   return (
-    <div className="registration-container">
-      <div className="registration-wrapper">
-        <div className="registration-background"></div>
-        <div className="registration-form-container">
-          <div className="registration-form-wrapper">
-            <div className="registration-form-content">
-              <h2 className="registration-title">Đăng Ký Tài Khoản</h2>
-              <form onSubmit={handleSubmit} className="registration-form">
-                {currentStep === 1 && (
-                  <>
-                    <div className="form-group">
-                      <label className="form-label">Họ và Tên</label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        placeholder="vd: Nguyễn Văn A"
-                        className={`form-input ${errors.fullName ? "input-error" : ""}`}
-                      />
-                      {errors.fullName && (
-                        <p className="error-message">{errors.fullName}</p>
-                      )}
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Vai trò</label>
-                      <select
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                        className={`form-input ${errors.role ? "input-error" : ""}`}
-                      >
-                        <option value="">Chọn vai trò</option>
-                        <option value="student">Học sinh</option>
-                        <option value="parent">Phụ huynh</option>
-                      </select>
-                      {errors.role && (
-                        <p className="error-message">{errors.role}</p>
-                      )}
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Ngày sinh</label>
-                      <input
-                        type="date"
-                        name="DoB"
-                        value={formData.DoB}
-                        onChange={handleChange}
-                        className={`form-input ${errors.DoB ? "input-error" : ""}`}
-                      />
-                      {errors.DoB && <p className="error-message">{errors.DoB}</p>}
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="vd: a@a.com"
-                        className={`form-input ${errors.email ? "input-error" : ""}`}
-                      />
-                      {errors.email && <p className="error-message">{errors.email}</p>}
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Số điện thoại</label>
-                      <div className="phone-input-container">
-                        <PhoneInput
-                          country={'vn'}
-                          onlyCountries={['vn']}
-                          disableDropdown={true}
-                          disableCountryCode={true}
-                          disableCountryGuess={true}
-                          specialLabel="Số điện thoại"
-                          placeholder="vd: 0912345678"
-                          value={formData.phone}
-                          onChange={(phone) => setFormData({ ...formData, phone })}
-                          inputClass={`form-input ${errors.phone ? "input-error" : ""}`}
-                          containerClass="phone-input"
-                          inputProps={{
-                            name: 'phone',
-                            required: true,
-                            autoFocus: true
-                          }}
-                        />
-                        {errors.phone && <span className="error-message">{errors.phone}</span>}
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Địa chỉ</label>
-                      <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        placeholder="vd: 123 Đường ABC, Quận XYZ, TP HCM"
-                        className={`form-input ${errors.address ? "input-error" : ""}`}
-                      />
-                      {errors.address && <p className="error-message">{errors.address}</p>}
-                    </div>
-
-                    <div className="form-buttons">
-                      <button type="button" onClick={() => setCurrentStep(2)} className="next-button">
-                        Tiếp
-                      </button>
-                    </div>
-                  </>
-                )}
-
-                {currentStep === 2 && (
-                  <>
-                    <div className="form-group">
-                      <label className="form-label">Tên người dùng</label>
-                      <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        placeholder="vd: nguyenvana"
-                        className={`form-input ${errors.username ? "input-error" : ""}`}
-                      />
-                      {errors.username && (
-                        <p className="error-message">{errors.username}</p>
-                      )}
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Mật khẩu</label>
-                      <div className="password-input-container">
+    <div className="register-page">
+      <div className="registration-container">
+        <div className="registration-wrapper">
+          <div className="registration-background"></div>
+          <div className="registration-form-container">
+            <div className="registration-form-wrapper">
+              <div className="registration-form-content">
+                <h2 className="registration-title">Đăng Ký Tài Khoản</h2>
+                <form onSubmit={handleSubmit} className="registration-form">
+                  {currentStep === 1 && (
+                    <>
+                      <div className="form-group">
+                        <label className="form-label">Họ và Tên</label>
                         <input
-                          type={showPassword ? "text" : "password"}
-                          name="password"
-                          value={formData.password}
+                          type="text"
+                          name="fullname"
+                          value={formData.fullname}
                           onChange={handleChange}
-                          placeholder="Mật khẩu từ 8 ký tự"
-                          className={`form-input ${errors.password ? "input-error" : ""}`}
+                          placeholder="vd: Nguyễn Văn A"
+                          className={`form-input ${errors.fullname ? "input-error" : ""}`}
                         />
-                        <button
-                          type="button"
-                          className="password-toggle-button"
-                          onClick={() => setShowPassword(!showPassword)}
+                        {errors.fullname && (
+                          <p className="error-message">{errors.fullname}</p>
+                        )}
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="roleName">Vai trò</label>
+                        <select
+                          id="roleName"
+                          name="roleName"
+                          value={formData.roleName}
+                          onChange={handleChange}
+                          className={`form-input ${errors.roleName ? "input-error" : ""}`}
                         >
-                          {showPassword ? "Ẩn" : "Hiện"}
+                          <option value="">Chọn vai trò</option>
+                          <option value="Student">Học Sinh</option>
+                          <option value="Parent">Phụ Huynh</option>
+                        </select>
+                        {errors.roleName && (
+                          <p className="error-message">{errors.roleName}</p>
+                        )}
+                      </div>
+
+                      {/* <div className="form-group">
+                        <label className="form-label">Ngày sinh</label>
+                        <input
+                          type="date"
+                          name="DoB"
+                          value={formData.DoB}
+                          onChange={handleChange}
+                          className={`form-input ${errors.DoB ? "input-error" : ""}`}
+                        />
+                        {errors.DoB && <p className="error-message">{errors.DoB}</p>}
+                      </div> */}
+
+                      <div className="form-group">
+                        <label className="form-label">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder="vd: a@a.com"
+                          className={`form-input ${errors.email ? "input-error" : ""}`}
+                        />
+                        {errors.email && <p className="error-message">{errors.email}</p>}
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Số điện thoại</label>
+                        <div className="phone-input-container">
+                          <PhoneInput
+                            country={'vn'}
+                            onlyCountries={['vn']}
+                            disableDropdown={true}
+                            disableCountryCode={true}
+                            disableCountryGuess={true}
+                            specialLabel="Số điện thoại"
+                            placeholder="vd: 0912345678"
+                            value={formData.phone}
+                            onChange={(phone) => setFormData({ ...formData, phone })}
+                            inputClass={`form-input ${errors.phone ? "input-error" : ""}`}
+                            containerClass="phone-input"
+                            inputProps={{
+                              name: 'phone',
+                              required: true,
+                              autoFocus: true
+                            }}
+                          />
+                          {errors.phone && <span className="error-message">{errors.phone}</span>}
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Địa chỉ</label>
+                        <input
+                          type="text"
+                          name="address"
+                          value={formData.address}
+                          onChange={handleChange}
+                          placeholder="vd: 123 Đường ABC, Quận XYZ, TP HCM"
+                          className={`form-input ${errors.address ? "input-error" : ""}`}
+                        />
+                        {errors.address && <p className="error-message">{errors.address}</p>}
+                      </div>
+
+                      <div className="form-buttons">
+                        <button type="button" onClick={() => setCurrentStep(2)} className="next-button">
+                          Tiếp
                         </button>
                       </div>
-                      {errors.password && (
-                        <p className="error-message">{errors.password}</p>
-                      )}
-                    </div>
+                    </>
+                  )}
 
-                    <div className="form-group">
-                      <label className="form-label">Xác nhận mật khẩu</label>
-                      <div className="password-input-container">
+                  {currentStep === 2 && (
+                    <>
+                      <div className="form-group">
+                        <label className="form-label">Tên người dùng</label>
                         <input
-                          type={showPasswordConfirmation ? "text" : "password"}
-                          name="passwordConfirmation"
-                          value={formData.passwordConfirmation}
+                          type="text"
+                          name="userName"
+                          value={formData.userName}
                           onChange={handleChange}
-                          placeholder="Xác nhận mật khẩu"
-                          className={`form-input ${errors.passwordConfirmation ? "input-error" : ""}`}
+                          placeholder="vd: nguyenvana"
+                          className={`form-input ${errors.userName ? "input-error" : ""}`}
                         />
-                        <button
-                          type="button"
-                          className="password-toggle-button"
-                          onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                        >
-                          {showPasswordConfirmation ? "Ẩn" : "Hiện"}
+                        {errors.userName && (
+                          <p className="error-message">{errors.userName}</p>
+                        )}
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Mật khẩu</label>
+                        <div className="password-input-container">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            name="passwordHash"
+                            value={formData.passwordHash}
+                            onChange={handleChange}
+                            placeholder="Mật khẩu từ 6 ký tự"
+                            autoComplete="new-password"
+                            spellCheck="false"
+                            className={`form-input ${errors.passwordHash ? "input-error" : ""}`}
+                          />
+                          <button
+                            type="button"
+                            className="password-toggle-button"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? "Ẩn" : "Hiện"}
+                          </button>
+                        </div>
+                        {errors.passwordHash && (
+                          <p className="error-message">{errors.passwordHash}</p>
+                        )}
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Xác nhận mật khẩu</label>
+                        <div className="password-input-container">
+                          <input
+                            type={showPasswordConfirmation ? "text" : "password"}
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            placeholder="Xác nhận mật khẩu"
+                            autoComplete="new-password"
+                            spellCheck="false"
+                            className={`form-input ${errors.confirmPassword ? "input-error" : ""}`}
+                          />
+                          <button
+                            type="button"
+                            className="password-toggle-button"
+                            onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
+                          >
+                            {showPasswordConfirmation ? "Ẩn" : "Hiện"}
+                          </button>
+                        </div>
+                        {errors.confirmPassword && (
+                          <p className="error-message">{errors.confirmPassword}</p>
+                        )}
+                      </div>
+
+                      <div className="password-strength">
+                        <div
+                          className={`strength-meter strength-${passwordStrength}`}
+                        ></div>
+                        <span>
+                          {
+                            ["Yếu", "Trung bình", "Khá", "Mạnh"][passwordStrength - 1]
+                          }
+                        </span>
+                      </div>
+
+                      <div className="form-buttons">
+                        <button type="button" onClick={() => setCurrentStep(1)} className="back-button">
+                          Quay lại
+                        </button>
+                        <button type="submit" disabled={isLoading} className="submit-button">
+                          {isLoading ? "Đang đăng ký..." : "Đăng ký"}
                         </button>
                       </div>
-                      {errors.passwordConfirmation && (
-                        <p className="error-message">{errors.passwordConfirmation}</p>
-                      )}
-                    </div>
-
-                    <div className="password-strength">
-                      <div
-                        className={`strength-meter strength-${passwordStrength}`}
-                      ></div>
-                      <span>
-                        {
-                          ["Yếu", "Trung bình", "Khá", "Mạnh"][passwordStrength - 1]
-                        }
-                      </span>
-                    </div>
-
-                    <div className="form-buttons">
-                      <button type="button" onClick={() => setCurrentStep(1)} className="back-button">
-                        Quay lại
-                      </button>
-                      <button type="submit" disabled={isLoading} className="submit-button">
-                        {isLoading ? "Đang đăng ký..." : "Đăng ký"}
-                      </button>
-                    </div>
-                  </>
-                )}
-              </form>
-              <ToastContainer />
+                    </>
+                  )}
+                </form>
+                <ToastContainer />
+              </div>
             </div>
           </div>
         </div>

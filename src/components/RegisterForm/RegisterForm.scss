@@ -1,297 +1,253 @@
-.registration-container {
-  background: url('../../images/pexels-thephotosaccount-30699932.jpg') no-repeat center center;
-  min-height: auto;
-  width: 100vw;
-  background-size: cover;
-  display: flex;
-  align-items: flex-start;
-  padding: 4% 0;
-  justify-content: center;
+// Define color variables for the registration page
+.register-page {
+  --primary-color: #3b82f6;
+  --primary-color-dark: #2563eb;
+  --text-color: #1f2937;
+  --background-color: #f3f4f6;
+  --error-color: #ef4444;
+  --success-color: #10b981;
+  --border-color: #d1d5db;
+  --input-placeholder-color: #9ca3af;
 
-  .form-input::placeholder {
-    font-style: italic;
-    color: #999;
+  // Remove default password reveal/clear buttons in browsers
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
   }
 
-  .registration-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .registration-form-container {
-    background-color: white;
+  // Style the registration container
+  .registration-container {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%),
+      url('../../images/pexels-thephotosaccount-30699932.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 2rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    border-radius: 1rem;
+
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+  }
+
+  // Style the registration wrapper
+  .registration-wrapper {
     width: 100%;
+    max-width: 500px;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
   }
 
+  // Style the content inside the registration form
+  .registration-form-content {
+    padding: 2.5rem;
+  }
+
+  // Style the registration title
   .registration-title {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
     text-align: center;
-    color: #2563eb;
     margin-bottom: 1.5rem;
+    letter-spacing: -0.025em;
   }
 
+  // Style the registration form
   .registration-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
+    gap: 1rem;
   }
 
+  // Style the form group
   .form-group {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    margin-bottom: 1rem; // Add spacing between form groups
 
-    input,
-    select {
-      transition: border-color 0.2s ease;
-
-      &:focus {
-        outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-      }
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
     }
   }
 
-  .form-buttons {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  .form-label {
-    font-size: 0.875rem;
-    font-weight: bold;
-  }
-
+  // Style the form input
   .form-input {
-    padding: 0.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
     width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+
+    &::placeholder {
+      color: var(--input-placeholder-color);
+      font-style: italic;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    &.input-error {
+      border-color: var(--error-color);
+    }
   }
 
-  .input-error {
-    border-color: #ef4444;
-  }
-
+  // Style the error message
   .error-message {
+    color: var(--error-color);
     font-size: 0.75rem;
-    color: #ef4444;
     margin-top: 0.25rem;
+    animation: fadeIn 0.3s ease;
   }
 
+  // Style the password input container
   .password-input-container {
     position: relative;
-    display: flex;
-    flex-direction: column;
-
-    input {
-      padding-right: 2.5rem; // Make space for the eye icon
-      margin-bottom: 0.5rem; // Add spacing between password and confirmation input
-    }
 
     .password-toggle-button {
       position: absolute;
+      right: 0.5rem;
       top: 50%;
-      right: 0.75rem;
       transform: translateY(-50%);
       background: none;
       border: none;
-      color: #9ca3af;
+      color: var(--input-placeholder-color);
       cursor: pointer;
-      padding: 0.25rem;
+      font-size: 0.8rem;
 
       &:hover {
-        color: #4b5563;
+        color: var(--text-color);
       }
     }
   }
 
+  // Style the password strength meter
   .password-strength {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 0.5rem;
-    width: 100%;
 
     .strength-meter {
+      flex-grow: 1;
       height: 4px;
       border-radius: 2px;
-      transition: all 0.3s ease;
-      margin-bottom: 0.25rem;
 
       &.strength-1 {
-        width: 25%;
-        background-color: #ef4444; // red
+        background-color: var(--error-color);
       }
 
       &.strength-2 {
-        width: 50%;
-        background-color: #f59e0b; // yellow
+        background-color: #f59e0b;
       }
 
       &.strength-3 {
-        width: 75%;
-        background-color: #10b981; // green
+        background-color: var(--success-color);
       }
 
       &.strength-4 {
-        width: 100%;
-        background-color: #059669; // dark green
+        background-color: var(--success-color);
       }
     }
 
     span {
       font-size: 0.75rem;
-      color: #6b7280;
+      color: var(--input-placeholder-color);
     }
   }
 
-  .submit-button {
-    width: 200px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    border-radius: 0.25rem;
-    margin-left: auto; // Align the submit button to the right
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: #2563eb;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-    }
-  }
-
-  .next-button,
-  .back-button,
-  .submit-button {
-    width: 100px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    border-radius: 0.25rem;
-    margin-right: 1rem; // Add spacing between buttons
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: #2563eb;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-    }
-  }
-
-  .phone-input-container {
-    .phone-input {
-      width: 100%;
-
-      .form-input {
-        width: 100%;
-        padding: 0.5rem 0.5rem 0.5rem 3rem; // Add padding to the left to accommodate the flag
-        border: 1px solid #d1d5db;
-        border-radius: 0.375rem;
-      }
-
-      .input-error {
-        border-color: #ef4444;
-      }
-    }
-
-    .flag-dropdown {
-      position: absolute;
-      left: 0.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
-
-  .password-toggle {
+  // Style the form buttons
+  .form-buttons {
     display: flex;
-    align-items: center;
-    margin-top: 0.5rem;
+    justify-content: space-between;
+    margin-top: 1.5rem;
 
-    input[type="checkbox"] {
-      margin-right: 0.5rem;
-    }
-
-    label {
-      font-size: 0.875rem;
-      color: #4b5563;
-    }
-  }
-
-  .password-input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-
-    input {
-      flex: 1;
-      padding-right: 2.5rem; // Make space for the toggle button
-    }
-
-    .password-toggle-button {
-      position: absolute;
-      right: 0.75rem;
-      background: none;
-      border: none;
-      color: #9ca3af;
-      cursor: pointer;
-      padding: 0.25rem;
-
-      &:hover {
-        color: #4b5563;
-      }
-    }
-  }
-
-  // Add responsive design for mobile
-  @media (max-width: 768px) {
-    .registration-form {
-      grid-template-columns: 1fr; // Stack form fields on mobile
-    }
-
+    .next-button,
+    .back-button,
     .submit-button {
-      grid-column: 1;
-      width: 100%;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
     }
 
-    .registration-form-container {
-      padding: 1rem;
+    .next-button,
+    .submit-button {
+      background-color: var(--primary-color);
+      color: white;
+
+      &:hover:not(:disabled) {
+        background-color: var(--primary-color-dark);
+      }
+    }
+
+    .back-button {
+      background-color: var(--background-color);
+      color: var(--text-color);
+
+      &:hover:not(:disabled) {
+        background-color: #e5e7eb;
+      }
+    }
+  }
+
+  // Style the phone input container
+  .phone-input-container {
+    .react-phone-input-2 {
+      width: 100%;
+
+      .flag-dropdown {
+        border: 1px solid var(--border-color);
+      }
+
+      .form-control {
+        width: 100%;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+      }
+    }
+  }
+
+  // Responsive styles for smaller screens
+  @media (max-width: 768px) {
+    .registration-wrapper {
+      width: 95%;
+      max-width: 100%;
       margin: 0 1rem;
+    }
+
+    .registration-form-content {
+      padding: 1.5rem;
+    }
+  }
+
+  // Keyframes for fade-in animation
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
