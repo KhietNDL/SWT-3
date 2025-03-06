@@ -2,11 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMail } from "react-icons/fi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast} from "react-toastify";
 import { toastConfig } from "../../types/toastConfig";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "./RegisterValidation.scss";
-import { OtpData, OtpErrors } from "../../types/RegisterValidate";
 
 const VerificationPage: React.FC = () => {
     const navigate = useNavigate();
@@ -14,7 +13,7 @@ const VerificationPage: React.FC = () => {
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [timer, setTimer] = useState<number>(60);
+    const [timer, setTimer] = useState<number>(30);
     const [canResend, setCanResend] = useState<boolean>(false);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -106,6 +105,7 @@ const VerificationPage: React.FC = () => {
                 setError("");
                 toast.success("Xác thực email thành công!", toastConfig);
                 setTimeout(() => navigate("/login"), 3000);
+                localStorage.removeItem("email");
             } else {
                 const errorMessage = data.message || "Mã xác thực không hợp lệ";
                 setError(errorMessage);
@@ -116,8 +116,6 @@ const VerificationPage: React.FC = () => {
             const errorMessage = err instanceof Error ? err.message : "Xác thực thất bại. Vui lòng thử lại.";
             setError(errorMessage);
             toast.error(errorMessage, toastConfig);
-            
-            // Redirect to registration if email is missing
             navigate("/register");
         }
         setLoading(false);
@@ -127,7 +125,6 @@ const VerificationPage: React.FC = () => {
         setCanResend(false);
         setTimer(60);
         try {
-            // Rigorous email validation
             const email = localStorage.getItem("email");
             if (!email) {
                 throw new Error("Không tìm thấy email. Vui lòng đăng ký lại.");
@@ -185,6 +182,7 @@ const VerificationPage: React.FC = () => {
                         />
                     ))}
                 </div>
+                {error && <p className="error-message">{error}</p>}
                 <button onClick={handleVerification} disabled={loading || success}>
                     {loading ? <AiOutlineLoading3Quarters className="loading-icon" /> : "Xác Thực Email"}
                 </button>

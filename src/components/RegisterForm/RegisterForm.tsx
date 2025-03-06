@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast, Zoom } from "react-toastify";
+import { ToastContainer, toast} from "react-toastify";
 import { toastConfig } from "../../types/toastConfig";
 import "react-toastify/dist/ReactToastify.css";
 import "./RegisterForm.scss";
@@ -14,13 +14,13 @@ const RegistrationForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     userName: "",
     fullname: "",
-    //DoB: "",
     email: "",
     phone: "",
     address: "",
     passwordHash: "",
     confirmPassword: "",
     roleName: "",
+    //DoB: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -47,18 +47,18 @@ const RegistrationForm: React.FC = () => {
     const {
       userName,
       fullname,
-      //DoB,
       email,
       phone,
       address,
       passwordHash,
       confirmPassword,
       roleName,
+      //DoB,
 
     } = formData;
 
-    if (!/^[A-Za-zÀ-ỹ\s]{2,}$/.test(fullname)) {
-      newErrors.fullname = "Tên chỉ được chứa chữ cái và ít nhất 2 ký tự";
+    if (!/^[A-Za-zÀ-ỹ\s]+$/.test(fullname) || fullname.trim().split(" ").length < 2) {
+      newErrors.fullname = "Họ và tên phải chứa ít nhất 2 từ và chỉ bao gồm chữ cái";
     }
     if (!/^[a-zA-Z0-9_]{4,}$/.test(userName)) {
       newErrors.userName =
@@ -68,7 +68,10 @@ const RegistrationForm: React.FC = () => {
       newErrors.email = "Vui lòng nhập địa chỉ email hợp lệ";
     }
     if (passwordHash.length < 6) {
-      newErrors.passwordHash = "Mật khẩu phải có ít nhất 8 ký tự";
+      newErrors.passwordHash = "Mật khẩu phải có ít nhất 6 ký tự";
+    }
+    else if (passwordHash.length === 25) {
+      newErrors.passwordHash = "Mật khẩu không được quá 25 ký tự";
     }
     if (passwordHash !== confirmPassword) {
       newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
@@ -109,7 +112,7 @@ const RegistrationForm: React.FC = () => {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        const apiUrl = "http://localhost:5199/Account/Register";  // Updated API URL
+        const apiUrl = "http://localhost:5199/Account/Register";
 
         const response = await fetch(apiUrl, {
           method: "POST",
@@ -120,45 +123,41 @@ const RegistrationForm: React.FC = () => {
             email: formData.email,
             phone: formData.phone,
             address: formData.address,
-            passwordHash: formData.passwordHash,        // Đổi 'password' thành 'passwordHash'
-            confirmPassword: formData.confirmPassword,  // Giữ nguyên
+            passwordHash: formData.passwordHash,
+            confirmPassword: formData.confirmPassword,
             roleName: formData.roleName,
-            // DoB: formData.DoB,  // Make sure DoB is included if required by API
+            // DoB: formData.DoB,
           }),
         });
 
         if (response.ok) {
           const result = await response.clone().json();
-          toast.success(result.message || "Đăng ký thành công!", { ...toastConfig, transition: Zoom });
+          toast.success(result.message || "Đăng ký thành công!", { ...toastConfig});
           localStorage.setItem("email", formData.email);
           setFormData({
             userName: "",
             fullname: "",
-            //DoB: "",
             email: "",
             phone: "",
             address: "",
             passwordHash: "",
             confirmPassword: "",
             roleName: "",
+            // DoB: "",
           });
           setTimeout(() => navigate("/register-valid"), 3000);
-        }
-        if (!response.ok) {
+        } else if (!response.ok) {
           const errorText = await response.clone().json();
           console.error("Error details:", errorText);
           toast.error(errorText);
-        }
-
-        else {
+        } else {
           const errorData = await response.clone().json();
-          toast.error(errorData.message || "Đăng ký thất bại!", { ...toastConfig, transition: Zoom });
+          toast.error(errorData.message || "Đăng ký thất bại!", { ...toastConfig});
         }
       } catch (error: any) {
         console.error("Đăng ký lỗi:", error);
         toast.error(error.message || "Đăng ký thất bại. Vui lòng thử lại.", {
           ...toastConfig,
-          transition: Zoom,
         });
       } finally {
         setIsLoading(false);
@@ -166,7 +165,6 @@ const RegistrationForm: React.FC = () => {
     } else {
       toast.error("Hãy kiểm tra lại thông tin bạn nhập", {
         ...toastConfig,
-        transition: Zoom,
       });
     }
   };
@@ -182,8 +180,8 @@ const RegistrationForm: React.FC = () => {
 
     switch (name) {
       case "fullname":
-        if (!/^[A-Za-zÀ-ỹ\s]{2,}$/.test(value)) {
-          error = "Tên chỉ được chứa chữ cái và ít nhất 2 ký tự";
+        if (!/^[A-Za-zÀ-ỹ\s]+$/.test(value) || value.trim().split(" ").length < 2) {
+          error = "Họ và tên phải chứa ít nhất 2 từ và chỉ bao gồm chữ cái";
         }
         break;
       case "userName":
@@ -192,14 +190,22 @@ const RegistrationForm: React.FC = () => {
         }
         break;
       case "email":
-        if (!/^[^\s@]+\@[^\s@]+\.[^\s@]+$/.test(value)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           error = "Vui lòng nhập địa chỉ email hợp lệ";
         }
         break;
       case "passwordHash":
         setPasswordStrength(validatePassword(value));
         if (value.length < 6) {
-          error = "Mật khẩu phải có ít nhất 8 ký tự";
+          error = "Mật khẩu phải có ít nhất 6 ký tự";
+        } else if (value.length === 25) {
+          error = "Mật khẩu không được quá 25 ký tự";
+          setTimeout(() => {
+            setErrors((prev) => ({
+              ...prev,
+              [name]: "",
+            }));
+          }, 3000);
         }
         break;
       case "confirmPassword":
@@ -214,7 +220,7 @@ const RegistrationForm: React.FC = () => {
         break;
       case "phone":
         if (!vietnamPhoneRegex.test(value)) {
-          error = "Số điện thoại không hợp lệ (phải có 10 hoặc 11 chữ số)";
+          error = "Số điện thoại không hợp lệ (phải có 10 chữ số)";
         }
         break;
       case "address":
@@ -298,18 +304,6 @@ const RegistrationForm: React.FC = () => {
                           <p className="error-message">{errors.roleName}</p>
                         )}
                       </div>
-
-                      {/* <div className="form-group">
-                        <label className="form-label">Ngày sinh</label>
-                        <input
-                          type="date"
-                          name="DoB"
-                          value={formData.DoB}
-                          onChange={handleChange}
-                          className={`form-input ${errors.DoB ? "input-error" : ""}`}
-                        />
-                        {errors.DoB && <p className="error-message">{errors.DoB}</p>}
-                      </div> */}
 
                       <div className="form-group">
                         <label className="form-label">Email</label>
@@ -398,6 +392,7 @@ const RegistrationForm: React.FC = () => {
                             placeholder="Mật khẩu từ 6 ký tự"
                             autoComplete="new-password"
                             spellCheck="false"
+                            maxLength={25}
                             className={`form-input ${errors.passwordHash ? "input-error" : ""}`}
                           />
                           <button
@@ -413,6 +408,17 @@ const RegistrationForm: React.FC = () => {
                         )}
                       </div>
 
+                      <div className="password-strength">
+                        <div
+                          className={`strength-meter strength-${passwordStrength}`}
+                        ></div>
+                        <span className="strength-status">
+                          {
+                            ["Yếu", "Trung bình", "Khá", "Mạnh"][passwordStrength - 1]
+                          }
+                        </span>
+                      </div>
+
                       <div className="form-group">
                         <label className="form-label">Xác nhận mật khẩu</label>
                         <div className="password-input-container">
@@ -424,6 +430,7 @@ const RegistrationForm: React.FC = () => {
                             placeholder="Xác nhận mật khẩu"
                             autoComplete="new-password"
                             spellCheck="false"
+                            maxLength={25}
                             className={`form-input ${errors.confirmPassword ? "input-error" : ""}`}
                           />
                           <button
@@ -437,18 +444,7 @@ const RegistrationForm: React.FC = () => {
                         {errors.confirmPassword && (
                           <p className="error-message">{errors.confirmPassword}</p>
                         )}
-                      </div>
-
-                      <div className="password-strength">
-                        <div
-                          className={`strength-meter strength-${passwordStrength}`}
-                        ></div>
-                        <span>
-                          {
-                            ["Yếu", "Trung bình", "Khá", "Mạnh"][passwordStrength - 1]
-                          }
-                        </span>
-                      </div>
+                      </div>                      
 
                       <div className="form-buttons">
                         <button type="button" onClick={() => setCurrentStep(1)} className="back-button">

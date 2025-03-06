@@ -131,41 +131,81 @@
     }
   }
 
+  // Custom styles for phone input
+  .react-tel-input {
+    .custom-flag-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-right: 1px solid #cacaca;
+
+      .flag {
+        align-items: center;
+        margin: 0;
+      }
+    }
+
+    .form-control {
+      padding-left: 36px;
+    }
+
+    .flag-dropdown {
+      background: transparent;
+      border: none;
+
+      &.open {
+        background: transparent;
+      }
+    }
+  }
+
   // Style the password strength meter
   .password-strength {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.5rem;
+    overflow: hidden;
 
     .strength-meter {
       flex-grow: 1;
       height: 4px;
       border-radius: 2px;
+      background-color: rgba(0, 0, 0, 0.1);
+      width: 0;
+      transition: width 0.1s ease-in-out, background-color 1s ease-in-out;
 
       &.strength-1 {
-        background-color: var(--error-color);
+        background-color: red;
+        max-width: 25%;
       }
 
       &.strength-2 {
-        background-color: #f59e0b;
+        background-color: orange;
+        max-width: 50%;
       }
 
       &.strength-3 {
-        background-color: var(--success-color);
+        background-color: skyblue;
+        max-width: 75%;
       }
 
       &.strength-4 {
-        background-color: var(--success-color);
+        background-color: green;
+        max-width: 100%;
       }
     }
 
-    span {
+
+    .strength-status {
       font-size: 0.75rem;
       color: var(--input-placeholder-color);
+      text-align: center;
     }
   }
-
+  
   // Style the form buttons
   .form-buttons {
     display: flex;
@@ -204,23 +244,6 @@
 
       &:hover:not(:disabled) {
         background-color: #e5e7eb;
-      }
-    }
-  }
-
-  // Style the phone input container
-  .phone-input-container {
-    .react-phone-input-2 {
-      width: 100%;
-
-      .flag-dropdown {
-        border: 1px solid var(--border-color);
-      }
-
-      .form-control {
-        width: 100%;
-        border: 1px solid var(--border-color);
-        border-radius: 0.5rem;
       }
     }
   }

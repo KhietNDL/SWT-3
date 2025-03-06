@@ -7,4 +7,5 @@ export const toastConfig: ToastOptions = {
     pauseOnFocusLoss: false,
     closeOnClick: true,
     transition: Zoom,
+    closeButton: false,
   };
