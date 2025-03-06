@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import "./index.scss";
 import { Button } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store"; // Điều chỉnh đường dẫn nếu cần
 import axios from "axios";
 
 function UserInformation() {
-  const [user, setUser] = useState(null);
-  const [isChangePassword, setIsChangePassword] = useState(false);
+  // Lấy thông tin user từ Redux
+  const reduxUser = useSelector((state: RootState) => state.user);
 
-  // Các state cho thông tin người dùng
+  // Nếu cần giữ các state riêng cho input để cho phép chỉnh sửa
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
@@ -20,49 +22,42 @@ function UserInformation() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isChangePassword, setIsChangePassword] = useState(false);
 
-  // Lấy dữ liệu user từ API khi component mount
+  // Đồng bộ các state với dữ liệu từ Redux khi reduxUser thay đổi
   useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await axios.get(
-          "https://localhost:7006/Account/dad2a80f-70e4-49f6-b3c5-3c1eedf525e4"
-        );
-        const data = response.data;
-        setUser(data);
-        // Cập nhật các state với giá trị từ API
-        setUsername(data.userName || "");
-        setFullname(data.fullname || "");
-        setEmail(data.email || "");
-        setPhone(data.phone || "");
-        setAddress(data.address || "");
-        setPasswordHash(data.passwordHash || "");
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu người dùng:", error);
-      }
+    if (reduxUser) {
+      setUsername(reduxUser.userName || reduxUser.userName || "");
+      setFullname(reduxUser.fullname || "");
+      setEmail(reduxUser.email || "");
+      setPhone(reduxUser.phone || "");
+      setAddress(reduxUser.address || "");
+      setPasswordHash(reduxUser.passwordHash || "");
+      // Nếu có thêm thông tin nào khác, cập nhật tương tự
     }
-    fetchUser();
-  }, []);
+  }, [reduxUser]);
 
-  if (!user) {
+  // Nếu chưa có user từ Redux, có thể hiển thị Loading
+  if (!reduxUser) {
     return <div>Loading...</div>;
   }
 
+  // Các hàm xử lý cập nhật thông tin người dùng và đổi mật khẩu giữ nguyên
   const handleUpdateUserInfo = async () => {
     const updatedData = {
-      accountId: user.id,
-      username: username || user.userName,
-      fullname: fullname || user.fullname,
-      email: email || user.email,
-      phone: phone || user.phone,
-      address: address || user.address,
-      passwordHash: passwordHash || user.passwordHash,
+      accountId: reduxUser.id,
+      username: username || reduxUser.userName,
+      fullname: fullname || reduxUser.fullname,
+      email: email || reduxUser.email,
+      phone: phone || reduxUser.phone,
+      address: address || reduxUser.address,
+      passwordHash: passwordHash || reduxUser.passwordHash,
       passwordSalt,
     };
-
+    
     try {
       const response = await axios.put(
-        `https://localhost:7006/Account/${user.id}`,
+        `http://localhost:5199/Account/${reduxUser.id}`,
         updatedData
       );
       console.log("User information updated:", response.data);
@@ -72,28 +67,25 @@ function UserInformation() {
   };
 
   const handleUpdatePassword = async () => {
-    // Kiểm tra mật khẩu mới có trùng khớp không
     if (newPassword !== confirmPassword) {
       alert("Mật khẩu xác nhận không khớp!");
       return;
     }
     try {
       const payload = {
-        accountId: user.id,
-        oldPassword, // mật khẩu người dùng nhập (plain text)
-        newPassword, // mật khẩu mới
+        accountId: reduxUser.id,
+        oldPassword,
+        newPassword,
       };
       const response = await axios.post(
-        "https://localhost:7006/Account/UpdatePassword",
+        "http://localhost:5199/Account/UpdatePassword",
         payload
       );
       console.log("Password updated successfully:", response.data);
       alert("Cập nhật mật khẩu thành công!");
-      // Reset lại các state liên quan mật khẩu
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      // Có thể chuyển về form thông tin user nếu cần
       setIsChangePassword(false);
     } catch (error) {
       console.error("Error updating password:", error);
@@ -101,6 +93,7 @@ function UserInformation() {
     }
   };
 
+  // Render form thông tin người dùng và đổi mật khẩu
   const renderUserInfoForm = () => (
     <div className="user-information__content">
       <div className="user-information__form">
@@ -133,7 +126,7 @@ function UserInformation() {
 
         <div className="form-group">
           <label>Vai trò</label>
-          <input type="text" value={user.roleName} readOnly />
+          <input type="text" value={reduxUser.roleName} readOnly />
         </div>
       </div>
 
@@ -141,7 +134,7 @@ function UserInformation() {
         <div className="avatar-section">
           <label>Hình đại diện</label>
           <div className="avatar-container">
-            <img src={user.avatar} alt={user.userName} />
+            <img src={reduxUser.avatar} alt={reduxUser.userName} />
           </div>
         </div>
 

@@ -84,7 +84,7 @@ function Header() {
         <div className="user-menu dropdown">
           <div className="user-avatar">
             <img src={user.avatar}/>
-            <span className="user-name">{user.first_name}</span>
+            <span className="user-name">{user.userName}</span>
           </div>
           <ul className="dropdown-content">
             <li>
