@@ -67,6 +67,8 @@ function DoctorInfo() {
         content: "Vui lòng đăng nhập để đặt lịch khám.",
         okText: "Đăng nhập ngay",
         onOk: () => navigate("/login"),
+        onCancel: () => {},
+        maskClosable: true,
       });
     } else {
       setIsBookingOpen(true);
