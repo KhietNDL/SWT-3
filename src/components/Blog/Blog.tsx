@@ -1,8 +1,8 @@
-import Footer from '../../components/footer'
-import Header from '../../components/header'
-import './Blog.scss'
-import { FiClock, FiUser, FiTag } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import Footer from "../Footer";
+import Header from "../Header";
+import "./Blog.scss";
+import { FiClock, FiUser, FiTag } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 interface BlogPost {
   id: number;
@@ -20,49 +20,53 @@ function Blog() {
     {
       id: 1,
       title: "Hiểu về Tâm lý học Trường học trong Thời đại Số",
-      excerpt: "Khám phá cách công nghệ và phương pháp hiện đại đang thay đổi cách tiếp cận tâm lý học đường...",
+      excerpt:
+        "Khám phá cách công nghệ và phương pháp hiện đại đang thay đổi cách tiếp cận tâm lý học đường...",
       author: "Dr. Nguyễn Văn A",
       date: "15/03/2024",
       imageUrl: "./src/images/blog1.jpg",
       category: "Tâm lý học Giáo dục",
-      readTime: "5 phút đọc"
+      readTime: "5 phút đọc",
     },
     {
       id: 2,
       title: "10 Kỹ năng Tư vấn Học đường Hiệu quả",
-      excerpt: "Tổng hợp những kỹ năng quan trọng giúp nhà tư vấn tâm lý kết nối hiệu quả với học sinh...",
+      excerpt:
+        "Tổng hợp những kỹ năng quan trọng giúp nhà tư vấn tâm lý kết nối hiệu quả với học sinh...",
       author: "ThS. Trần Thị B",
       date: "12/03/2024",
       imageUrl: "./src/images/tamlyhocduong1.jpg",
       category: "Tư vấn Tâm lý",
-      readTime: "8 phút đọc"
+      readTime: "8 phút đọc",
     },
     {
       id: 3,
       title: "Quản lý Stress và Lo âu ở Học sinh THPT",
-      excerpt: "Hướng dẫn cách nhận biết và hỗ trợ học sinh đối phó với áp lực học tập và thi cử...",
+      excerpt:
+        "Hướng dẫn cách nhận biết và hỗ trợ học sinh đối phó với áp lực học tập và thi cử...",
       author: "ThS. Lê Văn C",
       date: "10/03/2024",
       imageUrl: "./src/images/quanlystressvaloau.jpg",
       category: "Sức khỏe Tinh thần",
-      readTime: "6 phút đọc"
+      readTime: "6 phút đọc",
     },
     {
       id: 4,
       title: "Xây dựng Môi trường Học đường Tích cực",
-      excerpt: "Các giải pháp và hoạt động thực tiễn để tạo nên không gian học tập lành mạnh, an toàn...",
+      excerpt:
+        "Các giải pháp và hoạt động thực tiễn để tạo nên không gian học tập lành mạnh, an toàn...",
       author: "PGS.TS. Phạm Thị D",
       date: "08/03/2024",
       imageUrl: "./src/images/tichcuc.jpg",
       category: "Tâm lý học Giáo dục",
-      readTime: "7 phút đọc"
-    }
+      readTime: "7 phút đọc",
+    },
   ];
 
   return (
     <div className="blog-page">
-      <Header/>
-      
+      <Header />
+
       <main className="blog-content">
         <div className="blog-hero">
           <h1>Blog Tâm lý học Đường</h1>
@@ -83,7 +87,7 @@ function Blog() {
             </div>
 
             <div className="blog-grid">
-              {blogPosts.map(post => (
+              {blogPosts.map((post) => (
                 <article key={post.id} className="blog-card">
                   <div className="blog-card-image">
                     <img src={post.imageUrl} alt={post.title} />
@@ -119,7 +123,7 @@ function Blog() {
             <div className="sidebar-section popular-posts">
               <h3>Bài viết nổi bật</h3>
               <ul>
-                {blogPosts.slice(0, 3).map(post => (
+                {blogPosts.slice(0, 3).map((post) => (
                   <li key={post.id}>
                     <img src={post.imageUrl} alt={post.title} />
                     <div>
@@ -154,7 +158,7 @@ function Blog() {
 
       <Footer />
     </div>
-  )
+  );
 }
 
-export default Blog
+export default Blog;

@@ -20,6 +20,7 @@ import ProgramDetail from "./pages/ProgramDetail/index";
 import "./main.css"
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";
+import ManagePage from "./pages/Manager";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
       { path: "dich-vu", element: <Program /> },
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
+      { path: "manage", element: <ManagePage /> },
     ],
   },
 ]);

@@ -1,14 +1,14 @@
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import UserInformation from '../../components/user-information'
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import UserInformation from "../../components/UserInformation";
 function Info() {
   return (
     <div>
-      <Header/>
-      <UserInformation/>
+      <Header />
+      <UserInformation />
       <Footer />
     </div>
-  )
+  );
 }
 
-export default Info
+export default Info;

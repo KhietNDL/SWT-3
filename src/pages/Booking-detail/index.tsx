@@ -1,17 +1,17 @@
-import DoctorCarousel from "../../components/doctor-carousel";
-import DoctorInfo from "../../components/doctor-information";
-import Footer from "../../components/footer";
-import Header from "../../components/header";
+import DoctorCarousel from "../../components/DoctorCarousel";
+import DoctorInfo from "../../components/DoctorInformation";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 function BookingDetail() {
   return (
     <div>
-      <Header/>
-      <DoctorInfo/>
+      <Header />
+      <DoctorInfo />
       <DoctorCarousel numberOfSlides={4} autoplay={false} />
-      <Footer/>
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default BookingDetail
+export default BookingDetail;

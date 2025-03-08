@@ -1,15 +1,21 @@
-import Footer from "../../components/footer"
-import GAD7FormPage from "../../components/Forms/GAD7Form"
-import Header from "../../components/header"
+import Footer from "../../components/Footer";
+import GAD7FormPage from "../../components/Forms/GAD7Form";
+import Header from "../../components/Header";
 
 function GAD7Form() {
-    return (
-        <div>
-            <header><Header /></header>
-            <main><GAD7FormPage /></main>
-            <footer><Footer /></footer>
-        </div>
-    )
+  return (
+    <div>
+      <header>
+        <Header />
+      </header>
+      <main>
+        <GAD7FormPage />
+      </main>
+      <footer>
+        <Footer />
+      </footer>
+    </div>
+  );
 }
 
-export default GAD7Form
+export default GAD7Form;

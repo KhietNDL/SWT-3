@@ -220,6 +220,20 @@ const LoginPage: React.FC = () => {
                 )}
               </div>
 
+              <div className="form-footer">
+                <div className="remember-me">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    name="rememberMe"
+                    checked={formData.rememberMe}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="remember">Ghi nhớ đăng nhập </label>
+                </div>
+                <a href="#" className="forgot-password">Quên mật khẩu?</a>
+              </div>
+
               <button
                 type="submit"
                 className="submit-button"
@@ -227,6 +241,13 @@ const LoginPage: React.FC = () => {
               >
                 {isLoading ? "Signing in..." : "Sign in"}
               </button>
+
+              <div className="register-section">
+                <p>
+                  Chưa có tài khoản?
+                  <a href="/register">Đăng ký ngay</a>
+                </p>
+              </div>
             </form>
           </div>
         </div>
