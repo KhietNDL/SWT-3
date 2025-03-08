@@ -27,8 +27,11 @@ function ProgramDetail() {
 
   const handleModalOk = () => {
     setIsModalOpen(false);
-    navigate('/payment'); // hoặc trang đích khác
+  
+    const orderId = "123"; // ⚠ Tạm thời dùng ID giả, sau này thay bằng API
+    navigate(`/order-detail/${orderId}`); // ✅ Truyền ID khi điều hướng
   };
+  
 
   const handleModalCancel = () => {
     setIsModalOpen(false);
