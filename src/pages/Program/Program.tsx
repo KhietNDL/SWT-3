@@ -6,61 +6,63 @@ import './Program.scss';
 
 function Program() {
   const [selectedService, setSelectedService] = useState<number | null>(null);
+  const [programTitle, setProgramTitle] = useState<string>(''); // Thêm state để lưu title
   const navigate = useNavigate();
 
   const programs = [
     {
       id: 1,
-      title: "Đánh giá sự phát triển của trẻ",
-      shortDesc: "Sự phát triển với tốc độ nhanh và đầy biến động của thời đại 4.0, cùng với yêu cầu ngày càng cao của nhà trường và những bất cập trong thực tiễn giáo dục đang tạo ra những áp lực rất lớn cho trẻ em...",
-      link: "/danh-gia/phat-trien"
+      title: "Giải Tỏa Lo Âu - Hướng Tới Tương Lai Tươi Sáng",
+      shortDesc: "Chương trình giúp học sinh giảm bớt lo âu, cải thiện khả năng quản lý căng thẳng trong môi trường học đường thông qua các buổi tư vấn và kỹ thuật thư giãn...",
+      link: "/danh-gia/lo-au"
     },
     {
       id: 2,
-      title: "Từ 6 tuổi trở lên - RAVEN",
-      shortDesc: "Test Raven là một công cụ đánh giá trí thông minh phi ngôn ngữ, được sử dụng rộng rãi để đo lường khả năng tư duy logic và giải quyết vấn đề của trẻ từ 6 tuổi trở lên...",
-      link: "/danh-gia/raven"
+      title: "Vượt Qua Trầm Cảm - Đánh Thức Niềm Tin Cuộc Sống",
+      shortDesc: "Chương trình cung cấp các buổi trị liệu tâm lý và tư vấn cho học sinh mắc chứng trầm cảm, giúp họ vượt qua cảm giác cô đơn và tuyệt vọng trong môi trường học đường.",
+      link: "/danh-gia/tram-cam"
     },
     {
       id: 3,
-      title: "Thang đo đánh giá trí tuệ của Wechsler",
-      shortDesc: "Thang đo Wechsler là công cụ đánh giá toàn diện về chỉ số thông minh (IQ), bao gồm các kỹ năng ngôn ngữ, tư duy logic, trí nhớ và tốc độ xử lý thông tin...",
-      link: "/danh-gia/wechsler"
+      title: "Kỹ Năng Chinh Phục Lo Âu - Tự Tin Vượt Lên",
+      shortDesc: "Chương trình này giúp học sinh xây dựng các kỹ năng đối phó hiệu quả với lo âu và căng thẳng thông qua các bài tập thực tế và tư vấn cá nhân...",
+      link: "/danh-gia/ky-nang-doi-pho-lo-au"
     },
     {
       id: 4,
-      title: "Cấu trúc nhân cách - EPI",
-      shortDesc: "Bài test EPI (Eysenck Personality Inventory) đánh giá các đặc điểm tính cách cơ bản như hướng nội - hướng ngoại, tính ổn định cảm xúc và tính cách...",
-      link: "/danh-gia/epi"
+      title: "Chinh Phục Lo Âu",
+      shortDesc: "Chương trình này giúp học sinh xây dựng các kỹ năng đối phó với lo âu trong học đường và cuộc sống.",
+      link: "/danh-gia/chinh-phuc-lo-au"
     },
     {
       id: 5,
-      title: "Tăng động giảm tập trung - ADHD",
-      shortDesc: "Đánh giá các triệu chứng của rối loạn tăng động giảm chú ý (ADHD) thông qua các tiêu chí chuẩn đoán quốc tế, giúp phát hiện sớm và có biện pháp can thiệp kịp thời...",
-      link: "/danh-gia/adhd"
+      title: "Giảm Căng Thẳng Để Học Tốt Hơn",
+      shortDesc: "Chương trình giúp học sinh giảm căng thẳng để nâng cao hiệu quả học tập và cải thiện sức khỏe tinh thần.",
+      link: "/danh-gia/giam-cang-thang"
     },
     {
       id: 6,
-      title: "Định hướng nghề nghiệp - MBTI",
-      shortDesc: "Test MBTI (Myers-Briggs Type Indicator) giúp học sinh hiểu rõ về tính cách, sở thích và điểm mạnh của bản thân, từ đó có định hướng nghề nghiệp phù hợp...",
-      link: "/danh-gia/mbti"
+      title: "Điều Chỉnh Thói Quen Sống Tích Cực",
+      shortDesc: "Chương trình hướng dẫn học sinh điều chỉnh thói quen sống để có một cuộc sống tích cực và đầy đủ.",
+      link: "/danh-gia/thoquen-tich-cuc"
     },
     {
       id: 7,
-      title: "Đánh giá tính cách - DISC",
-      shortDesc: "Mô hình DISC đánh giá bốn khía cạnh chính của tính cách: Quyết đoán (D), Ảnh hưởng (I), Ổn định (S) và Cẩn trọng (C), giúp hiểu rõ phong cách làm việc và giao tiếp...",
-      link: "/danh-gia/disc"
+      title: "Phát Triển Kỹ Năng Quản Lý Thời Gian",
+      shortDesc: "Chương trình giúp học sinh phát triển kỹ năng quản lý thời gian hiệu quả để cải thiện công việc học tập.",
+      link: "/danh-gia/quan-ly-thoi-gian"
     },
     {
       id: 8,
-      title: "M-Chart-R đánh giá trẻ tự kỷ",
-      shortDesc: "M-CHAT-R (Modified Checklist for Autism in Toddlers) là công cụ sàng lọc giúp phát hiện sớm dấu hiệu rối loạn phổ tự kỷ ở trẻ nhỏ...",
-      link: "/danh-gia/mchat"
+      title: "Xây Dựng Niềm Tin Tự Tin Vào Bản Thân",
+      shortDesc: "Chương trình giúp học sinh phát triển sự tự tin và niềm tin vào bản thân để vượt qua mọi thử thách.",
+      link: "/danh-gia/tu-tin"
     }
   ];
 
-  const handleServiceClick = (id: number) => {
-    setSelectedService(selectedService === id ? null : id);
+  const handleServiceClick = (id: number, title: string) => {
+    setSelectedService(selectedService === id ? null : id); // Toggle selected service
+    setProgramTitle(title); // Cập nhật title khi click vào chương trình
   };
 
   const handleViewMore = (link: string) => {
@@ -70,10 +72,10 @@ function Program() {
   return (
     <div className="program-page">
       <Header />
-      
+
       <main className="program-content">
         <div className="program-hero">
-          <h1>Các dịch vụ đánh giá tâm lý</h1>
+          <h1>{programTitle || "Các dịch vụ đánh giá tâm lý"}</h1> {/* Hiển thị title cập nhật hoặc mặc định */}
           <p>Hệ thống đánh giá toàn diện theo tiêu chuẩn quốc tế</p>
         </div>
 
@@ -82,11 +84,11 @@ function Program() {
             <div key={program.id} className="service-card">
               <div 
                 className="service-header" 
-                onClick={() => handleServiceClick(program.id)}
+                onClick={() => handleServiceClick(program.id, program.title)}
               >
                 <h2>{program.title}</h2>
               </div>
-              
+
               {selectedService === program.id && (
                 <div className="service-description">
                   <p>{program.shortDesc}</p>
