@@ -2,8 +2,10 @@ import { BookOpen, Users, ClipboardList, Calendar, LogOut } from "lucide-react";
 import "./index.scss";
 import { useState } from "react";
 import SurveyManagement from "../SurveyManagement";
-import ProgramManagement from "../ProgramManagement";
 
+import logo from "../../images/Logo.png";
+import UserManagement from "../UserManagement";
+import SubscriptionManagement from "../ProgramManagement";
 const Sidebar = () => {
   const [activePage, setActivePage] = useState();
 
@@ -11,7 +13,7 @@ const Sidebar = () => {
     <div className="dashboard">
       <div className="sidebar">
         <h2 className="sidebar-title">
-          <span className="icon">🖥️</span> Admin Portal
+        <img src={logo} width={80} alt="Logo" /> Admin Portal
         </h2>
         <ul className="sidebar-menu">
           <li
@@ -43,7 +45,8 @@ const Sidebar = () => {
 
       <div className="content">
         {activePage === "Surveys" && <SurveyManagement />}
-        {activePage === "Programs" && <ProgramManagement />}
+        {activePage === "Programs" && <SubscriptionManagement />}
+        {activePage === "Users" && <UserManagement />}
       </div>
     </div>
   );
