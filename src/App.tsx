@@ -21,6 +21,7 @@ import "./main.css"
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";
 import OrderDetailPage from "./pages/OrderDetail";
+import ManagePage from "./pages/Manager";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
       { path: "order-detail/:id", element: <OrderDetailPage /> },
+      { path: "manage", element: <ManagePage /> },
     ],
   },
 ]);

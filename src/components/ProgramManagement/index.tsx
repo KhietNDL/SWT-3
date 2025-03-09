@@ -1,77 +1,67 @@
-import React, { useState } from "react";
-import { Pencil, Trash2, Plus, Search } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Pencil, Trash2, Plus, Search, XCircle } from "lucide-react";
 import "./index.scss";
 
-// ====== INTERFACE CHO SUBSCRIPTION ======
+// ✅ Định nghĩa `id` là `string` thay vì `number`
 interface Subscription {
-  id: number;
+  id?: string;
   subscriptionName: string;
   description: string;
   price: number;
-  duration: number;         // Kiểu number
+  duration: number;
   categoryName: string;
   psychologistName: string;
 }
 
-// ====== DỮ LIỆU BAN ĐẦU (MẪU) ======
-const initialSubscriptions: Subscription[] = [
-  {
-    id: 1,
-    subscriptionName: "Basic Plan",
-    description: "Basic subscription with minimal features",
-    price: 0.01,
-    duration: 2147483647,
-    categoryName: "General",
-    psychologistName: "Dr. John",
-  },
-  {
-    id: 2,
-    subscriptionName: "Premium Plan",
-    description: "Full-feature subscription with premium support",
-    price: 9.99,
-    duration: 365,
-    categoryName: "Advanced",
-    psychologistName: "Dr. Jane",
-  },
-];
+const API_URL = "http://localhost:5199/Subscription";
 
 const SubscriptionManagement: React.FC = () => {
-  // State quản lý danh sách Subscription
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>(initialSubscriptions);
-
-  // State quản lý tìm kiếm (theo subscriptionName)
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  // State điều khiển hiển thị Modal (Add/Edit)
   const [showModal, setShowModal] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Xác định đang edit subscription nào (nếu có). null = đang thêm mới
-  const [editingId, setEditingId] = useState<number | null>(null);
-
-  // State lưu tạm Subscription khi thêm/sửa
   const [currentSub, setCurrentSub] = useState<Subscription>({
-    id: 0,
     subscriptionName: "",
     description: "",
-    price: 0,
+    price: 0.01,
     duration: 0,
     categoryName: "",
     psychologistName: "",
   });
 
-  // ====== Lọc subscriptions theo searchTerm ======
-  const filteredSubs = subscriptions.filter((sub) =>
-    sub.subscriptionName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // 🔹 Lấy danh sách từ API
+  const fetchSubscriptions = async () => {
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-  // ====== Mở modal để Thêm mới ======
+      const data: Subscription[] = await response.json();
+      console.log("📢 Dữ liệu API trả về:", data);
+
+      if (!Array.isArray(data)) {
+        throw new Error("❌ Dữ liệu API không phải là mảng!");
+      }
+
+      setSubscriptions(data);
+    } catch (error) {
+      console.error("⚠ Lỗi khi gọi API:", error);
+      alert("❌ Không thể lấy dữ liệu từ API! Kiểm tra console.");
+    }
+  };
+
+  // 🔹 Gọi API khi component mount
+  useEffect(() => {
+    fetchSubscriptions();
+  }, []);
+
+  // Mở Modal để thêm mới
   const handleOpenAddModal = () => {
-    setEditingId(null); // Không sửa, mà là thêm mới
+    setEditingId(null);
     setCurrentSub({
-      id: 0,
       subscriptionName: "",
       description: "",
-      price: 0,
+      price: 0.01,
       duration: 0,
       categoryName: "",
       psychologistName: "",
@@ -79,53 +69,70 @@ const SubscriptionManagement: React.FC = () => {
     setShowModal(true);
   };
 
-  // ====== Mở modal để Sửa (Edit) ======
+  // Mở Modal để chỉnh sửa
   const handleOpenEditModal = (sub: Subscription) => {
-    setEditingId(sub.id);
-    setCurrentSub(sub); // Điền sẵn thông tin
+    setEditingId(sub.id || null);
+    setCurrentSub(sub);
     setShowModal(true);
   };
 
-  // ====== Đóng modal ======
+  // Đóng Modal
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingId(null);
-    setCurrentSub({
-      id: 0,
-      subscriptionName: "",
-      description: "",
-      price: 0,
-      duration: 0,
-      categoryName: "",
-      psychologistName: "",
-    });
   };
 
-  // ====== Submit form (Thêm hoặc Sửa) ======
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Xử lý Submit Form (Thêm/Sửa)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (editingId !== null) {
-      // Chế độ sửa => cập nhật
-      setSubscriptions((prev) =>
-        prev.map((item) =>
-          item.id === editingId ? { ...currentSub, id: editingId } : item
-        )
-      );
-    } else {
-      // Thêm mới => sinh ID
-      const newId =
-        subscriptions.length > 0
-          ? Math.max(...subscriptions.map((item) => item.id)) + 1
-          : 1;
-      setSubscriptions([...subscriptions, { ...currentSub, id: newId }]);
+    console.log("🔍 Dữ liệu gửi lên API:", JSON.stringify(currentSub, null, 2));
+
+    try {
+      const method = editingId ? "PUT" : "POST";
+      const url = editingId ? `${API_URL}/Update/${editingId}` : `${API_URL}/Create`;
+
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentSub),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to save subscription: ${errorText}`);
+      }
+
+      await response.json();
+
+      // 🔥 Gọi lại API để cập nhật danh sách
+      fetchSubscriptions();
+      handleCloseModal();
+    } catch (error) {
+      console.error("🚨 Lỗi khi gửi API:", error);
+      alert("⚠ Failed to save subscription. Check console for details.");
     }
-    handleCloseModal();
   };
 
-  // ====== Xoá subscription ======
-  const handleDelete = (id: number) => {
-    setSubscriptions((prev) => prev.filter((item) => item.id !== id));
+  // Xóa Subscription
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this subscription?")) return;
+
+    try {
+      const response = await fetch(`${API_URL}/Delete/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete subscription");
+
+      // 🔥 Sau khi xóa, gọi lại API để cập nhật danh sách
+      fetchSubscriptions();
+    } catch (error) {
+      console.error("Error deleting subscription:", error);
+      alert("Failed to delete subscription. Please try again.");
+    }
   };
+
+  // 🔹 Fix lỗi `.toLowerCase()` bị undefined
+  const filteredSubs = subscriptions.filter((sub) =>
+    sub.subscriptionName?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="subscription-container">
@@ -168,21 +175,15 @@ const SubscriptionManagement: React.FC = () => {
             <tr key={sub.id}>
               <td>{sub.subscriptionName}</td>
               <td>{sub.description}</td>
-              <td>{sub.price}</td>
-              <td>{sub.duration}</td>
+              <td>${sub.price.toLocaleString()}</td>
+              <td>{sub.duration} days</td>
               <td>{sub.categoryName}</td>
               <td>{sub.psychologistName}</td>
               <td>
-                <button
-                  className="edit-button"
-                  onClick={() => handleOpenEditModal(sub)}
-                >
+                <button className="edit-button" onClick={() => handleOpenEditModal(sub)}>
                   <Pencil size={16} />
                 </button>
-                <button
-                  className="delete-button"
-                  onClick={() => handleDelete(sub.id)}
-                >
+                <button className="delete-button" onClick={() => handleDelete(sub.id!)}>
                   <Trash2 size={16} />
                 </button>
               </td>
@@ -191,108 +192,39 @@ const SubscriptionManagement: React.FC = () => {
         </tbody>
       </table>
 
-      {/* MODAL (Add/Edit) */}
+      {/* MODAL (Add/Edit Subscription) */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>
-              {editingId !== null ? "Edit Subscription" : "Create New Subscription"}
-            </h3>
-            <form onSubmit={handleSubmit}>
+            <div className="modal-header">
+              <h3>{editingId !== null ? "Edit Subscription" : "Create New Subscription"}</h3>
+              <button className="close-button" onClick={handleCloseModal}>
+                <XCircle size={20} />
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} className="modal-form">
               <div className="form-group">
                 <label>Subscription Name</label>
-                <input
-                  type="text"
-                  value={currentSub.subscriptionName}
-                  onChange={(e) =>
-                    setCurrentSub({
-                      ...currentSub,
-                      subscriptionName: e.target.value,
-                    })
-                  }
-                  required
-                />
+                <input type="text" value={currentSub.subscriptionName} onChange={(e) => setCurrentSub({ ...currentSub, subscriptionName: e.target.value })} required />
               </div>
-
               <div className="form-group">
                 <label>Description</label>
-                <textarea
-                  value={currentSub.description}
-                  onChange={(e) =>
-                    setCurrentSub({
-                      ...currentSub,
-                      description: e.target.value,
-                    })
-                  }
-                />
+                <textarea value={currentSub.description} onChange={(e) => setCurrentSub({ ...currentSub, description: e.target.value })} />
               </div>
-
               <div className="form-group">
                 <label>Price</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={currentSub.price}
-                  onChange={(e) =>
-                    setCurrentSub({
-                      ...currentSub,
-                      price: Number(e.target.value),
-                    })
-                  }
-                />
+                <input type="number" step="0.01" value={currentSub.price} onChange={(e) => setCurrentSub({ ...currentSub, price: Number(e.target.value) })} />
               </div>
-
-              <div className="form-group">
-                <label>Duration</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={currentSub.duration}
-                  onChange={(e) =>
-                    setCurrentSub({
-                      ...currentSub,
-                      duration: Number(e.target.value),
-                    })
-                  }
-                />
-              </div>
-
               <div className="form-group">
                 <label>Category</label>
-                <input
-                  type="text"
-                  value={currentSub.categoryName}
-                  onChange={(e) =>
-                    setCurrentSub({
-                      ...currentSub,
-                      categoryName: e.target.value,
-                    })
-                  }
-                />
+                <input type="text" value={currentSub.categoryName} onChange={(e) => setCurrentSub({ ...currentSub, categoryName: e.target.value })} />
               </div>
-
               <div className="form-group">
                 <label>Psychologist</label>
-                <input
-                  type="text"
-                  value={currentSub.psychologistName}
-                  onChange={(e) =>
-                    setCurrentSub({
-                      ...currentSub,
-                      psychologistName: e.target.value,
-                    })
-                  }
-                />
+                <input type="text" value={currentSub.psychologistName} onChange={(e) => setCurrentSub({ ...currentSub, psychologistName: e.target.value })} />
               </div>
-
               <div className="modal-actions">
-                <button type="button" onClick={handleCloseModal}>
-                  Cancel
-                </button>
-                <button type="submit">
-                  {editingId !== null ? "Update Subscription" : "Create Subscription"}
-                </button>
+                <button type="submit">{editingId !== null ? "Update" : "Create"}</button>
               </div>
             </form>
           </div>
