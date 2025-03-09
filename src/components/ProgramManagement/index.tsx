@@ -1,222 +1,187 @@
 import React, { useState } from "react";
-import {
-  Pencil,
-  Trash2,
-  Plus,
-  Search,
-  Filter,
-  ChevronDown,
-} from "lucide-react";
+import { Pencil, Trash2, Plus, Search } from "lucide-react";
 import "./index.scss";
-// ====== INTERFACE & DATA MẪU ======
-interface Program {
+
+// ====== INTERFACE CHO SUBSCRIPTION ======
+interface Subscription {
   id: number;
-  name: string;
+  subscriptionName: string;
   description: string;
-  duration: string;
-  startDate: string;
-  endDate: string;
-  status: "Open" | "Full" | "Closed";
+  price: number;
+  duration: number;         // Kiểu number
+  categoryName: string;
+  psychologistName: string;
 }
 
-const initialPrograms: Program[] = [
-  {
-    id: 2,
-    name: "Happy to School",
-    description:
-      "Support program to ease children's transition to school environment.",
-    duration: "12 weeks",
-    startDate: "2023-09-15",
-    endDate: "2023-12-08",
-    status: "Full",
-  },
+// ====== DỮ LIỆU BAN ĐẦU (MẪU) ======
+const initialSubscriptions: Subscription[] = [
   {
     id: 1,
-    name: "Sleep Support",
-    description:
-      "A program designed to help participants improve their sleep quality and habits.",
-    duration: "30 days",
-    startDate: "2023-10-01",
-    endDate: "2023-10-30",
-    status: "Open",
+    subscriptionName: "Basic Plan",
+    description: "Basic subscription with minimal features",
+    price: 0.01,
+    duration: 2147483647,
+    categoryName: "General",
+    psychologistName: "Dr. John",
   },
   {
-    id: 3,
-    name: "Stress Management",
-    description: "Techniques and practices to reduce and manage daily stress.",
-    duration: "8 weeks",
-    startDate: "2023-11-01",
-    endDate: "2023-12-27",
-    status: "Closed",
+    id: 2,
+    subscriptionName: "Premium Plan",
+    description: "Full-feature subscription with premium support",
+    price: 9.99,
+    duration: 365,
+    categoryName: "Advanced",
+    psychologistName: "Dr. Jane",
   },
 ];
 
-// ====== COMPONENT CHÍNH ======
-const ProgramManagement: React.FC = () => {
-  // State quản lý danh sách Program
-  const [programs, setPrograms] = useState<Program[]>(initialPrograms);
+const SubscriptionManagement: React.FC = () => {
+  // State quản lý danh sách Subscription
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>(initialSubscriptions);
 
-  // State quản lý tìm kiếm và filter
+  // State quản lý tìm kiếm (theo subscriptionName)
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
-  // State điều khiển hiển thị Modal Add New
-  const [showModal, setShowModal] = useState<boolean>(false);
+  // State điều khiển hiển thị Modal (Add/Edit)
+  const [showModal, setShowModal] = useState(false);
 
-  // State lưu tạm thông tin Program mới
-  const [newProgram, setNewProgram] = useState<Program>({
+  // Xác định đang edit subscription nào (nếu có). null = đang thêm mới
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  // State lưu tạm Subscription khi thêm/sửa
+  const [currentSub, setCurrentSub] = useState<Subscription>({
     id: 0,
-    name: "",
+    subscriptionName: "",
     description: "",
-    duration: "",
-    startDate: "",
-    endDate: "",
-    status: "Open",
+    price: 0,
+    duration: 0,
+    categoryName: "",
+    psychologistName: "",
   });
 
-  // ====== Xử lý xoá Program ======
-  const handleDelete = (id: number) => {
-    setPrograms(programs.filter((program) => program.id !== id));
-  };
+  // ====== Lọc subscriptions theo searchTerm ======
+  const filteredSubs = subscriptions.filter((sub) =>
+    sub.subscriptionName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  // ====== Lọc Program theo SearchTerm & Status ======
-  const filteredPrograms = programs.filter((program) => {
-    const matchesSearch = program.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      selectedStatus === "All" || program.status === selectedStatus;
-    return matchesSearch && matchesStatus;
-  });
-
-  // ====== Mở form Add New ======
-  const handleOpenModal = () => {
+  // ====== Mở modal để Thêm mới ======
+  const handleOpenAddModal = () => {
+    setEditingId(null); // Không sửa, mà là thêm mới
+    setCurrentSub({
+      id: 0,
+      subscriptionName: "",
+      description: "",
+      price: 0,
+      duration: 0,
+      categoryName: "",
+      psychologistName: "",
+    });
     setShowModal(true);
   };
 
-  // ====== Đóng form Add New & reset dữ liệu ======
+  // ====== Mở modal để Sửa (Edit) ======
+  const handleOpenEditModal = (sub: Subscription) => {
+    setEditingId(sub.id);
+    setCurrentSub(sub); // Điền sẵn thông tin
+    setShowModal(true);
+  };
+
+  // ====== Đóng modal ======
   const handleCloseModal = () => {
     setShowModal(false);
-    setNewProgram({
+    setEditingId(null);
+    setCurrentSub({
       id: 0,
-      name: "",
+      subscriptionName: "",
       description: "",
-      duration: "",
-      startDate: "",
-      endDate: "",
-      status: "Open",
+      price: 0,
+      duration: 0,
+      categoryName: "",
+      psychologistName: "",
     });
   };
 
-  // ====== Submit form Add New ======
-  const handleAddProgram = (e: React.FormEvent<HTMLFormElement>) => {
+  // ====== Submit form (Thêm hoặc Sửa) ======
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Sinh ID mới (cách đơn giản)
-    const newId =
-      programs.length > 0 ? Math.max(...programs.map((p) => p.id)) + 1 : 1;
-
-    // Tạo object Program mới
-    const programToAdd = {
-      ...newProgram,
-      id: newId,
-    };
-
-    // Cập nhật state
-    setPrograms([...programs, programToAdd]);
-
-    // Đóng Modal
+    if (editingId !== null) {
+      // Chế độ sửa => cập nhật
+      setSubscriptions((prev) =>
+        prev.map((item) =>
+          item.id === editingId ? { ...currentSub, id: editingId } : item
+        )
+      );
+    } else {
+      // Thêm mới => sinh ID
+      const newId =
+        subscriptions.length > 0
+          ? Math.max(...subscriptions.map((item) => item.id)) + 1
+          : 1;
+      setSubscriptions([...subscriptions, { ...currentSub, id: newId }]);
+    }
     handleCloseModal();
   };
 
+  // ====== Xoá subscription ======
+  const handleDelete = (id: number) => {
+    setSubscriptions((prev) => prev.filter((item) => item.id !== id));
+  };
+
   return (
-    <div className="program-container">
-      <div className="program-header">
-        <h2>Support Program Management</h2>
-        <button className="add-button" onClick={handleOpenModal}>
-          <Plus size={16} /> Add New Program
+    <div className="subscription-container">
+      {/* HEADER */}
+      <div className="subscription-header">
+        <h2>Subscription Management</h2>
+        <button className="add-button" onClick={handleOpenAddModal}>
+          <Plus size={16} /> Add New Subscription
         </button>
       </div>
 
-      <div className="program-controls">
-        {/* Search bar */}
+      {/* SEARCH BAR */}
+      <div className="subscription-controls">
         <div className="search-bar">
           <Search size={16} />
           <input
             type="text"
-            placeholder="Search programs..."
+            placeholder="Search by subscription name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
-        {/* Dropdown filter */}
-        <div className="filter-dropdown">
-          <button
-            className="filter-button"
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            <Filter size={16} />
-            Status: {selectedStatus}
-            <ChevronDown size={16} />
-          </button>
-
-          {showDropdown && (
-            <ul className="dropdown-menu">
-              {["All", "Open", "Full", "Closed"].map((status) => (
-                <li
-                  key={status}
-                  onClick={() => {
-                    setSelectedStatus(status);
-                    setShowDropdown(false);
-                  }}
-                >
-                  {status}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
       </div>
 
-      {/* Bảng hiển thị danh sách Program */}
-      <table className="program-table">
+      {/* TABLE */}
+      <table className="subscription-table">
         <thead>
           <tr>
-            <th>Program Name</th>
+            <th>Subscription Name</th>
             <th>Description</th>
+            <th>Price</th>
             <th>Duration</th>
-            <th>Dates</th>
-            <th>Status</th>
+            <th>Category</th>
+            <th>Psychologist</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filteredPrograms.map((program) => (
-            <tr key={program.id}>
+          {filteredSubs.map((sub) => (
+            <tr key={sub.id}>
+              <td>{sub.subscriptionName}</td>
+              <td>{sub.description}</td>
+              <td>{sub.price}</td>
+              <td>{sub.duration}</td>
+              <td>{sub.categoryName}</td>
+              <td>{sub.psychologistName}</td>
               <td>
-                <strong>{program.name}</strong>
-                <br />
-                <span className="program-id">ID: {program.id}</span>
-              </td>
-              <td>{program.description}</td>
-              <td>{program.duration}</td>
-              <td>
-                Start: {program.startDate} <br />
-                End: {program.endDate}
-              </td>
-              <td>
-                <span className={`status ${program.status.toLowerCase()}`}>
-                  {program.status}
-                </span>
-              </td>
-              <td>
-                <button className="edit-button">
+                <button
+                  className="edit-button"
+                  onClick={() => handleOpenEditModal(sub)}
+                >
                   <Pencil size={16} />
                 </button>
                 <button
                   className="delete-button"
-                  onClick={() => handleDelete(program.id)}
+                  onClick={() => handleDelete(sub.id)}
                 >
                   <Trash2 size={16} />
                 </button>
@@ -226,19 +191,24 @@ const ProgramManagement: React.FC = () => {
         </tbody>
       </table>
 
-      {/* Modal Add New Program */}
+      {/* MODAL (Add/Edit) */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Create New Program</h3>
-            <form onSubmit={handleAddProgram}>
+            <h3>
+              {editingId !== null ? "Edit Subscription" : "Create New Subscription"}
+            </h3>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Program Name</label>
+                <label>Subscription Name</label>
                 <input
                   type="text"
-                  value={newProgram.name}
+                  value={currentSub.subscriptionName}
                   onChange={(e) =>
-                    setNewProgram({ ...newProgram, name: e.target.value })
+                    setCurrentSub({
+                      ...currentSub,
+                      subscriptionName: e.target.value,
+                    })
                   }
                   required
                 />
@@ -247,11 +217,27 @@ const ProgramManagement: React.FC = () => {
               <div className="form-group">
                 <label>Description</label>
                 <textarea
-                  value={newProgram.description}
+                  value={currentSub.description}
                   onChange={(e) =>
-                    setNewProgram({
-                      ...newProgram,
+                    setCurrentSub({
+                      ...currentSub,
                       description: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Price</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={currentSub.price}
+                  onChange={(e) =>
+                    setCurrentSub({
+                      ...currentSub,
+                      price: Number(e.target.value),
                     })
                   }
                 />
@@ -260,62 +246,53 @@ const ProgramManagement: React.FC = () => {
               <div className="form-group">
                 <label>Duration</label>
                 <input
+                  type="number"
+                  min="0"
+                  value={currentSub.duration}
+                  onChange={(e) =>
+                    setCurrentSub({
+                      ...currentSub,
+                      duration: Number(e.target.value),
+                    })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Category</label>
+                <input
                   type="text"
-                  placeholder="e.g. 30 days, 12 weeks"
-                  value={newProgram.duration}
+                  value={currentSub.categoryName}
                   onChange={(e) =>
-                    setNewProgram({ ...newProgram, duration: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Start Date</label>
-                <input
-                  type="date"
-                  value={newProgram.startDate}
-                  onChange={(e) =>
-                    setNewProgram({
-                      ...newProgram,
-                      startDate: e.target.value,
+                    setCurrentSub({
+                      ...currentSub,
+                      categoryName: e.target.value,
                     })
                   }
                 />
               </div>
 
               <div className="form-group">
-                <label>End Date</label>
+                <label>Psychologist</label>
                 <input
-                  type="date"
-                  value={newProgram.endDate}
+                  type="text"
+                  value={currentSub.psychologistName}
                   onChange={(e) =>
-                    setNewProgram({ ...newProgram, endDate: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Status</label>
-                <select
-                  value={newProgram.status}
-                  onChange={(e) =>
-                    setNewProgram({
-                      ...newProgram,
-                      status: e.target.value as "Open" | "Full" | "Closed",
+                    setCurrentSub({
+                      ...currentSub,
+                      psychologistName: e.target.value,
                     })
                   }
-                >
-                  <option value="Open">Open</option>
-                  <option value="Full">Full</option>
-                  <option value="Closed">Closed</option>
-                </select>
+                />
               </div>
 
               <div className="modal-actions">
                 <button type="button" onClick={handleCloseModal}>
                   Cancel
                 </button>
-                <button type="submit">Create Program</button>
+                <button type="submit">
+                  {editingId !== null ? "Update Subscription" : "Create Subscription"}
+                </button>
               </div>
             </form>
           </div>
@@ -325,4 +302,4 @@ const ProgramManagement: React.FC = () => {
   );
 };
 
-export default ProgramManagement;
+export default SubscriptionManagement;

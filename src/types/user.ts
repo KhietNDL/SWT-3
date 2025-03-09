@@ -7,6 +7,5 @@ export interface User {
     address: string;
     roleName: string;
     avatar: string;
-    token: string;
 }
 
