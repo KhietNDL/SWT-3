@@ -1,15 +1,15 @@
-import Header from "../../components/header"
-import RegisterForm from "../../components/RegisterForm/RegisterForm"
-import Footer from "../../components/footer"
+import Header from "../../components/Header";
+import RegisterForm from "../../components/RegisterForm/RegisterForm";
+import Footer from "../../components/Footer";
 
 function RegisterPage() {
-    return (
-        <div>
-            <Header />
-            <RegisterForm />
-            <Footer />
-        </div>
-    )
+  return (
+    <div>
+      <Header />
+      <RegisterForm />
+      <Footer />
+    </div>
+  );
 }
 
-export default RegisterPage
+export default RegisterPage;

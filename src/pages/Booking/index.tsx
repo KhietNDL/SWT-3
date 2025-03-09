@@ -1,15 +1,15 @@
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import DoctorList from '../../components/list-doctor'
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import DoctorList from "../../components/ListDoctor";
 
 function Booking() {
   return (
     <div>
-        <Header/>
-        <DoctorList/>
-        <Footer/>
+      <Header />
+      <DoctorList />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default Booking
+export default Booking;

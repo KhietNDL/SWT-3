@@ -1,15 +1,15 @@
-import Header from "../../components/header"
-import RegisterValidationComponent from "../../components/RegisterValidation/RegisterValidation"
-import Footer from "../../components/footer"
+import Header from "../../components/Header";
+import RegisterValidationComponent from "../../components/RegisterValidation/RegisterValidation";
+import Footer from "../../components/Footer";
 
 function RegisterValidation() {
-    return (
-        <div>
-            <Header />
-            <RegisterValidationComponent />
-            <Footer />
-        </div>
-    )
+  return (
+    <div>
+      <Header />
+      <RegisterValidationComponent />
+      <Footer />
+    </div>
+  );
 }
 
-export default RegisterValidation
+export default RegisterValidation;

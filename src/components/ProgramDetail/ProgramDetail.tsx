@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Modal } from 'antd';
-import Header from '../../components/header';
-import Footer from '../../components/footer';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import './ProgramDetail.scss';
-import childImg from '../../images/child-development.jpg';
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Modal } from "antd";
+import Header from "../Header";
+import Footer from "../Footer";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import "./ProgramDetail.scss";
+import childImg from "../../images/child-development.jpg";
 
 function ProgramDetail() {
   const { id } = useParams();
@@ -14,9 +14,9 @@ function ProgramDetail() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleSection = (section: string) => {
-    setExpandedSections(prev => 
-      prev.includes(section) 
-        ? prev.filter(s => s !== section)
+    setExpandedSections((prev) =>
+      prev.includes(section)
+        ? prev.filter((s) => s !== section)
         : [...prev, section]
     );
   };
@@ -44,7 +44,7 @@ function ProgramDetail() {
   return (
     <div className="program-detail-page">
       <Header />
-      
+
       <main className="program-detail-content">
         <div className="program-detail-hero">
           <img src={childImg} alt="Child Development" />
@@ -72,14 +72,18 @@ function ProgramDetail() {
 
         <div className="program-detail-sections">
           <div className="detail-section">
-            <div 
+            <div
               className="section-header"
-              onClick={() => toggleSection('purpose')}
+              onClick={() => toggleSection("purpose")}
             >
               <h2>Mục đích</h2>
-              {isSectionExpanded('purpose') ? <FiChevronUp /> : <FiChevronDown />}
+              {isSectionExpanded("purpose") ? (
+                <FiChevronUp />
+              ) : (
+                <FiChevronDown />
+              )}
             </div>
-            {isSectionExpanded('purpose') && (
+            {isSectionExpanded("purpose") && (
               <div className="section-content">
                 <p>Mục tiêu của chương trình là giảm lo âu và cải thiện khả năng quản lý căng thẳng của học sinh, giúp các em học sinh trở nên tự tin hơn trong học tập và cuộc sống.</p>
               </div>
@@ -87,14 +91,18 @@ function ProgramDetail() {
           </div>
 
           <div className="detail-section">
-            <div 
+            <div
               className="section-header"
-              onClick={() => toggleSection('indicators')}
+              onClick={() => toggleSection("indicators")}
             >
               <h2>Các chỉ số đánh giá</h2>
-              {isSectionExpanded('indicators') ? <FiChevronUp /> : <FiChevronDown />}
+              {isSectionExpanded("indicators") ? (
+                <FiChevronUp />
+              ) : (
+                <FiChevronDown />
+              )}
             </div>
-            {isSectionExpanded('indicators') && (
+            {isSectionExpanded("indicators") && (
               <div className="section-content">
                 <ul>
                   <li>Chỉ số lo âu học đường</li>
@@ -107,14 +115,18 @@ function ProgramDetail() {
           </div>
 
           <div className="detail-section">
-            <div 
+            <div
               className="section-header"
-              onClick={() => toggleSection('target')}
+              onClick={() => toggleSection("target")}
             >
               <h2>Đối tượng</h2>
-              {isSectionExpanded('target') ? <FiChevronUp /> : <FiChevronDown />}
+              {isSectionExpanded("target") ? (
+                <FiChevronUp />
+              ) : (
+                <FiChevronDown />
+              )}
             </div>
-            {isSectionExpanded('target') && (
+            {isSectionExpanded("target") && (
               <div className="section-content">
                 <p>Chương trình này dành cho học sinh từ 12-18 tuổi, đặt biệt là những em gặp phải lo âu, căng thẳng trong môi trường và có nhu cầu cải thiện kỹ năng quản lý cảm xúc, giảm lo âu.</p>
               </div>
@@ -122,14 +134,14 @@ function ProgramDetail() {
           </div>
 
           <div className="detail-section">
-            <div 
+            <div
               className="section-header"
-              onClick={() => toggleSection('tools')}
+              onClick={() => toggleSection("tools")}
             >
               <h2>Công cụ đánh giá</h2>
-              {isSectionExpanded('tools') ? <FiChevronUp /> : <FiChevronDown />}
+              {isSectionExpanded("tools") ? <FiChevronUp /> : <FiChevronDown />}
             </div>
-            {isSectionExpanded('tools') && (
+            {isSectionExpanded("tools") && (
               <div className="section-content">
                 <ul>
                   <li>Bộ công cụ đánh giá lo âu học đường</li>
@@ -142,14 +154,18 @@ function ProgramDetail() {
           </div>
 
           <div className="detail-section">
-            <div 
+            <div
               className="section-header"
-              onClick={() => toggleSection('experts')}
+              onClick={() => toggleSection("experts")}
             >
               <h2>Các chuyên gia</h2>
-              {isSectionExpanded('experts') ? <FiChevronUp /> : <FiChevronDown />}
+              {isSectionExpanded("experts") ? (
+                <FiChevronUp />
+              ) : (
+                <FiChevronDown />
+              )}
             </div>
-            {isSectionExpanded('experts') && (
+            {isSectionExpanded("experts") && (
               <div className="section-content">
                 <ul>
                   <li>Chuyên gia tâm lý học đường</li>

@@ -1,18 +1,18 @@
-import { useParams } from 'react-router-dom';
-import Header from '../../components/header';
-import Footer from '../../components/footer';
-import { FiClock, FiUser, FiTag } from 'react-icons/fi';
-import './BlogDetail.scss';
-import blog1 from '../../images/blog1.jpg';
-import tamlyhocduong1 from '../../images/tamlyhocduong1.jpg';
-import quanlystressvaloau from '../../images/quanlystressvaloau.jpg';
-import tichcuc from '../../images/tichcuc.jpg';
+import { useParams } from "react-router-dom";
+import Header from "../Header";
+import Footer from "../Footer";
+import { FiClock, FiUser, FiTag } from "react-icons/fi";
+import "./BlogDetail.scss";
+import blog1 from "../../images/blog1.jpg";
+import tamlyhocduong1 from "../../images/tamlyhocduong1.jpg";
+import quanlystressvaloau from "../../images/quanlystressvaloau.jpg";
+import tichcuc from "../../images/tichcuc.jpg";
 
 const imageMap: { [key: string]: string } = {
   "1": blog1,
   "2": tamlyhocduong1,
   "3": quanlystressvaloau,
-  "4": tichcuc
+  "4": tichcuc,
 };
 
 function BlogDetail() {
@@ -39,13 +39,13 @@ function BlogDetail() {
     date: "15/03/2024",
     imageUrl: imageMap[id || "1"],
     category: "Tâm lý học Giáo dục",
-    readTime: "5 phút đọc"
+    readTime: "5 phút đọc",
   };
 
   return (
     <div className="blog-detail-page">
       <Header />
-      
+
       <main className="blog-detail-content">
         <div className="blog-detail-header">
           <h1>{post.title}</h1>
@@ -78,7 +78,10 @@ function BlogDetail() {
             <img src="./src/images/author-avatar.jpg" alt={post.author} />
             <div className="author-bio">
               <h3>{post.author}</h3>
-              <p>Chuyên gia tâm lý học đường với hơn 10 năm kinh nghiệm trong lĩnh vực tư vấn học đường.</p>
+              <p>
+                Chuyên gia tâm lý học đường với hơn 10 năm kinh nghiệm trong
+                lĩnh vực tư vấn học đường.
+              </p>
             </div>
           </div>
         </div>
@@ -89,4 +92,4 @@ function BlogDetail() {
   );
 }
 
-export default BlogDetail; 
+export default BlogDetail;

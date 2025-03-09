@@ -1,16 +1,15 @@
-import Header from "../../components/header"
-import Footer from "../../components/footer"
-import SurveyResultComponent from "../../components/SurveyResult/SurveyResult"
-
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import SurveyResultComponent from "../../components/SurveyResult/SurveyResult";
 
 function SurveyResultPage() {
-    return (
-        <div>
-            <Header />
-            <SurveyResultComponent />
-            <Footer />
-        </div>
-    )
+  return (
+    <div>
+      <Header />
+      <SurveyResultComponent />
+      <Footer />
+    </div>
+  );
 }
 
-export default SurveyResultPage
+export default SurveyResultPage;

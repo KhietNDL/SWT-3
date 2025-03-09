@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../../components/header';
-import Footer from '../../components/footer';
-import './Program.scss';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import "./Program.scss";
 
 function Program() {
   const [selectedService, setSelectedService] = useState<number | null>(null);
@@ -80,7 +80,7 @@ function Program() {
         </div>
 
         <div className="services-grid">
-          {programs.map(program => (
+          {programs.map((program) => (
             <div key={program.id} className="service-card">
               <div 
                 className="service-header" 
@@ -92,7 +92,7 @@ function Program() {
               {selectedService === program.id && (
                 <div className="service-description">
                   <p>{program.shortDesc}</p>
-                  <button 
+                  <button
                     className="view-more"
                     onClick={() => handleViewMore(program.link)}
                   >

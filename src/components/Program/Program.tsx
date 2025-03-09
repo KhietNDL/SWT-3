@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../../components/header';
-import Footer from '../../components/footer';
-import './Program.scss';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../Header";
+import Footer from "../Footer";
+import "./Program.scss";
 
 function Program() {
   const [selectedService, setSelectedService] = useState<number | null>(null);
@@ -70,7 +70,7 @@ function Program() {
   return (
     <div className="program-page">
       <Header />
-      
+
       <main className="program-content">
         <div className="program-hero">
           <h1>Các dịch vụ đánh giá tâm lý</h1>
@@ -78,19 +78,19 @@ function Program() {
         </div>
 
         <div className="services-grid">
-          {programs.map(program => (
+          {programs.map((program) => (
             <div key={program.id} className="service-card">
-              <div 
-                className="service-header" 
+              <div
+                className="service-header"
                 onClick={() => handleServiceClick(program.id)}
               >
                 <h2>{program.title}</h2>
               </div>
-              
+
               {selectedService === program.id && (
                 <div className="service-description">
                   <p>{program.shortDesc}</p>
-                  <button 
+                  <button
                     className="view-more"
                     onClick={() => handleViewMore(program.link)}
                   >

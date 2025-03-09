@@ -1,18 +1,18 @@
-import { useParams } from 'react-router-dom';
-import Header from '../../components/header';
-import Footer from '../../components/footer';
-import { FiClock, FiUser, FiTag } from 'react-icons/fi';
-import './DocumentDetail.scss';
-import doc1 from '../../images/adhd.jpg';
-import doc2 from '../../images/dauhieutamly.jpg';
-import doc3 from '../../images/vaitro.jpg';
-import doc4 from '../../images/taphuankns.jpg';
+import { useParams } from "react-router-dom";
+import Header from "../Header";
+import Footer from "../Footer";
+import { FiClock, FiUser, FiTag } from "react-icons/fi";
+import "./DocumentDetail.scss";
+import doc1 from "../../images/adhd.jpg";
+import doc2 from "../../images/dauhieutamly.jpg";
+import doc3 from "../../images/vaitro.jpg";
+import doc4 from "../../images/taphuankns.jpg";
 
 const imageMap: { [key: string]: string } = {
   "1": doc1,
   "2": doc2,
   "3": doc3,
-  "4": doc4
+  "4": doc4,
 };
 
 function DocumentDetail() {
@@ -137,7 +137,7 @@ function DocumentDetail() {
         <li>Đồng cảm</li>
         <li>Ứng phó với stress</li>
       </ul>
-    `
+    `,
   };
 
   const post = {
@@ -146,20 +146,32 @@ function DocumentDetail() {
       "Rối loạn tăng động - giảm chú ý",
       "Những dấu hiệu cảnh báo về sức khỏe tâm lý ở học sinh",
       "Vai trò của tâm lý học học đường trong sự phát triển của học sinh",
-      "Tài liệu Tập huấn Kỹ năng Sống cho Học sinh"
+      "Tài liệu Tập huấn Kỹ năng Sống cho Học sinh",
     ][parseInt(id || "1") - 1],
     content: documentContent[id || "1"],
-    author: ["TS. Nguyễn Văn A", "PGS.TS. Trần Thị B", "ThS. Lê Văn C", "TS. Phạm Thị D"][parseInt(id || "1") - 1],
+    author: [
+      "TS. Nguyễn Văn A",
+      "PGS.TS. Trần Thị B",
+      "ThS. Lê Văn C",
+      "TS. Phạm Thị D",
+    ][parseInt(id || "1") - 1],
     date: "15/03/2024",
     imageUrl: imageMap[id || "1"],
-    category: ["Sách Tham khảo", "Công cụ Đánh giá", "Hướng dẫn Thực hành", "Tài liệu Đào tạo"][parseInt(id || "1") - 1],
-    readTime: ["45 phút đọc", "30 phút đọc", "25 phút đọc", "35 phút đọc"][parseInt(id || "1") - 1]
+    category: [
+      "Sách Tham khảo",
+      "Công cụ Đánh giá",
+      "Hướng dẫn Thực hành",
+      "Tài liệu Đào tạo",
+    ][parseInt(id || "1") - 1],
+    readTime: ["45 phút đọc", "30 phút đọc", "25 phút đọc", "35 phút đọc"][
+      parseInt(id || "1") - 1
+    ],
   };
 
   return (
     <div className="document-detail-page">
       <Header />
-      
+
       <main className="document-detail-content">
         <div className="document-detail-header">
           <h1>{post.title}</h1>
@@ -192,7 +204,10 @@ function DocumentDetail() {
             <img src={doc1} alt={post.author} />
             <div className="author-bio">
               <h3>{post.author}</h3>
-              <p>Chuyên gia tâm lý học đường với hơn 10 năm kinh nghiệm trong lĩnh vực tư vấn học đường.</p>
+              <p>
+                Chuyên gia tâm lý học đường với hơn 10 năm kinh nghiệm trong
+                lĩnh vực tư vấn học đường.
+              </p>
             </div>
           </div>
         </div>
