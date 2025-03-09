@@ -1,5 +1,5 @@
 import Footer from "../../components/footer"
-import GAD7FormPage from "../../components/Forms/GAD7Form"
+import GAD7FormPage from "../../components/SurveyForm/GAD7Form"
 import Header from "../../components/header"
 
 function GAD7Form() {

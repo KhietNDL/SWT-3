@@ -1,6 +1,6 @@
 import Header from "../../components/header"
 import Footer from "../../components/footer"
-import AssessmentList from "../../components/AssessmentList/AssessmentList"
+import AssessmentList from "../../components/SurveyListUser/AssessmentList"
 
 
 function SurveyOption() {

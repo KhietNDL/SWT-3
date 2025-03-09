@@ -1,11 +1,12 @@
 import React from 'react';
 import './SurveyResult.scss';
 import { SurveyResultData } from '../../types/QuizResult';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const SurveyResult: React.FC = () => {
     const gad7Score = localStorage.getItem('gad7Score');
+    const navigate = useNavigate();
 
     const result: SurveyResultData = {
         name: "Nguyễn Văn A",
@@ -55,9 +56,7 @@ const SurveyResult: React.FC = () => {
             </section>
 
             <section className="result-explanation">
-                <Link to="/Booking">
-                <button>Đặt lịch hẹn với chuyên gia</button>
-                </Link>
+                <button onClick={() => navigate('/Booking')}>Đặt lịch hẹn với chuyên gia</button>
             </section>
         </div>
     );

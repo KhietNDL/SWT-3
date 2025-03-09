@@ -12,14 +12,16 @@ import BlogDetail from "./pages/BlogDetail/index";
 import Document from "./pages/Document/index";
 import DocumentDetail from "./pages/DocumentDetail/index";
 import "./main.css"
-import AssessmentList from "./pages/AssessmentList";
-import GAD7Form from "./pages/Form";
+import AssessmentList from "./pages/SurveyListUser";
+import GAD7Form from "./pages/SurveyForm";
 import SurveyResult from "./components/SurveyResult/SurveyResult";
 import Program from "./pages/Program/Program";
 import ProgramDetail from "./pages/ProgramDetail/index";
 import "./main.css"
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";
+
+import SurveyManagement from "./pages/SurveyManagement";
 
 const router = createBrowserRouter([
   {
@@ -37,12 +39,14 @@ const router = createBrowserRouter([
       { path: "blog/:id", element: <BlogDetail /> },
       { path: "tai-lieu", element: <Document /> },
       { path: "tai-lieu/:id", element: <DocumentDetail /> },
-      { path: "test", element: <AssessmentList /> },
-      { path: "quiz/:id", element: <GAD7Form /> },
+      { path: "survey", element: <AssessmentList /> },
+      { path: "survey/:id", element: <GAD7Form /> },
       { path: "survey_result", element: <SurveyResult /> },
       { path: "dich-vu", element: <Program /> },
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
+
+      { path: "survey-management", element: <SurveyManagement /> },
     ],
   },
 ]);

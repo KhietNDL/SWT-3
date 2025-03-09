@@ -48,17 +48,17 @@ function Header() {
           </li>
           <li className="dropdown">
             <Link to="/dich-vu">Dịch vụ</Link>
-            <ul className="dropdown-content">
+            {/* <ul className="dropdown-content">
               <li>
                 <Link to="/dich-vu/1">Dịch vụ 1</Link>
               </li>
               <li>
                 <Link to="/dich-vu/2">Dịch vụ 2</Link>
               </li>
-            </ul>
+            </ul> */}
           </li>
           <li className="dropdown">
-            <Link to="/test">Quiz</Link>
+            <Link to="/survey">Quiz</Link>
           </li>
           <li className="dropdown">
             <Link to="/booking">Đặt lịch</Link>
