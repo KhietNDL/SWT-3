@@ -86,24 +86,33 @@ const SubscriptionManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("🔍 Dữ liệu gửi lên API:", JSON.stringify(currentSub, null, 2));
-
+  
     try {
       const method = editingId ? "PUT" : "POST";
-      const url = editingId ? `${API_URL}/Update/${editingId}` : `${API_URL}/Create`;
-
+      const url = editingId ? `http://localhost:5199/Subscription/${editingId}` : `http://localhost:5199/Subscription/Create`;
+  
+      // 🔹 Nếu là cập nhật, chỉ lấy 3 trường cần thiết
+      const payload = editingId
+        ? {
+            description: currentSub.description,
+            duration: currentSub.duration,
+            price: currentSub.price,
+          }
+        : currentSub;
+  
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentSub),
+        body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to save subscription: ${errorText}`);
       }
-
+  
       await response.json();
-
+  
       // 🔥 Gọi lại API để cập nhật danh sách
       fetchSubscriptions();
       handleCloseModal();
@@ -112,13 +121,13 @@ const SubscriptionManagement: React.FC = () => {
       alert("⚠ Failed to save subscription. Check console for details.");
     }
   };
-
+  
   // Xóa Subscription
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this subscription?")) return;
 
     try {
-      const response = await fetch(`${API_URL}/Delete/${id}`, { method: "DELETE" });
+      const response = await fetch(`http://localhost:5199/Subscription/${id}`, { method: "DELETE" });
       if (!response.ok) throw new Error("Failed to delete subscription");
 
       // 🔥 Sau khi xóa, gọi lại API để cập nhật danh sách
@@ -214,6 +223,10 @@ const SubscriptionManagement: React.FC = () => {
               <div className="form-group">
                 <label>Price</label>
                 <input type="number" step="0.01" value={currentSub.price} onChange={(e) => setCurrentSub({ ...currentSub, price: Number(e.target.value) })} />
+              </div>
+              <div className="form-group">
+                <label>Duration</label>
+                <input type="number" value={currentSub.duration} onChange={(e) => setCurrentSub({ ...currentSub, duration: Number(e.target.value) })} />
               </div>
               <div className="form-group">
                 <label>Category</label>
