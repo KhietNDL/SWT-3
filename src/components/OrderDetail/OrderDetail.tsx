@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/Store";
@@ -11,19 +11,21 @@ const OrderDetail: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const order = useSelector((state: RootState) => state.order.currentOrder) as OrderDetailProps;
-  const user = useSelector((state: RootState) => state.user.currentUser) || { fullname: "Đang cập nhật" };
+  // Lấy dữ liệu từ Redux Store
+  const order = useSelector((state: RootState) => state.order?.currentOrder) as OrderDetailProps | null;
+  const user = useSelector((state: RootState) => state.user) || { fullname: "Đang cập nhật" };
 
   console.log("Redux Order:", order);
   console.log("Redux User:", user);
 
-  useEffect(() => {
-    if (!order) {
+  // Hàm cập nhật đơn hàng nếu chưa có dữ liệu
+  const updateOrder = useCallback(() => {
+    if (!order?.id) {
       const fakeOrder: OrderDetailProps = {
         id: "123456",
         programId: "PROG-001",
         packageName: "Khóa học React",
-        fullname: user?.fullname || "Đang cập nhật",
+        fullname: user.fullname || "Đang cập nhật",
         orderDate: "2025-03-08",
         startDate: "2024-04-01",
         endDate: "2024-06-01",
@@ -33,12 +35,18 @@ const OrderDetail: React.FC = () => {
       console.log("🔥 Đang cập nhật Redux Order:", fakeOrder);
       dispatch(setOrder(fakeOrder));
     }
-  }, [order, user, dispatch]);
+  }, [order?.id, user.fullname, dispatch]);
 
-  if (!order) {
+  useEffect(() => {
+    updateOrder();
+  }, [updateOrder]);
+
+  // Xử lý nếu không tìm thấy đơn hàng
+  if (!order?.id) {
     return <div className="order-detail-container">Không tìm thấy đơn hàng!</div>;
   }
 
+  // Xử lý điều hướng khi xác nhận đơn hàng
   const handleConfirm = () => {
     navigate(`/order-detail/${order.id}`);
   };
