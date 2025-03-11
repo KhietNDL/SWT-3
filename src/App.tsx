@@ -20,6 +20,7 @@ import ProgramDetail from "./pages/ProgramDetail/index";
 import "./main.css";
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";
+import OrderDetailPage from "./pages/OrderDetail";
 import ManagePage from "./pages/Manager";
 import RequireManager from "./components/RequireManager";
 
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
           </RequireManager>
         ),
       },
+      { path: "order-detail/:id", element: <OrderDetailPage /> },
     ],
   },
 ]);

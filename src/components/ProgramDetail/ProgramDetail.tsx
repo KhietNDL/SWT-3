@@ -27,8 +27,11 @@ function ProgramDetail() {
 
   const handleModalOk = () => {
     setIsModalOpen(false);
-    navigate("/payment"); // hoặc trang đích khác
+  
+    const orderId = "123"; // ⚠ Tạm thời dùng ID giả, sau này thay bằng API
+    navigate(`/order-detail/${orderId}`); // ✅ Truyền ID khi điều hướng
   };
+  
 
   const handleModalCancel = () => {
     setIsModalOpen(false);
@@ -48,42 +51,22 @@ function ProgramDetail() {
         </div>
 
         <div className="program-title">
-          <h1>Đánh giá sự phát triển</h1>
+          <h1>Giải Tỏa Lo Âu- Hướng Tới Tương Lai Tươi Sáng</h1>
         </div>
 
         <div className="program-description">
           <p>
-            Sự phát triển với tốc độ nhanh và đầy biến động của thời đại 4.0,
-            cùng với yêu cầu ngày càng cao của nhà trường và những bất cập trong
-            thực tiễn giáo dục; Sự kì vọng của cha mẹ, thầy cô đang tạo ra những
-            áp lực rất lớn và gây căng thẳng trong cuộc sống, học tập và quá
-            trình phát triển của trẻ em. Mặt khác, sự hiểu biết của cha mẹ bận
-            rộn cũng như kỹ năng sống của các em vẫn còn hạn chế trong giao tiếp
-            rộng rãi.
+            Trong bối cảnh học đường ngày càng trở nên căng thẳng, với những yêu cầu và kỳ vọng ngày càng cao, không ít học sinh cảm thấy lo âu, áp lực và khó khăn trong việc quản lý cảm xúc của bản thân. Điều này có thể ảnh hưởng đến sức khỏe tâm lý, cũng như kết quả học tập và phát triển cá nhân của các em.
+            </p>
+          <p>
+            Chương trình "Giải Tỏa Lo Âu - Hướng Tới Tương Lai Tươi Sáng" được thiết kế đặc biệt để giúp học sinh giảm bớt lo âu , cải thiện khả năng quản lý căng thẳng và xây dựng những kỹ năng sống thiết yếu. Thông qua tư vấn chuyên sâu và các kỹ thuật thư gianx hiểuj quả, các em sẽ được trang bị những công cụ để đối phó với aps lực trong học tập cũng như cuộc sống.
+          </p>
+            
+          <p>
+            Chúng tôi hiểu rằng sự phát triển toàn diện không chỉ dựa vào kết quả học tập mà còn phụ thuộc vào sức khỏe tinh thần. Vì vậy, chương trình này không chỉ giúp học sinh nâng cao khả năng kiểm soát cảm xúc, mà còn hỗ trợ các em phát triển tự tin hơn, dễ dàng vượt qua các thử thách trong cuộc sống.
           </p>
           <p>
-            Thực tế cho thấy trẻ em hiện nay dễ gặp những rối nhiễu cảm xúc (Lo
-            âu, trầm cảm…), rối loạn phát triển (tự kỷ, chậm phát triển, khó
-            khăn ngôn ngữ giao tiếp), các khó khăn học tập (như đọc, viết, tính
-            toán…), những rối loạn về hành vi (chống đối, bỏ học, trốn cắp, hung
-            tính…) mà bản thân không hề biết.
-          </p>
-          <p>
-            Ngoài ra, việc khám phá và hiểu rõ năng lực bản thân, định hướng
-            nghề nghiệp phù hợp giúp cho trẻ có thể phát triển toàn diện hơn,
-            giúp người học định hướng được nghề nghiệp phù hợp với năng lực của
-            bản thân và nhu cầu của thị trường lao động, từ đó có kế hoạch để
-            quyết định lựa chọn con đường học tập phù hợp với bản thân mình
-            trong tương lai.
-          </p>
-          <p>
-            Vì vậy, Viện Tâm lý Giáo dục BrainCare thiết kế chương trình Đánh
-            giá sức khỏe tâm lý toàn diện. Phát hiện và tầm soát các nhân cách
-            và tính khí của trẻ em, nhằm Đánh giá Nhận cách và Định giá Trí tuệ
-            cảm xúc giúp hướng nghề nghiệp trong tương lai nhằm phát triển toàn
-            diện các trường hợp trẻ em gặp khó khăn, phát hiện khả năng tiềm
-            tàng của cá nhân và mang lại sự thành công, hòa nhập xã hội, hạnh
-            phúc hơn.
+            Với sự đồng hành của các chuyên gia tâm lý hàng đầu, chương trình sẽ giúp học sinh thoải mái hơn trong môi trường học đường, từ đó mở ra những cơ hội tốt đẹp hơn cho tương lai của các em 
           </p>
         </div>
 
@@ -102,10 +85,7 @@ function ProgramDetail() {
             </div>
             {isSectionExpanded("purpose") && (
               <div className="section-content">
-                <p>
-                  Đánh giá toàn diện sự phát triển của trẻ, phát hiện sớm các
-                  khó khăn và có biện pháp can thiệp kịp thời.
-                </p>
+                <p>Mục tiêu của chương trình là giảm lo âu và cải thiện khả năng quản lý căng thẳng của học sinh, giúp các em học sinh trở nên tự tin hơn trong học tập và cuộc sống.</p>
               </div>
             )}
           </div>
@@ -125,10 +105,10 @@ function ProgramDetail() {
             {isSectionExpanded("indicators") && (
               <div className="section-content">
                 <ul>
-                  <li>Chỉ số phát triển nhận thức</li>
-                  <li>Chỉ số phát triển ngôn ngữ</li>
-                  <li>Chỉ số phát triển vận động</li>
-                  <li>Chỉ số phát triển cảm xúc xã hội</li>
+                  <li>Chỉ số lo âu học đường</li>
+                  <li>Chỉ số căng thẳng và stress</li>
+                  <li>Chỉ số khả năng đối phó với khó khăn</li>
+                  <li>Chỉ số tự tin và khả năng giải quyết vấn đề</li>
                 </ul>
               </div>
             )}
@@ -148,7 +128,7 @@ function ProgramDetail() {
             </div>
             {isSectionExpanded("target") && (
               <div className="section-content">
-                <p>Trẻ em từ 2-18 tuổi có nhu cầu đánh giá sự phát triển.</p>
+                <p>Chương trình này dành cho học sinh từ 12-18 tuổi, đặt biệt là những em gặp phải lo âu, căng thẳng trong môi trường và có nhu cầu cải thiện kỹ năng quản lý cảm xúc, giảm lo âu.</p>
               </div>
             )}
           </div>
@@ -164,10 +144,10 @@ function ProgramDetail() {
             {isSectionExpanded("tools") && (
               <div className="section-content">
                 <ul>
-                  <li>Bộ công cụ đánh giá chuẩn hóa quốc tế</li>
-                  <li>Phiếu quan sát hành vi</li>
-                  <li>Bảng hỏi dành cho phụ huynh</li>
-                  <li>Bài tập đánh giá theo độ tuổi</li>
+                  <li>Bộ công cụ đánh giá lo âu học đường</li>
+                  <li>Bài tập thư giãn và kỹ thuật thở </li>
+                  <li>Bảng câu hỏi tự đánh giá mức độ căng thẳng</li>
+                  <li>Hướng dẫn thực hành tự quản lý cảm xúc</li>
                 </ul>
               </div>
             )}
@@ -188,9 +168,9 @@ function ProgramDetail() {
             {isSectionExpanded("experts") && (
               <div className="section-content">
                 <ul>
-                  <li>Chuyên gia tâm lý trẻ em</li>
-                  <li>Chuyên gia đánh giá phát triển</li>
-                  <li>Chuyên gia giáo dục đặc biệt</li>
+                  <li>Chuyên gia tâm lý học đường</li>
+                  <li>Chuyên gia tư vấn sức khỏe tâm lý trẻ em</li>
+                  <li>Chuyên gia đào tạo kỹ năng sống cho học sinh</li>
                 </ul>
               </div>
             )}
@@ -198,7 +178,7 @@ function ProgramDetail() {
         </div>
 
         <div className="program-detail-footer">
-          <p className="duration">Thời gian liệu trình: 3-6 tuần</p>
+          <p className="duration">Thời gian liệu trình: 4-6 tuần</p>
           <button className="register-button" onClick={handleRegister}>
             Đăng ký
           </button>

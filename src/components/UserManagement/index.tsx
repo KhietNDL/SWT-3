@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import "./index.scss";
 import { User } from "../../types/user";
+import { useNavigate } from "react-router-dom";
 
 const UserManagement: React.FC = () => {
   // Khởi tạo state users là mảng rỗng
@@ -96,7 +97,7 @@ const UserManagement: React.FC = () => {
     setPassword("");
     setConfirmPassword("");
   };
-
+  
   // Xử lý submit user (cả thêm mới và cập nhật)
   const handleSubmitUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -183,15 +184,21 @@ const UserManagement: React.FC = () => {
       })
       .catch((error) => console.error("Error deleting user:", error));
   };
+  const navigate = useNavigate();
 
+  const handleCreateUser = () => {
+    navigate("/register");
+  };
   return (
     <div className="user-container">
       {/* HEADER */}
       <div className="user-header">
         <h2>User Management</h2>
-        <button className="add-button" onClick={handleOpenAddModal}>
-          <Plus size={16} /> Add New User
-        </button>
+        
+          <button className="add-button" onClick={handleCreateUser}>
+            <Plus size={16} /> Add New User
+          </button>
+      
       </div>
 
       {/* CONTROLS: Search + Filter */}
