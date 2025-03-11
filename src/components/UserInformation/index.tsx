@@ -126,7 +126,7 @@ function UserInformation() {
 
         <div className="form-group">
           <label>Vai trò</label>
-          <input type="text" value={reduxUser.roleName} readOnly />
+          <input disabled type="text" value={reduxUser.roleName} readOnly />
         </div>
       </div>
 

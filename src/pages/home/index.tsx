@@ -1,10 +1,10 @@
-import Carousel from "../../components/carousel";
-import Footer from "../../components/footer";
-import Header from "../../components/header";
-import DoctorCarousel from "../../components/doctor-carousel";
-import BlogAndDocument from "../../components/blog-and-document";
+import Carousel from "../../components/Carousel";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import DoctorCarousel from "../../components/DoctorCarousel";
+import BlogAndDocument from "../../components/BlogAndDocument";
 import AssessmentList from "../../components/SurveyListUser/AssessmentList";
-import ServiceIntro from "../../components/review-services";
+import ServiceIntro from "../../components/ReviewServices";
 function HomePage() {
   return (
     <div>

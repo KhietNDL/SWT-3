@@ -1,16 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../types/user";
 
-const initialState: null | User = null;
+// Lấy dữ liệu từ localStorage khi Redux khởi động
+const storedUser = localStorage.getItem("userInfo");
 
-const userSlice = createSlice ({
-    name: "user",
-    initialState,
-    reducers: {
-        login: (state, action) => action.payload,
-        logout: () => initialState,
+const initialState: User | null = storedUser ? JSON.parse(storedUser) : null;
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    login: (state, action: PayloadAction<User>) => {
+      localStorage.setItem("userInfo", JSON.stringify(action.payload)); // Lưu vào localStorage
+      return action.payload;
     },
-
+    logout: () => {
+      localStorage.removeItem("userInfo"); // Xóa khỏi localStorage khi logout
+      return null;
+    },
+  },
 });
+
 export const { login, logout } = userSlice.actions;
 export default userSlice.reducer;

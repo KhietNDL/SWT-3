@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../../components/header';
-import Footer from '../../components/footer';
-import './Program.scss';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../Header";
+import Footer from "../Footer";
+import "./Program.scss";
 
 function Program() {
   const [selectedService, setSelectedService] = useState<number | null>(null);
@@ -11,66 +11,66 @@ function Program() {
   const programs = [
     {
       id: 1,
-      title: "Đánh giá sự phát triển của trẻ",
-      shortDesc: "Sự phát triển với tốc độ nhanh và đầy biến động của thời đại 4.0, cùng với yêu cầu ngày càng cao của nhà trường và những bất cập trong thực tiễn giáo dục đang tạo ra những áp lực rất lớn cho trẻ em...",
-      link: "/danh-gia/phat-trien"
+      title: "Giải Tỏa Lo Âu - Hướng Tới Tương Lai Tươi Sáng",
+      shortDesc: "Chương trình giúp học sinh giảm bớt lo âu, cải thiện khả năng quản lý căng thẳng trong môi trường học đường thông qua các buổi tư vấn và kỹ thuật thư giãn...",
+      link: "/danh-gia/lo-au"
     },
     {
       id: 2,
-      title: "Từ 6 tuổi trở lên - RAVEN",
-      shortDesc: "Test Raven là một công cụ đánh giá trí thông minh phi ngôn ngữ, được sử dụng rộng rãi để đo lường khả năng tư duy logic và giải quyết vấn đề của trẻ từ 6 tuổi trở lên...",
-      link: "/danh-gia/raven"
+      title: "Vượt Qua Trầm Cảm - Đánh Thức Niềm Tin Cuộc Sống",
+      shortDesc: "Chương trình cung cấp các buổi trị liệu tâm lý và tư vấn cho học sinh mắc chứng trầm cảm, giúp họ vượt qua cảm giác cô đơn và tuyệt vọng trong môi trường học đường..",
+      link: "/danh-gia/tram-cam"
     },
     {
       id: 3,
-      title: "Thang đo đánh giá trí tuệ của Wechsler",
-      shortDesc: "Thang đo Wechsler là công cụ đánh giá toàn diện về chỉ số thông minh (IQ), bao gồm các kỹ năng ngôn ngữ, tư duy logic, trí nhớ và tốc độ xử lý thông tin...",
-      link: "/danh-gia/wechsler"
+      title: "Kỹ Năng Chinh Phục Lo Âu - Tự Tin Vượt Lên",
+      shortDesc: "Chương trình này giúp học sinh xây dựng các kỹ năng đối phó hiệu quả với lo âu và căng thẳng thông qua các bài tập thực tế và tư vấn cá nhân...",
+      link: "/danh-gia/ky-nang-doi-pho-lo-au"
     },
     {
       id: 4,
-      title: "Cấu trúc nhân cách - EPI",
-      shortDesc: "Bài test EPI (Eysenck Personality Inventory) đánh giá các đặc điểm tính cách cơ bản như hướng nội - hướng ngoại, tính ổn định cảm xúc và tính cách...",
-      link: "/danh-gia/epi"
+      title: "Kết NỐi Cảm Xúc - Tư Vấn Nhóm Cho Trẻ Mắc Trầm Cảm",
+      shortDesc: "Chương trình tổ chức các buổi tư vấn tâm lý nhóm giúp học sinh trầm cảm chia sẻ cảm xúc và nhận sự hỗ trợ từ cộng đồng, giảm bớt sự cô đơn và khủng hoảng...",
+      link: "/danh-gia/tu-van-tam-ly-nhom"
     },
     {
       id: 5,
-      title: "Tăng động giảm tập trung - ADHD",
-      shortDesc: "Đánh giá các triệu chứng của rối loạn tăng động giảm chú ý (ADHD) thông qua các tiêu chí chuẩn đoán quốc tế, giúp phát hiện sớm và có biện pháp can thiệp kịp thời...",
-      link: "/danh-gia/adhd"
+      title: "Thiền & Thư Giãn - Khám Phá Tâm An, Học Tốt",
+      shortDesc: "Các bài tập thiền và thư giãn trong chương trình giúp học sinh giảm căng thẳng, cải thiện tâm trạng và tăng cường sự tập trung trong học tập...",
+      link: "/danh-gia/thu-gian-thien-dinh"
     },
     {
       id: 6,
-      title: "Định hướng nghề nghiệp - MBTI",
-      shortDesc: "Test MBTI (Myers-Briggs Type Indicator) giúp học sinh hiểu rõ về tính cách, sở thích và điểm mạnh của bản thân, từ đó có định hướng nghề nghiệp phù hợp...",
-      link: "/danh-gia/mbti"
+      title: "Nhận Thức & Hành Động - Chấm Dứt Lo Âu và Trầm Cảm",
+      shortDesc: "Chương Trình cung cấp các buổi hội thảo và tài liệu giáo dục để học sinh nhận thức rõ hơn về các triệu chứng lo âu và trầm cảm, giúp họ tìm kiếm sự hỗ trợ kịp thời ",
+      link: "/danh-gia/nhan-thuc-lo-au-tram-cam"
     },
     {
       id: 7,
-      title: "Đánh giá tính cách - DISC",
-      shortDesc: "Mô hình DISC đánh giá bốn khía cạnh chính của tính cách: Quyết đoán (D), Ảnh hưởng (I), Ổn định (S) và Cẩn trọng (C), giúp hiểu rõ phong cách làm việc và giao tiếp...",
-      link: "/danh-gia/disc"
+      title: "Khám Phá Cảm Xúc - Tìm Hiểu Bản Thân Thật Sự",
+      shortDesc: "Chương trình này giúp học sinh nhận diện và hiểu rõ cảm xúc của bản thân, từ đó tìm ra các phương pháp cân bằng tâm lý và đối phó với lo âu và trầm cảm...",
+      link: "/danh-gia/kham-pha-cam-xuc"
     },
     {
       id: 8,
-      title: "M-Chart-R đánh giá trẻ tự kỷ",
-      shortDesc: "M-CHAT-R (Modified Checklist for Autism in Toddlers) là công cụ sàng lọc giúp phát hiện sớm dấu hiệu rối loạn phổ tự kỷ ở trẻ nhỏ...",
-      link: "/danh-gia/mchat"
+      title: "Khám Phá Tâm Lý Học Đường- Hiểu Rõ Về Chính Mình",
+      shortDesc: "Chương trình này giúp học sinh nắm bắt các yếu tố tác động đến tâm lý học đường, từ đó học cách đối phó với các vấn đề học tập và xã hội có thể ảnh hưởng đến sức khỏe tâm lý ... ",
+      link: "/danh-gia/tam-ly-hoc-duong"
     }
   ];
 
   const handleServiceClick = (id: number) => {
-    setSelectedService(selectedService === id ? null : id);
+    setSelectedService(selectedService === id ? null : id);  // Tắt hoặc bật mô tả
   };
 
   const handleViewMore = (link: string) => {
-    navigate(link);
+    navigate(link); // Điều hướng đến trang chi tiết
   };
 
   return (
     <div className="program-page">
       <Header />
-      
+
       <main className="program-content">
         <div className="program-hero">
           <h1>Các dịch vụ đánh giá tâm lý</h1>
@@ -78,19 +78,19 @@ function Program() {
         </div>
 
         <div className="services-grid">
-          {programs.map(program => (
+          {programs.map((program) => (
             <div key={program.id} className="service-card">
-              <div 
-                className="service-header" 
+              <div
+                className="service-header"
                 onClick={() => handleServiceClick(program.id)}
               >
                 <h2>{program.title}</h2>
               </div>
-              
+
               {selectedService === program.id && (
                 <div className="service-description">
                   <p>{program.shortDesc}</p>
-                  <button 
+                  <button
                     className="view-more"
                     onClick={() => handleViewMore(program.link)}
                   >

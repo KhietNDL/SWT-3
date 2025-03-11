@@ -3,7 +3,7 @@ import HomePage from "./pages/home";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register/register";
 import RegisterValidation from "./pages/RegisterValidation/RegisterValidation";
-import "./main.css"
+import "./main.css";
 import Info from "./pages/info-user";
 import Booking from "./pages/Booking";
 import BookingDetail from "./pages/Booking-detail";
@@ -17,9 +17,12 @@ import GAD7Form from "./pages/SurveyForm";
 import SurveyResult from "./components/SurveyResult/SurveyResult";
 import Program from "./pages/Program/Program";
 import ProgramDetail from "./pages/ProgramDetail/index";
-import "./main.css"
+import "./main.css";
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";
+import OrderDetailPage from "./pages/OrderDetail";
+import ManagePage from "./pages/Manager";
+import RequireManager from "./components/RequireManager";
 
 import SurveyTypeManagementPage from "./pages/SurveyTypeManagement";
 import SurveyManagementPage from "./pages/SurveyManagement";
@@ -49,6 +52,15 @@ const router = createBrowserRouter([
 
       { path: "survey-type-management", element: <SurveyTypeManagementPage /> },
       { path: "survey-management/:surveyTypeId", element: <SurveyManagementPage /> },
+      {
+        path: "manage",
+        element: (
+          <RequireManager>
+            <ManagePage />
+          </RequireManager>
+        ),
+      },
+      { path: "order-detail/:id", element: <OrderDetailPage /> },
     ],
   },
 ]);

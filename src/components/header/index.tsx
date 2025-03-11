@@ -46,17 +46,10 @@ function Header() {
           <li>
             <Link to="/">Trang chủ</Link>
           </li>
-          <li className="dropdown">
+          <li>
             <Link to="/dich-vu">Dịch vụ</Link>
-            {/* <ul className="dropdown-content">
-              <li>
-                <Link to="/dich-vu/1">Dịch vụ 1</Link>
-              </li>
-              <li>
-                <Link to="/dich-vu/2">Dịch vụ 2</Link>
-              </li>
-            </ul> */}
           </li>
+
           <li className="dropdown">
             <Link to="/survey">Quiz</Link>
           </li>
