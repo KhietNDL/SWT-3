@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/features/userSlice";
 import { jwtDecode } from "jwt-decode";
-import { RootState } from "../../redux/Store";
+
 
 interface FormData {
   email: string;

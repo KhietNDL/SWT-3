@@ -1,63 +1,28 @@
-import React, { useState } from "react";
-import { Plus, Search, Filter, ChevronDown, Pencil, Trash2 } from "lucide-react";
-import "./index.scss"; // File SCSS (hoặc CSS) của bạn
+import React, { useState, useEffect } from "react";
+import {
+  Plus,
+  Search,
+  Filter,
+  ChevronDown,
+  Pencil,
+  Trash2,
+} from "lucide-react";
+import "./index.scss";
 import { User } from "../../types/user";
 
-// ====== INTERFACE CHO USER ======
-
-
-// ====== DỮ LIỆU MẪU BAN ĐẦU ======
-const initialUsers: User[] = [
-  {
-    id: "1",
-    username: "john_doe",
-    fullname: "John Doe",
-    email: "john@example.com",
-    phone: 123456789,
-    address: "123 Main St",
-    roleName: "Admin",
-    avatar: "https://i.pravatar.cc/40?img=1",
-  },
-  {
-    id: "2",
-    username: "jane_smith",
-    fullname: "Jane Smith",
-    email: "jane@example.com",
-    phone: 987654321,
-    address: "456 Park Ave",
-    roleName: "User",
-    avatar: "https://i.pravatar.cc/40?img=2",
-  },
-  {
-    id: "3",
-    username: "alex_nguyen",
-    fullname: "Alex Nguyen",
-    email: "alex@example.com",
-    phone: 555666777,
-    address: "789 Broadway",
-    roleName: "User",
-    avatar: "https://i.pravatar.cc/40?img=3",
-  },
-];
-
 const UserManagement: React.FC = () => {
-  // State quản lý danh sách Users
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  // Khởi tạo state users là mảng rỗng
+  const [users, setUsers] = useState<User[]>([]);
 
-  // State cho tìm kiếm (search) và filter
+  // Các state khác vẫn giữ nguyên
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedRole, setSelectedRole] = useState<string>("All");
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
-
-  // State điều khiển hiển thị Modal (Add/Edit)
   const [showModal, setShowModal] = useState<boolean>(false);
-  // Xác định đang edit user nào (nếu có). null = đang thêm mới
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
-
-  // State lưu tạm thông tin user đang tạo/sửa
   const [currentUser, setCurrentUser] = useState<User>({
     id: "",
-    username: "",
+    userName: "",
     fullname: "",
     email: "",
     phone: 0,
@@ -66,22 +31,34 @@ const UserManagement: React.FC = () => {
     avatar: "",
   });
 
-  // ====== Lọc users theo searchTerm & selectedRole ======
+  // State dành cho mật khẩu khi thêm mới user
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+  // Lấy dữ liệu từ API khi component mount
+  useEffect(() => {
+    fetch("http://localhost:5199/Account")
+      .then((response) => response.json())
+      .then((data: User[]) => setUsers(data))
+      .catch((error) => console.error("Error fetching users: ", error));
+  }, []);
+
+  // Lọc users theo searchTerm & selectedRole
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
-      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.fullname.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = selectedRole === "All" || user.roleName === selectedRole;
-
+      (user.userName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.fullname || "").toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole =
+      selectedRole === "All" || user.roleName === selectedRole;
     return matchesSearch && matchesRole;
   });
 
-  // ====== Mở modal để Thêm mới ======
+  // Mở modal thêm mới user
   const handleOpenAddModal = () => {
-    setEditingUserId(null); // không sửa, mà là thêm mới
+    setEditingUserId(null);
     setCurrentUser({
       id: "",
-      username: "",
+      userName: "",
       fullname: "",
       email: "",
       phone: 0,
@@ -89,24 +66,26 @@ const UserManagement: React.FC = () => {
       roleName: "User",
       avatar: "",
     });
+    // Reset lại mật khẩu khi mở modal thêm mới
+    setPassword("");
+    setConfirmPassword("");
     setShowModal(true);
   };
 
-  // ====== Mở modal để Sửa (Edit) ======
+  // Mở modal chỉnh sửa user
   const handleOpenEditModal = (user: User) => {
     setEditingUserId(user.id);
-    setCurrentUser(user); // điền sẵn thông tin
+    setCurrentUser(user);
     setShowModal(true);
   };
 
-  // ====== Đóng modal ======
+  // Đóng modal và reset lại state
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingUserId(null);
-    // Reset
     setCurrentUser({
       id: "",
-      username: "",
+      userName: "",
       fullname: "",
       email: "",
       phone: 0,
@@ -114,30 +93,95 @@ const UserManagement: React.FC = () => {
       roleName: "User",
       avatar: "",
     });
+    setPassword("");
+    setConfirmPassword("");
   };
 
-  // ====== Submit form (Thêm hoặc Sửa) ======
+  // Xử lý submit user (cả thêm mới và cập nhật)
   const handleSubmitUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (editingUserId) {
-      // Đang sửa => cập nhật
-      setUsers((prev) =>
-        prev.map((u) =>
-          u.id === editingUserId ? { ...currentUser, id: editingUserId } : u
-        )
-      );
-    } else {
-      // Đang thêm mới => tạo ID mới (hoặc lấy input)
-      const newId = (users.length + 1).toString();
-      setUsers([...users, { ...currentUser, id: newId }]);
+    // Nếu đang thêm mới user, kiểm tra mật khẩu và confirm password
+    if (!editingUserId) {
+      if (password !== confirmPassword) {
+        alert("Mật khẩu và nhập lại mật khẩu không khớp!");
+        return;
+      }
+      // Gán mật khẩu vào currentUser nếu API yêu cầu
+      (currentUser as any).password = password;
     }
-    handleCloseModal();
+
+    if (editingUserId) {
+      // Update user qua PUT
+      fetch(`http://localhost:5199/Account/${editingUserId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentUser),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Lỗi cập nhật user");
+          }
+          return response.json();
+        })
+        .then(() => {
+          // Sau PUT, gọi GET để lấy user mới nhất
+          return fetch(`http://localhost:5199/Account/${editingUserId}`);
+        })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Lỗi lấy user sau cập nhật");
+          }
+          return response.json();
+        })
+        .then((updatedUser: User) => {
+          // Cập nhật state users với user mới cập nhật
+          setUsers((prev) =>
+            prev.map((u) => (u.id === editingUserId ? updatedUser : u))
+          );
+          handleCloseModal();
+        })
+        .catch((error) => console.error("Error updating user:", error));
+    } else {
+      // Thêm mới user qua POST với API Register
+      fetch("http://localhost:5199/Account/Register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentUser),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Lỗi tạo user mới");
+          }
+          return response.json();
+        })
+        .then((newUser: User) => {
+          setUsers([...users, newUser]);
+          handleCloseModal();
+        })
+        .catch((error) => console.error("Error creating user:", error));
+    }
   };
 
-  // ====== Xoá user ======
   const handleDeleteUser = (id: string) => {
-    setUsers((prev) => prev.filter((u) => u.id !== id));
+    if (!window.confirm("Bạn có chắc chắn muốn xóa tài khoản này không?")) {
+      return;
+    }
+    fetch(`http://localhost:5199/Account/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Lỗi xoá user");
+        }
+        // Sau khi xoá thành công trên server, cập nhật lại state
+        setUsers((prev) => prev.filter((user) => user.id !== id));
+      })
+      .catch((error) => console.error("Error deleting user:", error));
   };
 
   return (
@@ -152,7 +196,6 @@ const UserManagement: React.FC = () => {
 
       {/* CONTROLS: Search + Filter */}
       <div className="user-controls">
-        {/* Search bar */}
         <div className="search-bar">
           <Search size={16} />
           <input
@@ -163,7 +206,6 @@ const UserManagement: React.FC = () => {
           />
         </div>
 
-        {/* Filter dropdown */}
         <div className="filter-dropdown">
           <button
             className="filter-button"
@@ -175,7 +217,7 @@ const UserManagement: React.FC = () => {
           </button>
           {showDropdown && (
             <ul className="dropdown-menu">
-              {["All", "Admin", "User"].map((role) => (
+              {["All", "Manager", "Student", "Parent"].map((role) => (
                 <li
                   key={role}
                   onClick={() => {
@@ -221,16 +263,12 @@ const UserManagement: React.FC = () => {
                   <div style={{ width: 40, height: 40, background: "#ccc" }} />
                 )}
               </td>
-              <td>{user.username}</td>
+              <td>{user.userName}</td>
               <td>{user.fullname}</td>
               <td>{user.email}</td>
               <td>{user.phone}</td>
               <td>{user.address}</td>
-              <td>
-                <span className={`role-badge ${user.roleName.toLowerCase()}`}>
-                  {user.roleName}
-                </span>
-              </td>
+              <td>{user.roleName}</td>
               <td>
                 <button
                   className="edit-button"
@@ -260,14 +298,13 @@ const UserManagement: React.FC = () => {
                 <label>Username</label>
                 <input
                   type="text"
-                  value={currentUser.username}
+                  value={currentUser.userName}
                   onChange={(e) =>
-                    setCurrentUser({ ...currentUser, username: e.target.value })
+                    setCurrentUser({ ...currentUser, userName: e.target.value })
                   }
                   required
                 />
               </div>
-
               <div className="form-group">
                 <label>Fullname</label>
                 <input
@@ -279,7 +316,6 @@ const UserManagement: React.FC = () => {
                   required
                 />
               </div>
-
               <div className="form-group">
                 <label>Email</label>
                 <input
@@ -291,7 +327,6 @@ const UserManagement: React.FC = () => {
                   required
                 />
               </div>
-
               <div className="form-group">
                 <label>Phone</label>
                 <input
@@ -306,7 +341,6 @@ const UserManagement: React.FC = () => {
                   required
                 />
               </div>
-
               <div className="form-group">
                 <label>Address</label>
                 <input
@@ -317,10 +351,10 @@ const UserManagement: React.FC = () => {
                   }
                 />
               </div>
-
               <div className="form-group">
                 <label>Role</label>
                 <select
+                  disabled
                   value={currentUser.roleName}
                   onChange={(e) =>
                     setCurrentUser({
@@ -329,11 +363,11 @@ const UserManagement: React.FC = () => {
                     })
                   }
                 >
-                  <option value="Admin">Admin</option>
-                  <option value="User">User</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Student">Student</option>
+                  <option value="Parent">Parent</option>
                 </select>
               </div>
-
               <div className="form-group">
                 <label>Avatar URL</label>
                 <input
@@ -345,7 +379,29 @@ const UserManagement: React.FC = () => {
                   }
                 />
               </div>
-
+              {/* Hiển thị các trường mật khẩu chỉ khi thêm mới user */}
+              {!editingUserId && (
+                <>
+                  <div className="form-group">
+                    <label>Password</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Confirm Password</label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                </>
+              )}
               <div className="modal-actions">
                 <button type="button" onClick={handleCloseModal}>
                   Cancel

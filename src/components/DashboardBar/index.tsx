@@ -6,9 +6,18 @@ import SurveyManagement from "../SurveyManagement";
 import logo from "../../images/Logo.png";
 import UserManagement from "../UserManagement";
 import SubscriptionManagement from "../ProgramManagement";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/features/userSlice";
 const Sidebar = () => {
   const [activePage, setActivePage] = useState();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+      dispatch(logout());
+      localStorage.removeItem("token");
+      navigate("/");
+    };
   return (
     <div className="dashboard">
       <div className="sidebar">
@@ -39,7 +48,7 @@ const Sidebar = () => {
           </li>
         </ul>
         <div className="logout">
-          <LogOut /> <span>Log out</span>
+          <span onClick={handleLogout}>Log out</span>
         </div>
       </div>
 

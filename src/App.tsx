@@ -3,7 +3,7 @@ import HomePage from "./pages/home";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register/register";
 import RegisterValidation from "./pages/RegisterValidation/RegisterValidation";
-import "./main.css"
+import "./main.css";
 import Info from "./pages/info-user";
 import Booking from "./pages/Booking";
 import BookingDetail from "./pages/Booking-detail";
@@ -11,16 +11,17 @@ import Blog from "./pages/Blog/index";
 import BlogDetail from "./pages/BlogDetail/index";
 import Document from "./pages/Document/index";
 import DocumentDetail from "./pages/DocumentDetail/index";
-import "./main.css"
+import "./main.css";
 import AssessmentList from "./pages/AssessmentList";
 import GAD7Form from "./pages/Form";
 import SurveyResult from "./components/SurveyResult/SurveyResult";
 import Program from "./pages/Program/Program";
 import ProgramDetail from "./pages/ProgramDetail/index";
-import "./main.css"
+import "./main.css";
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";
 import ManagePage from "./pages/Manager";
+import RequireManager from "./components/RequireManager";
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,14 @@ const router = createBrowserRouter([
       { path: "dich-vu", element: <Program /> },
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
-      { path: "manage", element: <ManagePage /> },
+      {
+        path: "manage",
+        element: (
+          <RequireManager>
+            <ManagePage />
+          </RequireManager>
+        ),
+      },
     ],
   },
 ]);
