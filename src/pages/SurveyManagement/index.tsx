@@ -1,8 +1,10 @@
-import SurveyComponent from "../../components/SurveyManagement/SurveyManagement";
-
-function SurveyManagement() {
-    return (
-        <div><SurveyComponent /></div>
-    );
+import SurveyDashboard from "../../components/SurveyManagement/SurveyDashboard";
+function SurveyManagementPage() {
+  return (
+    <div>
+        <SurveyDashboard surveyTypes={[]} />
+    </div>
+  );
 }
-export default SurveyManagement;
+
+export default SurveyManagementPage;

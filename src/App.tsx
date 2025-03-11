@@ -21,7 +21,8 @@ import "./main.css"
 import ResetPassword from "./pages/RePass-Page";
 import RootLayout from "./root";
 
-import SurveyManagement from "./pages/SurveyManagement";
+import SurveyTypeManagementPage from "./pages/SurveyTypeManagement";
+import SurveyManagementPage from "./pages/SurveyManagement";
 
 const router = createBrowserRouter([
   {
@@ -46,7 +47,8 @@ const router = createBrowserRouter([
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
 
-      { path: "survey-management", element: <SurveyManagement /> },
+      { path: "survey-type-management", element: <SurveyTypeManagementPage /> },
+      { path: "survey-management/:surveyTypeId", element: <SurveyManagementPage /> },
     ],
   },
 ]);

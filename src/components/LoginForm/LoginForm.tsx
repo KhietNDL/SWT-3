@@ -134,6 +134,7 @@ const LoginPage: React.FC = () => {
       const userInfo = await fetchUserInfo(userId);
 
       localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token)
 
       dispatch(login(userInfo));
       navigate("/");

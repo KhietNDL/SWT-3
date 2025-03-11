@@ -1,0 +1,40 @@
+.survey-dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  .survey-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    
+    .actions {
+      display: flex;
+      justify-content: center;  /* Center buttons horizontally */
+      align-items: center;      /* Center buttons vertically */
+      gap: 8px;
+      
+      button {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+        
+        &:hover {
+          background-color: #0056b3;
+        }
+
+        &.delete {
+          background-color: #dc3545;
+          
+          &:hover {
+            background-color: #c82333;
+          }
+        }
+      }
+    }
+  }
+}
