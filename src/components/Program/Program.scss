@@ -1,99 +1,117 @@
-.program-page {
-  background-color: #f8f9fa;
-  min-height: 100vh;
-  padding-top: 80px;
-}
-
 .program-content {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
   padding: 2rem;
-}
-
-.program-hero {
   text-align: center;
-  margin-bottom: 3rem;
+}
 
-  h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 1rem;
+/* ✅ Tiêu đề lớn & mô tả */
+.program-hero {
+  margin-bottom: 2rem;
+
+  .main-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 0.5rem;
   }
 
-  p {
-    font-size: 1.2rem;
-    color: #666;
+  .sub-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #444;
+    text-align: center;
   }
 }
 
+/* ✅ Chia thành 2 cột */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
+/* ✅ Thiết kế Card */
 .service-card {
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
 
   .service-header {
-    padding: 2rem;
+    padding: 1.5rem;
+    background-color: #f0f7ff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-align: center;
+    transition: background 0.3s ease;
 
     &:hover {
-      background-color: #f0f7ff;
+      background-color: #dbeafe;
     }
 
     h2 {
       font-size: 1.5rem;
-      color: #1890ff;
+      color: #0056b3;
       margin: 0;
     }
   }
 
+  /* ✅ Mô tả hiển thị khi mở */
   .service-description {
-    padding: 0 2rem 2rem;
+    display: none;
+    padding: 1.5rem;
+    text-align: left;
     border-top: 1px solid #f0f0f0;
+    animation: fadeIn 0.3s ease-in-out;
 
     p {
-      color: #666;
+      color: #555;
       line-height: 1.6;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     .view-more {
-      padding: 0.75rem 2rem;
-      background: #1890ff;
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: #0056b3;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      font-weight: 500;
+      font-size: 1rem;
       transition: background 0.3s ease;
 
       &:hover {
-        background: #096dd9;
+        background: #003d82;
       }
     }
   }
+
+  &.active .service-description {
+    display: block;
+  }
 }
 
+/* ✅ Responsive */
 @media (max-width: 768px) {
   .services-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Chuyển về 1 cột trên mobile */
   }
 
-  .program-content {
-    padding: 1rem;
+  .program-hero .main-title {
+    font-size: 2.5rem;
   }
 
-  .program-hero {
-    h1 {
-      font-size: 2rem;
-    }
+  .program-hero .sub-title {
+    font-size: 1.3rem;
   }
 }

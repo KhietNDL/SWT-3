@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Pencil, Trash2, Plus, Search, XCircle } from "lucide-react";
 import "./index.scss";
 
-// ✅ Định nghĩa `id` là `string` thay vì `number`
+// ✅ Định nghĩa `id` là `string`
 interface Subscription {
   id?: string;
   subscriptionName: string;
@@ -13,9 +13,14 @@ interface Subscription {
   psychologistName: string;
 }
 
+// ✅ Props để cập nhật `Program.tsx`
+interface ProgramManagementProps {
+  onProgramUpdated?: () => void;
+}
+
 const API_URL = "http://localhost:5199/Subscription";
 
-const SubscriptionManagement: React.FC = () => {
+const SubscriptionManagement: React.FC<ProgramManagementProps> = ({ onProgramUpdated }) => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -30,32 +35,30 @@ const SubscriptionManagement: React.FC = () => {
     psychologistName: "",
   });
 
-  // 🔹 Lấy danh sách từ API
+  // ✅ Lấy danh sách từ API
   const fetchSubscriptions = async () => {
     try {
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      console.log("⏳ Fetching subscriptions...");
+      const response = await fetch(API_URL, { cache: "no-store" });
+      if (!response.ok) throw new Error("Không thể lấy dữ liệu từ API");
 
       const data: Subscription[] = await response.json();
-      console.log("📢 Dữ liệu API trả về:", data);
-
-      if (!Array.isArray(data)) {
-        throw new Error("❌ Dữ liệu API không phải là mảng!");
-      }
-
+      console.log("📢 Dữ liệu từ API:", data);
       setSubscriptions(data);
+
+      // ✅ Cập nhật dữ liệu bên `Program.tsx`
+      if (onProgramUpdated) onProgramUpdated();
     } catch (error) {
       console.error("⚠ Lỗi khi gọi API:", error);
-      alert("❌ Không thể lấy dữ liệu từ API! Kiểm tra console.");
     }
   };
 
-  // 🔹 Gọi API khi component mount
+  // ✅ Gọi API khi component mount
   useEffect(() => {
     fetchSubscriptions();
   }, []);
 
-  // Mở Modal để thêm mới
+  // ✅ Mở Modal để thêm mới
   const handleOpenAddModal = () => {
     setEditingId(null);
     setCurrentSub({
@@ -69,79 +72,65 @@ const SubscriptionManagement: React.FC = () => {
     setShowModal(true);
   };
 
-  // Mở Modal để chỉnh sửa
+  // ✅ Mở Modal để chỉnh sửa
   const handleOpenEditModal = (sub: Subscription) => {
     setEditingId(sub.id || null);
     setCurrentSub(sub);
     setShowModal(true);
   };
 
-  // Đóng Modal
+  // ✅ Đóng Modal
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingId(null);
   };
 
-  // Xử lý Submit Form (Thêm/Sửa)
+  // ✅ Xử lý Submit Form (Thêm/Sửa)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("🔍 Dữ liệu gửi lên API:", JSON.stringify(currentSub, null, 2));
-  
+    console.log("📤 Đang gửi dữ liệu lên API:", currentSub);
+    
     try {
       const method = editingId ? "PUT" : "POST";
-      const url = editingId ? `http://localhost:5199/Subscription/${editingId}` : `http://localhost:5199/Subscription/Create`;
-  
-      // 🔹 Nếu là cập nhật, chỉ lấy 3 trường cần thiết
-      const payload = editingId
-        ? {
-            description: currentSub.description,
-            duration: currentSub.duration,
-            price: currentSub.price,
-          }
-        : currentSub;
+      const url = editingId ? `${API_URL}/${editingId}` : `${API_URL}/Create`;
   
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(currentSub),
       });
   
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to save subscription: ${errorText}`);
-      }
+      console.log("📡 Response từ server:", response.status);
+      if (!response.ok) throw new Error("❌ Lưu không thành công!");
   
       await response.json();
+      console.log("✅ Lưu thành công, gọi `onProgramUpdated()`...");
   
-      // 🔥 Gọi lại API để cập nhật danh sách
       fetchSubscriptions();
-      handleCloseModal();
+      if (onProgramUpdated) onProgramUpdated(); // 🚀 Cập nhật Program.tsx
+      setShowModal(false);
     } catch (error) {
       console.error("🚨 Lỗi khi gửi API:", error);
-      alert("⚠ Failed to save subscription. Check console for details.");
     }
   };
   
-  // Xóa Subscription
+
+  // ✅ Xóa Subscription
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this subscription?")) return;
-
+    if (!window.confirm("Bạn có chắc chắn muốn xóa?")) return;
+  
     try {
-      const response = await fetch(`http://localhost:5199/Subscription/${id}`, { method: "DELETE" });
+      const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
       if (!response.ok) throw new Error("Failed to delete subscription");
-
-      // 🔥 Sau khi xóa, gọi lại API để cập nhật danh sách
+  
+      console.log("✅ Xóa thành công, gọi `onProgramUpdated()`...");
       fetchSubscriptions();
+      if (onProgramUpdated) onProgramUpdated(); // 🚀 Cập nhật Program.tsx
     } catch (error) {
       console.error("Error deleting subscription:", error);
-      alert("Failed to delete subscription. Please try again.");
     }
   };
-
-  // 🔹 Fix lỗi `.toLowerCase()` bị undefined
-  const filteredSubs = subscriptions.filter((sub) =>
-    sub.subscriptionName?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  
 
   return (
     <div className="subscription-container">
@@ -180,24 +169,26 @@ const SubscriptionManagement: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredSubs.map((sub) => (
-            <tr key={sub.id}>
-              <td>{sub.subscriptionName}</td>
-              <td>{sub.description}</td>
-              <td>${sub.price.toLocaleString()}</td>
-              <td>{sub.duration} days</td>
-              <td>{sub.categoryName}</td>
-              <td>{sub.psychologistName}</td>
-              <td>
-                <button className="edit-button" onClick={() => handleOpenEditModal(sub)}>
-                  <Pencil size={16} />
-                </button>
-                <button className="delete-button" onClick={() => handleDelete(sub.id!)}>
-                  <Trash2 size={16} />
-                </button>
-              </td>
-            </tr>
-          ))}
+          {subscriptions
+            .filter((sub) => sub.subscriptionName?.toLowerCase().includes(searchTerm.toLowerCase()))
+            .map((sub) => (
+              <tr key={sub.id}>
+                <td>{sub.subscriptionName}</td>
+                <td>{sub.description}</td>
+                <td>${sub.price.toLocaleString()}</td>
+                <td>{sub.duration} days</td>
+                <td>{sub.categoryName}</td>
+                <td>{sub.psychologistName}</td>
+                <td>
+                  <button className="edit-button" onClick={() => handleOpenEditModal(sub)}>
+                    <Pencil size={16} />
+                  </button>
+                  <button className="delete-button" onClick={() => handleDelete(sub.id!)}>
+                    <Trash2 size={16} />
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
 
@@ -212,33 +203,13 @@ const SubscriptionManagement: React.FC = () => {
               </button>
             </div>
             <form onSubmit={handleSubmit} className="modal-form">
-              <div className="form-group">
-                <label>Subscription Name</label>
-                <input type="text" value={currentSub.subscriptionName} onChange={(e) => setCurrentSub({ ...currentSub, subscriptionName: e.target.value })} required />
-              </div>
-              <div className="form-group">
-                <label>Description</label>
-                <textarea value={currentSub.description} onChange={(e) => setCurrentSub({ ...currentSub, description: e.target.value })} />
-              </div>
-              <div className="form-group">
-                <label>Price</label>
-                <input type="number" step="0.01" value={currentSub.price} onChange={(e) => setCurrentSub({ ...currentSub, price: Number(e.target.value) })} />
-              </div>
-              <div className="form-group">
-                <label>Duration</label>
-                <input type="number" value={currentSub.duration} onChange={(e) => setCurrentSub({ ...currentSub, duration: Number(e.target.value) })} />
-              </div>
-              <div className="form-group">
-                <label>Category</label>
-                <input type="text" value={currentSub.categoryName} onChange={(e) => setCurrentSub({ ...currentSub, categoryName: e.target.value })} />
-              </div>
-              <div className="form-group">
-                <label>Psychologist</label>
-                <input type="text" value={currentSub.psychologistName} onChange={(e) => setCurrentSub({ ...currentSub, psychologistName: e.target.value })} />
-              </div>
-              <div className="modal-actions">
-                <button type="submit">{editingId !== null ? "Update" : "Create"}</button>
-              </div>
+              <input type="text" placeholder="Subscription Name" value={currentSub.subscriptionName} onChange={(e) => setCurrentSub({ ...currentSub, subscriptionName: e.target.value })} required />
+              <textarea placeholder="Description" value={currentSub.description} onChange={(e) => setCurrentSub({ ...currentSub, description: e.target.value })} />
+              <input type="number" placeholder="Price" value={currentSub.price} onChange={(e) => setCurrentSub({ ...currentSub, price: Number(e.target.value) })} required />
+              <input type="number" placeholder="Duration" value={currentSub.duration} onChange={(e) => setCurrentSub({ ...currentSub, duration: Number(e.target.value) })} required />
+              <input type="text" placeholder="Category" value={currentSub.categoryName} onChange={(e) => setCurrentSub({ ...currentSub, categoryName: e.target.value })} />
+              <input type="text" placeholder="Psychologist" value={currentSub.psychologistName} onChange={(e) => setCurrentSub({ ...currentSub, psychologistName: e.target.value })} />
+              <button type="submit">{editingId !== null ? "Update" : "Create"}</button>
             </form>
           </div>
         </div>
