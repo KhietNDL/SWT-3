@@ -18,7 +18,7 @@ const SurveyTypeManagement: React.FC = () => {
   const navigate = useNavigate();
 
   const handleEditSurveyType = (surveyType: SurveyType) => {
-    navigate(`/survey-management/${surveyType.id}`, {
+    navigate(`/manage/survey-management/${surveyType.id}`, {
       state: {
         selectedSurveyType: surveyType,
       },

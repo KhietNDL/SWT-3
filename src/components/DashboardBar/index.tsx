@@ -1,6 +1,6 @@
 import { BookOpen, Users, ClipboardList, Calendar, LogOut } from "lucide-react";
 import "./index.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SurveyTypeManagement from "../SurveyTypeManagement/SurveyTypeManagement";
 
 import logo from "../../images/Logo.png";
@@ -13,6 +13,13 @@ const Sidebar = () => {
   const [activePage, setActivePage] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname === "/manage") {
+      setActivePage("Users");
+    }
+  }, [location.pathname]);
+
   const handleLogout = () => {
       dispatch(logout());
       localStorage.removeItem("token");

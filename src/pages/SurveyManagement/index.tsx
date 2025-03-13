@@ -2,7 +2,7 @@ import SurveyDashboard from "../../components/SurveyManagement/SurveyDashboard";
 function SurveyManagementPage() {
   return (
     <div>
-        <SurveyDashboard surveyTypes={[]} />
+        <SurveyDashboard />
     </div>
   );
 }

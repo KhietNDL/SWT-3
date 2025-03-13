@@ -1,0 +1,233 @@
+// Survey Creation Form SCSS
+$primary-color: #4a90e2;
+$secondary-color: #f5f7fa;
+$border-color: #e1e4e8;
+$delete-color: #e74c3c;
+$text-color: #333;
+$light-text: #666;
+$hover-bg: #f0f5ff;
+
+.survey-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+
+  .survey-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+
+  .survey-title {
+    font-size: 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    width: 100%;
+    font-weight: 600;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+  }
+
+  .max-score {
+    width: 150px;
+    padding: 0.75rem 1rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+  }
+
+  .question-block {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    background-color: $secondary-color;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: lighten($primary-color, 15%);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  .drag-icon {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: $light-text;
+    cursor: grab;
+    padding: 0.25rem;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .question-input {
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+  }
+
+  .answer-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    background: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid $border-color;
+
+    input[type="text"] {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+    }
+
+    input[type="number"] {
+      width: 80px;
+      padding: 0.5rem;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+    }
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: $light-text;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+
+    &:hover {
+      color: $delete-color;
+      background-color: rgba($delete-color, 0.1);
+    }
+  }
+
+  .add-answer-btn,
+  .add-question-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: white;
+    color: $primary-color;
+    border: 1px dashed $primary-color;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.1);
+    }
+  }
+
+  .add-answer-btn {
+    margin-top: 0.5rem;
+    align-self: flex-start;
+  }
+
+  .add-question-btn {
+    margin: 1rem 0;
+    align-self: flex-start;
+  }
+
+  .save-survey-btn {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  // Drag and drop styling
+  .question-block.is-dragging {
+    border: 2px dashed $primary-color;
+    background-color: rgba($primary-color, 0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    opacity: 0.9;
+  }
+
+  // Responsive styling
+  @media (max-width: 768px) {
+    .survey-container {
+      padding: 0.5rem;
+    }
+
+    .survey-form {
+      padding: 1rem;
+    }
+
+    .answer-block {
+      flex-direction: column;
+      align-items: flex-start;
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+      }
+    }
+
+    .delete-btn {
+      align-self: flex-end;
+    }
+
+    .save-survey-btn {
+      align-self: center;
+      width: 100%;
+    }
+  }
+}

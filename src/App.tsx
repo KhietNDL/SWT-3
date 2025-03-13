@@ -50,8 +50,8 @@ const router = createBrowserRouter([
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
 
-      { path: "survey-type-management", element: <SurveyTypeManagementPage /> },
-      { path: "survey-management/:surveyTypeId", element: <SurveyManagementPage /> },
+      { path: "manage/SurveyTypeManagement", element: <SurveyTypeManagementPage /> },
+      { path: "manage/survey-management/:surveyTypeId", element: <SurveyManagementPage /> },
       {
         path: "manage",
         element: (
