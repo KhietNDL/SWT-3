@@ -49,13 +49,8 @@
   .service-header {
     padding: 1.5rem;
     background-color: #f0f7ff;
-    cursor: pointer;
     text-align: center;
     transition: background 0.3s ease;
-
-    &:hover {
-      background-color: #dbeafe;
-    }
 
     h2 {
       font-size: 1.5rem;
@@ -66,7 +61,6 @@
 
   /* ✅ Mô tả hiển thị khi mở */
   .service-description {
-    display: none;
     padding: 1.5rem;
     text-align: left;
     border-top: 1px solid #f0f0f0;
@@ -76,6 +70,14 @@
       color: #555;
       line-height: 1.6;
       margin-bottom: 1rem;
+    }
+
+    /* ✅ Chỉ hiển thị 1 dòng mô tả */
+    .short-description {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     .view-more {
@@ -95,16 +97,12 @@
       }
     }
   }
-
-  &.active .service-description {
-    display: block;
-  }
 }
 
 /* ✅ Responsive */
 @media (max-width: 768px) {
   .services-grid {
-    grid-template-columns: 1fr; /* Chuyển về 1 cột trên mobile */
+    grid-template-columns: 1fr;
   }
 
   .program-hero .main-title {

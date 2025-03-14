@@ -36,7 +36,7 @@
     }
   }
 
-  /* CONTROLS: chỉ có search-bar (nếu bạn không cần filter dropdown) */
+  /* CONTROLS: chỉ có search-bar */
   .subscription-controls {
     display: flex;
     justify-content: flex-start;
@@ -93,7 +93,6 @@
       }
     }
 
-    /* Nút edit / delete trong cột Actions */
     .edit-button,
     .delete-button {
       border: none;
@@ -126,7 +125,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 999; /* Đảm bảo modal hiển thị trên cùng */
+    z-index: 999;
   }
 
   .modal-content {
@@ -135,6 +134,10 @@
     border-radius: 8px;
     width: 400px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    /* THÊM SCROLL CHO FORM */
+    max-height: 80vh; /* Giới hạn chiều cao modal */
+    overflow-y: auto; /* Hiển thị thanh cuộn nếu nội dung quá dài */
 
     h3 {
       margin-top: 0;
@@ -160,7 +163,6 @@
         border-radius: 4px;
       }
 
-      /* Cho textarea */
       textarea {
         resize: vertical;
         min-height: 80px;

@@ -15,10 +15,10 @@ interface ProgramItem {
 }
 
 const API_URL = "http://localhost:5199/Subscription";
+const MAX_DESCRIPTION_LENGTH = 50; // ✅ Giới hạn ký tự mô tả để hiển thị 1 dòng
 
 function Program() {
   const [programs, setPrograms] = useState<ProgramItem[]>([]);
-  const [selectedService, setSelectedService] = useState<string | null>(null);
   const navigate = useNavigate();
 
   async function fetchPrograms() {
@@ -38,12 +38,8 @@ function Program() {
     fetchPrograms();
   }, []);
 
-  const handleServiceClick = (id: string) => {
-    setSelectedService(selectedService === id ? null : id);
-  };
-
   const handleViewMore = (id: string) => {
-    navigate(`/danh-gia/${id}`);
+    navigate(`/danh-gia/${id}`); // Chuyển hướng sang trang chi tiết
   };
 
   return (
@@ -63,26 +59,26 @@ function Program() {
             <p className="no-data">Không có chương trình nào.</p>
           ) : (
             programs.map((program) => (
-              <div
-                key={program.id}
-                className={`service-card ${selectedService === program.id ? "active" : ""}`}
-              >
-                <div className="service-header" onClick={() => handleServiceClick(program.id)}>
+              <div key={program.id} className="service-card">
+                <div className="service-header">
                   <h2>{program.subscriptionName}</h2>
                 </div>
 
-                {selectedService === program.id && (
-                  <div className="service-description">
-                    <p><strong>Mô tả:</strong> {program.description}</p>
-                    <p><strong>Giá:</strong> ${program.price.toLocaleString()}</p>
-                    <p><strong>Thời gian:</strong> {program.duration} ngày</p>
-                    <p><strong>Danh mục:</strong> {program.categoryName}</p>
-                    <p><strong>Chuyên gia:</strong> {program.psychologistName}</p>
-                    <button className="view-more" onClick={() => handleViewMore(program.id)}>
-                      Xem thêm
-                    </button>
-                  </div>
-                )}
+                <div className="service-description">
+                  <p className="single-line">
+                    <strong>Mô tả:</strong>{" "}
+                    {program.description.length > MAX_DESCRIPTION_LENGTH
+                      ? `${program.description.substring(0, MAX_DESCRIPTION_LENGTH)}...`
+                      : program.description}
+                  </p>
+                  <p><strong>Giá:</strong> ${program.price.toLocaleString()}</p>
+                  <p><strong>Thời gian:</strong> {program.duration} ngày</p>
+                  <p><strong>Danh mục:</strong> {program.categoryName}</p>
+                  <p><strong>Chuyên gia:</strong> {program.psychologistName}</p>
+                  <button className="view-more" onClick={() => handleViewMore(program.id)}>
+                    Xem thêm
+                  </button>
+                </div>
               </div>
             ))
           )}
