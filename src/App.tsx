@@ -15,7 +15,7 @@ import "./main.css"
 import AssessmentList from "./pages/SurveyListUser";
 import GAD7Form from "./pages/SurveyForm";
 import SurveyResult from "./components/SurveyResult/SurveyResult";
-import Program from "./pages/Program/Program";
+import ProgramPage from "./pages/Program/index";
 import ProgramDetail from "./pages/ProgramDetail/index";
 import "./main.css";
 import ResetPassword from "./pages/RePass-Page";
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       { path: "survey", element: <AssessmentList /> },
       { path: "survey/:id", element: <GAD7Form /> },
       { path: "survey_result", element: <SurveyResult /> },
-      { path: "dich-vu", element: <Program /> },
+      { path: "dich-vu", element: <ProgramPage /> },
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
 
