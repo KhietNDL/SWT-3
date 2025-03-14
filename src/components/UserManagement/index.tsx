@@ -10,7 +10,7 @@ import {
 import "./index.scss";
 import { User } from "../../types/user";
 import { useNavigate } from "react-router-dom";
-
+import avt from "../../images/User.png";
 const UserManagement: React.FC = () => {
   // Khởi tạo state users là mảng rỗng
   const [users, setUsers] = useState<User[]>([]);
@@ -29,7 +29,7 @@ const UserManagement: React.FC = () => {
     phone: 0,
     address: "",
     roleName: "User",
-    avatar: "",
+    imgUrl: "",
   });
 
   // State dành cho mật khẩu khi thêm mới user
@@ -65,7 +65,7 @@ const UserManagement: React.FC = () => {
       phone: 0,
       address: "",
       roleName: "User",
-      avatar: "",
+      imgUrl: "",
     });
     // Reset lại mật khẩu khi mở modal thêm mới
     setPassword("");
@@ -92,7 +92,7 @@ const UserManagement: React.FC = () => {
       phone: 0,
       address: "",
       roleName: "User",
-      avatar: "",
+      imgUrl: "",
     });
     setPassword("");
     setConfirmPassword("");
@@ -244,7 +244,6 @@ const UserManagement: React.FC = () => {
       <table className="user-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Avatar</th>
             <th>Username</th>
             <th>Fullname</th>
@@ -258,16 +257,20 @@ const UserManagement: React.FC = () => {
         <tbody>
           {filteredUsers.map((user) => (
             <tr key={user.id}>
-              <td>{user.id}</td>
               <td>
-                {user.avatar ? (
+                {user.imgUrl ? (
                   <img
-                    src={user.avatar}
+                    src={`http://localhost:5199${user.imgUrl}`}
                     alt="avatar"
                     style={{ width: 40, height: 40, borderRadius: "50%" }}
                   />
                 ) : (
-                  <div style={{ width: 40, height: 40, background: "#ccc" }} />
+                  
+                  <img
+                    src={avt}
+                    alt="avatar"
+                    style={{ width: 40, height: 40, borderRadius: "50%" }}
+                  />
                 )}
               </td>
               <td>{user.userName}</td>
@@ -380,9 +383,9 @@ const UserManagement: React.FC = () => {
                 <input
                   type="text"
                   placeholder="https://..."
-                  value={currentUser.avatar}
+                  value={currentUser.imgUrl}
                   onChange={(e) =>
-                    setCurrentUser({ ...currentUser, avatar: e.target.value })
+                    setCurrentUser({ ...currentUser, imgUrl: e.target.value })
                   }
                 />
               </div>

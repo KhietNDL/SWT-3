@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import "./index.scss";
 import { Button } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/Store"; // Điều chỉnh đường dẫn nếu cần
 import axios from "axios";
+import { updateUserInfo } from "../../redux/features/userSlice";
 
 function UserInformation() {
   // Lấy thông tin user từ Redux
   const reduxUser = useSelector((state: RootState) => state.user);
-
+  const dispatch = useDispatch();
+  
   // Nếu cần giữ các state riêng cho input để cho phép chỉnh sửa
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
@@ -17,7 +19,8 @@ function UserInformation() {
   const [address, setAddress] = useState("");
   const [passwordHash, setPasswordHash] = useState("");
   const [passwordSalt, setPasswordSalt] = useState("");
-
+  const [avatarUrl, setAvatarUrl] = useState(reduxUser?.imgUrl); // Thêm state cho avatar URL
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // Lưu file ảnh đã chọn
   // Các state cho đổi mật khẩu
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -54,13 +57,15 @@ function UserInformation() {
       passwordHash: passwordHash || reduxUser.passwordHash,
       passwordSalt,
     };
-    
+
     try {
       const response = await axios.put(
         `http://localhost:5199/Account/${reduxUser.id}`,
         updatedData
       );
       console.log("User information updated:", response.data);
+      console.log("User information updated:", reduxUser);
+      dispatch(updateUserInfo(response.data));
     } catch (error) {
       console.error("Error updating user information:", error);
     }
@@ -92,7 +97,38 @@ function UserInformation() {
       alert("Cập nhật mật khẩu thất bại. Vui lòng kiểm tra lại mật khẩu cũ.");
     }
   };
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
 
+  const handleUploadAvatar = async () => {
+    if (!selectedFile) {
+      alert("Vui lòng chọn ảnh trước khi tải lên!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5199/Account/${reduxUser.id}/avatar`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      console.log(response.data);
+      setAvatarUrl(response.data.avatarUrl);
+      dispatch(updateUserInfo(response.data));
+      alert("Cập nhật avatar thành công!");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật avatar:", error);
+      alert("Cập nhật avatar thất bại!");
+    }
+    
+  };
   // Render form thông tin người dùng và đổi mật khẩu
   const renderUserInfoForm = () => (
     <div className="user-information__content">
@@ -134,8 +170,15 @@ function UserInformation() {
         <div className="avatar-section">
           <label>Hình đại diện</label>
           <div className="avatar-container">
-            <img src={reduxUser.avatar} alt={reduxUser.userName} />
+            <img
+              src={`http://localhost:5199/${avatarUrl}`}
+              alt="avatar"
+            />
           </div>
+          <input type="file" accept="image/*" onChange={handleAvatarChange} />
+            <Button type="primary" className="update-btn" onClick={handleUploadAvatar}>
+              Cập nhật Avatar
+            </Button>
         </div>
 
         <div className="form-group">
@@ -146,6 +189,7 @@ function UserInformation() {
             onChange={(e) => setFullname(e.target.value)}
           />
         </div>
+        
 
         <div className="form-group">
           <label>Địa chỉ</label>

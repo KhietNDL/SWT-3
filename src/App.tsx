@@ -23,6 +23,7 @@ import RootLayout from "./root";
 import OrderDetailPage from "./pages/OrderDetail";
 import ManagePage from "./pages/Manager";
 import RequireManager from "./components/RequireManager";
+import Psychologist from "./pages/Psychologist";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
           </RequireManager>
         ),
       },
+      { path: "Psycologist", element: <Psychologist /> },
       { path: "order-detail/:id", element: <OrderDetailPage /> },
     ],
   },

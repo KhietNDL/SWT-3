@@ -1,0 +1,84 @@
+.weekly-schedule {
+    // Chỉnh style cho tiêu đề
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  
+    // Ẩn thanh toolbar mặc định của react-big-calendar (nếu muốn)
+    
+  
+    // Chỉnh style cho phần hiển thị view theo giờ
+    .rbc-time-view {
+      border: 1px solid #e5e7eb;         // Đường viền bên ngoài
+      border-radius: 0.5rem;            // Bo góc
+      background-color: #fff;           // Màu nền
+    }
+  
+    // Phần header trên cùng (ngày/thứ)
+    .rbc-time-header {
+      background-color: #f9fafb;        // Màu nền header
+      border-bottom: 1px solid #e5e7eb; // Đường viền bên dưới header
+    }
+    .rbc-header {
+      padding: 20px;
+    }
+    .rbc-button-link {
+        font-size: 0.9rem;
+        font-weight: 500;
+      color: #374151;                   // Màu chữ
+    }
+    
+    .rbc-row-content {
+        display: none !important;
+      }
+    .rbc-row-bg {
+        display: none !important;
+      }
+    .rbc-allday-cell {
+        display: none !important;
+      }
+  
+    // Cột giờ bên trái
+    .rbc-time-gutter {
+      background-color: #f3f4f6;        // Màu nền cột giờ
+      border-right: 1px solid #e5e7eb;  // Viền phải
+      width: 80px;                      // Có thể chỉnh lại độ rộng
+    }
+  
+    // Nội dung chính (các khung giờ)
+    .rbc-time-content {
+      // Giảm chiều cao mỗi slot nếu muốn hiển thị gọn hơn
+      .rbc-timeslot-group {
+        min-height: 3rem;
+      }
+  
+      // Đường kẻ ngang mỗi khung giờ
+      .rbc-time-slot {
+
+        border-bottom: 1px solid #e5e7eb;
+        
+      }
+      
+      // Màu nền xen kẽ (nếu muốn):
+      // .rbc-day-bg:nth-child(odd) {
+      //   background-color: #fafafa;
+      // }
+    }
+  
+    // Style cho các event
+    .rbc-event {
+      color: #fff;              // Màu chữ
+      border-radius: 4px;       // Bo góc event
+      padding: 4px 8px;         // Khoảng padding bên trong
+      font-weight: 500;         // Độ đậm chữ
+      border: none;             // Bỏ viền mặc định
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15); // Thêm chút shadow nếu thích
+    }
+  
+    // Nếu muốn canh lại font hoặc màu chữ cho tên event
+    .rbc-event-content {
+      font-size: 0.9rem;
+    }
+  }
+  

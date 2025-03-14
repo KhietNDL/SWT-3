@@ -76,7 +76,7 @@ function Header() {
       {user ? (
         <div className="user-menu dropdown">
           <div className="user-avatar">
-            <img src={user.avatar}/>
+            <img src={`http://localhost:5199${user.imgUrl}`}/>
             <span className="user-name">{user.userName}</span>
           </div>
           <ul className="dropdown-content">

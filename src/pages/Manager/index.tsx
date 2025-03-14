@@ -1,4 +1,4 @@
-import Sidebar from "../../components/DashboardBar"
+import Sidebar from "../../components/AdminSidebar"
 
 function ManagePage() {
   return (

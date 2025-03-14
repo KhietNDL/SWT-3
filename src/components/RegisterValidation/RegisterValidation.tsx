@@ -6,6 +6,8 @@ import { ToastContainer, toast} from "react-toastify";
 import { toastConfig } from "../../types/toastConfig";
 import "react-toastify/dist/ReactToastify.css";
 import "./RegisterValidation.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
 
 const VerificationPage: React.FC = () => {
     const navigate = useNavigate();
@@ -16,7 +18,7 @@ const VerificationPage: React.FC = () => {
     const [timer, setTimer] = useState<number>(30);
     const [canResend, setCanResend] = useState<boolean>(false);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
+    const User = useSelector((state: RootState) => state.user);
     // Debugging: Log all localStorage contents
     useEffect(() => {
         console.log("All localStorage contents:", localStorage);
@@ -104,7 +106,15 @@ const VerificationPage: React.FC = () => {
                 setSuccess(true);
                 setError("");
                 toast.success("Xác thực email thành công!", toastConfig);
-                setTimeout(() => navigate("/login"), 3000);
+                
+                // Check user role and navigate accordingly
+                
+                if (User?.roleName === "Manager") {
+                    setTimeout(() => navigate("/manage"), 3000);
+                } else {
+                    setTimeout(() => navigate("/login"), 3000);
+                }
+                
                 localStorage.removeItem("email");
             } else {
                 const errorMessage = data.message || "Mã xác thực không hợp lệ";

@@ -1,0 +1,106 @@
+.dashboard {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    font-family: "Arial", sans-serif;
+  
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #1e6ba8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgb(203, 203, 203);
+    }
+  
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        font-size: 16px;
+        color: #555;
+        cursor: pointer;
+        transition: background 0.3s;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        &:hover, &.active {
+          background: #e8f0fe;
+          color: #1a73e8;
+        }
+  
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  
+    .consultant-info {
+      margin-top: auto;
+      padding: 20px 0;
+      border-top: 1px solid rgb(203, 203, 203);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  
+      .consultant-avatar {
+        width: 40px;
+        height: 40px;
+        background: #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+  
+      .consultant-details {
+        font-size: 14px;
+        color: #333;
+      }
+    }
+  
+    .logout {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #d32f2f;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 10px;
+      transition: background 0.3s;
+      border-top: 1px solid rgb(203, 203, 203);
+      &:hover {
+        background: #fdecec;
+      }
+  
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  

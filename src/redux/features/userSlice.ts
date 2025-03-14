@@ -18,8 +18,20 @@ const userSlice = createSlice({
       localStorage.removeItem("userInfo"); // Xóa khỏi localStorage khi logout
       return null;
     },
+    updateUserInfo: (state, action) => {
+      // Cập nhật các thuộc tính của user theo dữ liệu mới
+      state.userName = action.payload.username || state.userName;
+      state.fullname = action.payload.fullname || state.fullname;
+      state.email = action.payload.email || state.email;
+      state.phone = action.payload.phone || state.phone;
+      state.address = action.payload.address || state.address;
+      // Nếu API trả về avatar mới, bạn cũng có thể cập nhật ở đây:
+      state.imgUrl = action.payload.imgUrl || state.imgUrl;
+      // Cập nhật thêm các thuộc tính khác nếu cần
+      localStorage.setItem("userInfo", JSON.stringify(state));
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, updateUserInfo } = userSlice.actions;
 export default userSlice.reducer;
