@@ -3,7 +3,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import DoctorCarousel from "../../components/DoctorCarousel";
 import BlogAndDocument from "../../components/BlogAndDocument";
-import AssessmentList from "../../components/AssessmentList/AssessmentList";
+import AssessmentList from "../../components/SurveyListUser/AssessmentList";
 import ServiceIntro from "../../components/ReviewServices";
 function HomePage() {
   return (

@@ -51,7 +51,7 @@ function Header() {
           </li>
 
           <li className="dropdown">
-            <Link to="/test">Quiz</Link>
+            <Link to="/survey">Quiz</Link>
           </li>
           <li className="dropdown">
             <Link to="/booking">Đặt lịch</Link>

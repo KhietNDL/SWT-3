@@ -32,7 +32,7 @@ const GAD7Form = () => {
     if (!user) {
       Modal.warning({
         title: "Yêu cầu đăng nhập",
-        content: "Vui lòng đăng nhập để đặt lịch khám.",
+        content: "Vui lòng đăng nhập để xem kết quả.",
         okText: "Đăng nhập ngay",
         onOk: () => navigate("/login"),
       });
@@ -40,7 +40,7 @@ const GAD7Form = () => {
     event.preventDefault();
     const totalScore = responses.reduce((acc, val) => acc + val, 0);
     localStorage.setItem('gad7Score', totalScore.toString());
-    window.location.href = '/survey_result';
+    navigate("/survey_result");
     }
   };
 

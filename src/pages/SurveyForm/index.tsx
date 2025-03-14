@@ -1,6 +1,6 @@
-import Footer from "../../components/Footer";
-import GAD7FormPage from "../../components/Forms/GAD7Form";
-import Header from "../../components/Header";
+import Footer from "../../components/Footer"
+import GAD7FormPage from "../../components/SurveyForm/GAD7Form"
+import Header from "../../components/Header"
 
 function GAD7Form() {
   return (

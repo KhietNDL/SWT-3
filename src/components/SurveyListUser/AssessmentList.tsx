@@ -20,7 +20,7 @@ const AssessmentList: React.FC = () => {
             <h2 className={styles.cardTitle}>{assessment.title}</h2>
             <p className={styles.cardDescription}>{assessment.description}</p>
             <p className={styles.cardDuration}>Duration: {assessment.duration}</p>
-            <Link to={`/quiz/${assessment.id}`}>
+            <Link to={`/survey/${assessment.id}`}>
               <button className={styles.startButton}>Start Test</button>
             </Link>
           </div>
