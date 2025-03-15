@@ -24,9 +24,9 @@ import OrderDetailPage from "./pages/OrderDetail";
 import ManagePage from "./pages/Manager";
 import RequireManager from "./components/RequireManager";
 import Psychologist from "./pages/Psychologist";
-
 import SurveyTypeManagementPage from "./pages/SurveyTypeManagement";
 import SurveyManagementPage from "./pages/SurveyManagement";
+import PaymentPage from "./pages/Payment";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +50,6 @@ const router = createBrowserRouter([
       { path: "dich-vu", element: <ProgramPage /> },
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
-
       { path: "manage/SurveyTypeManagement", element: <SurveyTypeManagementPage /> },
       { path: "manage/survey-management/:surveyTypeId", element: <SurveyManagementPage /> },
       {
@@ -63,6 +62,7 @@ const router = createBrowserRouter([
       },
       { path: "Psycologist", element: <Psychologist /> },
       { path: "order-detail/:id", element: <OrderDetailPage /> },
+      { path: "payment", element: <PaymentPage /> },
     ],
   },
 ]);

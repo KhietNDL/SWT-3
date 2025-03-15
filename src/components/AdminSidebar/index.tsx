@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/features/userSlice";
 const Sidebar = () => {
-  const [activePage, setActivePage] = useState();
+  const [activePage, setActivePage] = useState<string | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

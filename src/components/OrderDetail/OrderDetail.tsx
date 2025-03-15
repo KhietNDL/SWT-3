@@ -48,7 +48,9 @@ const OrderDetail: React.FC = () => {
 
   // Xử lý điều hướng khi xác nhận đơn hàng
   const handleConfirm = () => {
-    navigate(`/order-detail/${order.id}`);
+    console.log("handleConfirm function called");  // Add this line to verify the function is called
+    console.log("Navigating to payment page");  // Add this line to verify the function is called
+    navigate(`/payment`);  // Ensure this navigation is correct
   };
 
   return (
