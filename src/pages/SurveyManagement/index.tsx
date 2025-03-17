@@ -1,8 +1,8 @@
-import SurveyDashboard from "../../components/SurveyManagement/SurveyDashboard";
+import SurveyEdit from "../../components/SurveyEdit/SurveyEdit";
 function SurveyManagementPage() {
   return (
     <div>
-        <SurveyDashboard />
+        <SurveyEdit />
     </div>
   );
 }

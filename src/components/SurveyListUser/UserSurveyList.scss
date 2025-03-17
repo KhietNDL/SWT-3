@@ -1,0 +1,135 @@
+.user-survey-container {
+  max-width: 1200px;
+  min-height: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #2c3e50;
+      margin: 0;
+    }
+
+    .search-box {
+      position: relative;
+      width: 300px;
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 10px 10px 35px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        transition: border-color 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: #3498db;
+          box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+
+    p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+  }
+
+  .survey-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; // Căn giữa theo chiều ngang
+    align-items: center; // Căn giữa theo chiều dọc
+    min-height: 60vh; // Đảm bảo có đủ chiều cao để căn giữa
+    gap: 1.5rem;
+  }
+
+
+
+  .survey-card {
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .survey-info {
+      h2 {
+        font-size: 1.5rem;
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+
+      .survey-score {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+      }
+    }
+
+    .take-survey-btn {
+      margin-top: 1.5rem;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+
+      .icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
