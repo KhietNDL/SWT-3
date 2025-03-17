@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiEdit2, FiTrash2, FiSearch, FiX, FiPlus } from "react-icons/fi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { toastConfig } from "../../types/toastConfig";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,8 +30,7 @@ const SurveyTypeManagement: React.FC = () => {
   const [surveyTypes, setSurveyTypes] = useState<SurveyType[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const { surveyTypeId } = useParams<{ surveyTypeId: string }>();
-  const [newSurvey, setNewSurvey] = useState<string>("");
+
 
   // States for the unified popup
   const [showEditPopup, setShowEditPopup] = useState(false);
@@ -81,8 +80,8 @@ const SurveyTypeManagement: React.FC = () => {
     try {
       const authAxios = getAuthAxios();
       const response = await authAxios.get("/SurveyType");
-      setSurveyTypes(response.data);
-      return response.data; // Trả về danh sách survey types
+      setSurveyTypes(response.data); // This line updates the state
+      return response.data;
     } catch (error) {
       toast.error("Lỗi khi lấy danh sách loại khảo sát", toastConfig);
       return [];
@@ -181,9 +180,10 @@ const SurveyTypeManagement: React.FC = () => {
   };
 
   // Handle add new survey submission
+  // Update this function
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!addForm.surveyName.trim()) {
       toast.error("Vui lòng nhập tên loại khảo sát", toastConfig);
       return;
@@ -191,7 +191,7 @@ const SurveyTypeManagement: React.FC = () => {
 
     try {
       const authAxios = getAuthAxios();
-      
+
       // Bước 1: Gửi yêu cầu tạo SurveyType mới
       const surveyTypeResponse = await authAxios.post("/SurveyType", {
         surveyName: addForm.surveyName,
@@ -219,7 +219,11 @@ const SurveyTypeManagement: React.FC = () => {
       });
 
       toast.success("Tạo khảo sát mới thành công!", toastConfig);
-      fetchSurveys(); // Cập nhật lại danh sách
+
+      // Fix: Update both survey types and surveys
+      await fetchSurveyTypes(); // Add this line to update survey types first
+      await fetchSurveys();     // Then update surveys
+
       closeAddPopup();
     } catch (error) {
       toast.error("Lỗi khi tạo khảo sát mới", toastConfig);
@@ -234,7 +238,7 @@ const SurveyTypeManagement: React.FC = () => {
 
     try {
       const authAxios = getAuthAxios();
-      
+
       // Cập nhật survey (chỉ maxScore)
       await authAxios.put(`/Survey/${editingSurvey.id}`, {
         maxScore: editForm.maxScore

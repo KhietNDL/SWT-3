@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,6 +25,11 @@ interface SurveyData {
   questionList: Question[];
 }
 
+interface StoredSurveyProgress {
+  selectedAnswers: Record<string, string>;
+  currentQuestion: number;
+}
+
 const TakeSurvey = () => {
   const { surveyId } = useParams<{ surveyId: string }>();
   const navigate = useNavigate();
@@ -36,12 +41,15 @@ const TakeSurvey = () => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
 
+  // Load saved progress from localStorage when component mounts
   useEffect(() => {
-    // if (!surveyId) {
-    //   toast.error("Không tìm thấy mã khảo sát!");
-    //   navigate("/survey");
-    //   return;
-    // }
+    console.log("TakeSurvey mounted with surveyId:", surveyId);
+    if (!surveyId) {
+      console.error("No surveyId provided in URL");
+      toast.error("Không tìm thấy mã khảo sát!");
+      navigate("/survey");
+      return;
+    }
 
     fetchSurveyData();
   }, [surveyId, navigate]);
@@ -49,14 +57,38 @@ const TakeSurvey = () => {
   const fetchSurveyData = async () => {
     try {
       setLoading(true);
+      console.log("Fetching survey data for ID:", surveyId);
+
+      if (!surveyId) {
+        throw new Error("Survey ID is required");
+      }
 
       // Lấy thông tin khảo sát
-      const surveyResponse = await axios.get(`http://localhost:5199/Survey/${surveyId}`);
-      console.log("Danh sách surveyResponse:", surveyResponse);
+      const url = `http://localhost:5199/Survey/${surveyId}`;
+      console.log("Making API call to:", url);
+      const surveyResponse = await axios.get(url);
+      console.log("Survey response:", surveyResponse);
+
+      if (!surveyResponse.data) {
+        throw new Error("No survey data received");
+      }
+
+      // Check if survey type ID is valid
+      if (!surveyResponse.data.surveyTypeId || surveyResponse.data.surveyTypeId === '00000000-0000-0000-0000-000000000000') {
+        console.warn("Invalid or missing survey type ID");
+        // Use a default name if survey type is not available
+        const surveyData = {
+          ...surveyResponse.data,
+          surveyName: "Khảo sát không có tên"
+        };
+        setSurvey(surveyData);
+        loadSavedProgress(surveyData);
+        return;
+      }
 
       // Lấy thông tin loại khảo sát để có tên khảo sát
       const surveyTypeResponse = await axios.get(`http://localhost:5199/SurveyType/${surveyResponse.data.surveyTypeId}`);
-      console.log("Danh sách surveyTypeResponse:", surveyTypeResponse);
+      console.log("Survey type response:", surveyTypeResponse);
 
       const surveyData = {
         ...surveyResponse.data,
@@ -70,6 +102,7 @@ const TakeSurvey = () => {
       }
 
       setSurvey(surveyData);
+      loadSavedProgress(surveyData);
     } catch (error) {
       console.error("Error fetching survey:", error);
       toast.error("Có lỗi xảy ra khi tải dữ liệu khảo sát!");
@@ -78,23 +111,96 @@ const TakeSurvey = () => {
     }
   };
 
+  // Initialize default answers and load saved progress
+  const loadSavedProgress = (surveyData: SurveyData) => {
+    // First set default answers (lowest point value for each question)
+    const defaultAnswers: Record<string, string> = {};
+    
+    surveyData.questionList.forEach(question => {
+      // Find answer with lowest point value
+      let lowestPointAnswer = question.answerList[0];
+      
+      for (const answer of question.answerList) {
+        if (answer.point < lowestPointAnswer.point) {
+          lowestPointAnswer = answer;
+        }
+      }
+      
+      defaultAnswers[question.id] = lowestPointAnswer.id;
+    });
+    
+    // Then try to load saved progress from localStorage
+    try {
+      const savedProgressJson = localStorage.getItem(`survey_progress_${surveyId}`);
+      if (savedProgressJson) {
+        const savedProgress: StoredSurveyProgress = JSON.parse(savedProgressJson);
+        
+        // Merge saved answers with default answers (for any new questions)
+        const mergedAnswers = { ...defaultAnswers, ...savedProgress.selectedAnswers };
+        
+        setSelectedAnswers(mergedAnswers);
+        setCurrentQuestion(savedProgress.currentQuestion);
+        
+        console.log("Loaded saved progress:", savedProgress);
+      } else {
+        // If no saved progress, just use the default answers
+        setSelectedAnswers(defaultAnswers);
+      }
+    } catch (error) {
+      console.error("Error loading saved progress:", error);
+      // Fallback to default answers
+      setSelectedAnswers(defaultAnswers);
+    }
+    
+    // Check if there's a completed result
+    try {
+      const savedResultJson = localStorage.getItem(`survey_result_${surveyId}`);
+      if (savedResultJson) {
+        const savedResult = JSON.parse(savedResultJson);
+        setScore(savedResult.score);
+        setIsCompleted(true);
+        console.log("Loaded saved result:", savedResult);
+      }
+    } catch (error) {
+      console.error("Error loading saved result:", error);
+    }
+  };
+
+  // Save progress to localStorage
+  const saveProgress = () => {
+    if (!surveyId) return;
+    
+    const progressData: StoredSurveyProgress = {
+      selectedAnswers,
+      currentQuestion
+    };
+    
+    localStorage.setItem(`survey_progress_${surveyId}`, JSON.stringify(progressData));
+    console.log("Saved progress to localStorage");
+  };
+
   const handleAnswerSelect = (questionId: string, answerId: string) => {
-    setSelectedAnswers({
+    const newSelectedAnswers = {
       ...selectedAnswers,
       [questionId]: answerId
-    });
+    };
+    
+    setSelectedAnswers(newSelectedAnswers);
+    
+    // Save to localStorage whenever an answer is selected
+    localStorage.setItem(`survey_progress_${surveyId}`, JSON.stringify({
+      selectedAnswers: newSelectedAnswers,
+      currentQuestion
+    }));
   };
 
   const handleNext = () => {
-    const currentQuestionId = survey?.questionList[currentQuestion].id;
-
-    if (!currentQuestionId || !selectedAnswers[currentQuestionId]) {
-      toast.warning("Vui lòng chọn một câu trả lời trước khi tiếp tục!");
-      return;
-    }
-
     if (currentQuestion < (survey?.questionList.length || 0) - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      const nextQuestion = currentQuestion + 1;
+      setCurrentQuestion(nextQuestion);
+      
+      // Save progress
+      saveProgress();
     } else {
       calculateResult();
     }
@@ -103,6 +209,9 @@ const TakeSurvey = () => {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
+      
+      // Save progress
+      saveProgress();
     }
   };
 
@@ -125,6 +234,13 @@ const TakeSurvey = () => {
     setScore(totalScore);
     setIsCompleted(true);
 
+    // Save result to localStorage
+    localStorage.setItem(`survey_result_${surveyId}`, JSON.stringify({
+      score: totalScore,
+      completedDate: new Date().toISOString(),
+      answers: selectedAnswers
+    }));
+
     // Có thể gửi kết quả lên server ở đây
     saveResult(totalScore);
   };
@@ -132,7 +248,7 @@ const TakeSurvey = () => {
   const saveResult = async (totalScore: number) => {
     try {
       // Giả định API lưu kết quả (có thể điều chỉnh theo API thực tế)
-      await axios.post('http://localhost:5199/SurveyResult', {
+      await axios.post('http://localhost:5199/api/SurveyAnswerRecord', {
         surveyId: surveyId,
         userId: "user-id", // Có thể lấy từ đăng nhập
         score: totalScore,
@@ -150,10 +266,17 @@ const TakeSurvey = () => {
   };
 
   const handleRetake = () => {
-    setSelectedAnswers({});
+    // Reset state
+    if (survey) {
+      loadSavedProgress(survey); // This will reload the default answers
+    }
+    
     setCurrentQuestion(0);
     setIsCompleted(false);
     setScore(0);
+    
+    // Clear saved result from localStorage
+    localStorage.removeItem(`survey_result_${surveyId}`);
   };
 
   const handleBackToList = () => {

@@ -40,6 +40,7 @@ const SurveyEdit: React.FC = () => {
   const [newAnswerContent, setNewAnswerContent] = useState<string>("");
   const [newAnswerPoint, setNewAnswerPoint] = useState<number>(0);
   const [addingAnswerToQuestionId, setAddingAnswerToQuestionId] = useState<string | null>(null);
+  const [editingAnswerQuestionId, setEditingAnswerQuestionId] = useState<string | null>(null);
 
   useEffect(() => {
     console.log("useEffect triggered with surveyId:", surveyId);
@@ -59,19 +60,24 @@ const SurveyEdit: React.FC = () => {
       setLoading(true);
       const response = await axios.get(`http://localhost:5199/Survey/${surveyId}`);
       console.log("API response received:", response.data);
-
+  
       if (!response.data.questionList) {
         console.error("API không trả về questionList!", response.data);
         toast.error("Dữ liệu khảo sát không hợp lệ", toastConfig);
         return;
       }
-
-      const formattedQuestions = response.data.questionList.map((q: any) => ({
+  
+      // Lọc câu hỏi với isDelete = false
+      const activeQuestions = response.data.questionList.filter((q: any) => q.isDelete === false);
+      
+      // Lọc câu trả lời với isDelete = false cho mỗi câu hỏi
+      const formattedQuestions = activeQuestions.map((q: any) => ({
         ...q,
-        answerList: q.answerList || []
+        answerList: (q.answerList || []).filter((a: any) => a.isDelete === false)
       }));
-      console.log("Formatted questions:", formattedQuestions);
-
+      
+      console.log("Formatted questions (active only):", formattedQuestions);
+  
       setQuestions(formattedQuestions);
     } catch (error) {
       console.error("Error fetching questions:", error);
@@ -89,7 +95,7 @@ const SurveyEdit: React.FC = () => {
       toast.error("Vui lòng nhập nội dung câu hỏi", toastConfig);
       return;
     }
-  
+
     try {
       const requestData = [
         {
@@ -98,10 +104,10 @@ const SurveyEdit: React.FC = () => {
         }
       ];
       console.log("POST request data:", requestData);
-  
+
       const response = await axios.post(`http://localhost:5199/api/SurveyQuestion/${surveyId}`, requestData);
       console.log("Add question response:", response.data);
-  
+
       if (response.data) {
         toast.success("Thêm câu hỏi thành công", toastConfig);
         setNewQuestion("");
@@ -135,9 +141,8 @@ const SurveyEdit: React.FC = () => {
 
     try {
       const requestData = {
-        id: SurveyQuestionId,
         contentQ: editQuestionText,
-        surveyId: surveyId
+        isDelete: false
       };
       console.log("PUT request data:", requestData);
 
@@ -149,9 +154,14 @@ const SurveyEdit: React.FC = () => {
         setEditingQuestionId(null);
         fetchQuestions();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating question:", error);
-      toast.error("Lỗi khi cập nhật câu hỏi", toastConfig);
+      if (error.response && error.response.data) {
+        console.error("API error response:", error.response.data);
+        toast.error(`Lỗi: ${error.response.data.message || JSON.stringify(error.response.data)}`, toastConfig);
+      } else {
+        toast.error("Lỗi khi cập nhật câu hỏi", toastConfig);
+      }
     }
   };
 
@@ -192,7 +202,7 @@ const SurveyEdit: React.FC = () => {
       toast.error("Vui lòng nhập nội dung câu trả lời", toastConfig);
       return;
     }
-  
+
     try {
       const requestData = [
         {
@@ -201,10 +211,10 @@ const SurveyEdit: React.FC = () => {
         }
       ];
       console.log("POST answer request data:", requestData);
-      
+
       const response = await axios.post(`http://localhost:5199/api/SurveyAnswer/${questionId}`, requestData);
       console.log("Add answer response:", response.data);
-  
+
       if (response.data) {
         toast.success("Thêm câu trả lời thành công", toastConfig);
         setAddingAnswerToQuestionId(null);
@@ -220,15 +230,16 @@ const SurveyEdit: React.FC = () => {
 
   const startEditAnswer = (answer: Answer, questionId: string) => {
     console.log("Starting to edit answer:", answer, "for question ID:", questionId);
-    setEditingQuestionId(questionId);
+    setEditingAnswerQuestionId(questionId);  // Sử dụng state mới
     setEditingAnswerId(answer.id);
     setEditAnswerText(answer.content);
     setEditAnswerPoint(answer.point);
   };
 
+
   const cancelEditAnswer = () => {
     console.log("Cancelling answer edit");
-    setEditingQuestionId(null);
+    setEditingAnswerQuestionId(null);
     setEditingAnswerId(null);
     setEditAnswerText("");
     setEditAnswerPoint(0);
@@ -244,10 +255,8 @@ const SurveyEdit: React.FC = () => {
 
     try {
       const requestData = {
-        id: answerId,
         content: editAnswerText,
-        point: editAnswerPoint,
-        questionId: questionId
+        point: editAnswerPoint
       };
       console.log("PUT answer request data:", requestData);
 
@@ -256,7 +265,7 @@ const SurveyEdit: React.FC = () => {
 
       if (response.data) {
         toast.success("Cập nhật câu trả lời thành công", toastConfig);
-        setEditingQuestionId(null);
+        setEditingAnswerQuestionId(null);  // Sử dụng state mới
         setEditingAnswerId(null);
         fetchQuestions();
       }
@@ -413,7 +422,7 @@ const SurveyEdit: React.FC = () => {
                   <ul>
                     {question.answerList.map((answer) => (
                       <li key={answer.id} className="answer-item">
-                        {editingQuestionId === question.id && editingAnswerId === answer.id ? (
+                        {editingAnswerQuestionId === question.id && editingAnswerId === answer.id ? (
                           <div className="edit-answer-form">
                             <input
                               type="text"

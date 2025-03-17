@@ -56,7 +56,11 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
-
+    /* Center the button horizontally */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
     &:hover {
       background-color: #0056b3;
     }

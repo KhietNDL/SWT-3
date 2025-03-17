@@ -45,7 +45,7 @@ const router = createBrowserRouter([
       { path: "tai-lieu", element: <Document /> },
       { path: "tai-lieu/:id", element: <DocumentDetail /> },
       { path: "survey", element: <SurveyListPage /> },
-      { path: "take-survey/:id", element: <TakeSurveyPage /> },
+      { path: "take-survey/:surveyId", element: <TakeSurveyPage /> },
       { path: "survey_result", element: <SurveyResult /> },
       { path: "dich-vu", element: <ProgramPage /> },
       { path: "danh-gia/:id", element: <ProgramDetail /> },

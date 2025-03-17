@@ -1,8 +1,9 @@
 .take-survey-container {
     max-width: 800px;
+    min-height: 800px;
+    align-content: center;
     margin: 0 auto;
     padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     .survey-header {
         margin-bottom: 2rem;
