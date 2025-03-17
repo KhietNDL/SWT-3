@@ -46,7 +46,6 @@ const OrderDetail: React.FC = () => {
           <div className="info-row"><span>Tên Gói:</span> <span>{order?.subscriptionName || "Đang cập nhật"}</span></div>
           <div className="info-row"><span>Người Đặt:</span> <span>{order.accountName || "Đang cập nhật"}</span></div>
           <div className="info-row"><span>Ngày Đặt:</span> <span>{order.createAt || "Đang cập nhật"}</span></div>
-          <div className="info-row"><span>Thời Lượng:</span> <span>{order.duration || "Đang cập nhật"}</span></div>
           <div className="info-row"><span>Tổng Tiền:</span> <span>{order.price ? `${order.price.toLocaleString()} VNĐ` : "Đang cập nhật"}</span></div>
         </div>
 
