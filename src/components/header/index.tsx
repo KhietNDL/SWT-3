@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/features/userSlice";
 import { RootState } from "../../redux/Store";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { setOrder } from "../../redux/features/orderSlice";
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const user = useSelector((state: RootState) => state.user);
@@ -29,6 +30,7 @@ function Header() {
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem("token");
+    dispatch(setOrder(null));
     navigate("/");
   };
 

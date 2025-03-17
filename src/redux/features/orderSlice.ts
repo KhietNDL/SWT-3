@@ -2,18 +2,20 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Order {
   id: string;
-  programId?: string;
-  packageName: string;
-  fullname: string;
-  orderDate: string;
-  startDate: string;
-  endDate: string;
+  subscriptionName: string;
+  accountName: string;
+  createAt: string;
   price: number;
   duration: string;
   
 }
 
-const initialState: { currentOrder: Order | null } = {
+interface OrderState {
+  currentOrder : Order | null;
+
+}
+
+const initialState: OrderState = {
   currentOrder: null, // Mặc định không có đơn hàng
 };
 
@@ -21,7 +23,7 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    setOrder: (state, action: PayloadAction<Order>) => {
+    setOrder: (state, action: PayloadAction<Order | null >) => {
       state.currentOrder = action.payload;
     },
     clearOrder: (state) => {

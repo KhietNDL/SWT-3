@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
 import { Modal } from "antd";
 import Header from "../Header";
 import Footer from "../Footer";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import "./ProgramDetail.scss";
+import { useDispatch } from "react-redux";
+import { setOrder } from "../../redux/features/orderSlice"; 
 
 const UNSPLASH_ACCESS_KEY = "lKeuedjOVx61M-ThaCZzVH7Jctq7kukuK9BqecOzv-w"; // Thay bằng API Key của bạn
 
@@ -15,6 +19,9 @@ function ProgramDetail() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [programData, setProgramData] = useState<any>(null);
   const [imageUrl, setImageUrl] = useState("");
+  const accountId = useSelector((state: RootState) => state.user?.id);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     // Lấy dữ liệu chương trình từ API
@@ -39,14 +46,74 @@ function ProgramDetail() {
   };
 
   const handleRegister = () => {
+    console.log("Trước khi mở modal:", programData); // Kiểm tra state trước khi mở modal
     setIsModalOpen(true);
   };
 
-  const handleModalOk = () => {
-    setIsModalOpen(false);
-    const orderId = "123"; // Tạm thời dùng ID giả
-    navigate(`/order-detail/${orderId}`);
+  const handleModalOk = async () => {
+    console.log("Dữ liệu trước khi đăng ký:", programData);
+    if (!programData?.id) {
+      console.error("❌ Lỗi: subscriptionId bị thiếu.");
+      return;
+    }
+    if (!accountId) {
+      console.error("❌ Lỗi: accountId không hợp lệ.");
+      return;
+    }
+  
+    const orderData = {
+      subscriptionId: programData.id,
+      accountId: accountId,
+      quantity: 1,
+    };
+  
+    console.log("Order Data:", orderData);
+  
+    try {
+      // Gửi request tạo đơn hàng
+      const response = await fetch("http://localhost:5199/Order/Create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Lỗi API: ${response.status} - ${errorText}`);
+      }
+  
+      console.log("✅ Đơn hàng tạo thành công, đang lấy orderId...");
+  
+      // Gọi API để lấy đơn hàng mới nhất của tài khoản
+      const orderResponse = await fetch(`http://localhost:5199/Order?accountId=${accountId}`);
+      if (!orderResponse.ok) {
+        throw new Error(`Lỗi lấy đơn hàng: ${orderResponse.status}`);
+      }
+  
+      const orders = await orderResponse.json();
+      if (orders.length === 0) {
+        throw new Error("Không tìm thấy đơn hàng nào.");
+      }
+  
+      orders.sort((a: any, b: any) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime()); 
+      const latestOrder = orders[0];// Giả sử đơn mới nhất là đơn cuối cùng
+      console.log("✅ Lấy được orderId:", latestOrder.id);
+  
+      dispatch(setOrder(latestOrder));
+  
+      setIsModalOpen(false);
+      navigate(`/order-detail/${latestOrder.id}`);
+    } catch (error: unknown) {
+      const errMessage = error instanceof Error ? error.message : "Lỗi không xác định";
+      console.error("❌ Lỗi:", errMessage);
+      alert(`Có lỗi xảy ra! Chi tiết: ${errMessage}`);
+    }
   };
+  
+  
+  
 
   const handleModalCancel = () => {
     setIsModalOpen(false);
