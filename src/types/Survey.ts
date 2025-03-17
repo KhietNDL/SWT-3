@@ -6,4 +6,5 @@ export interface Survey {
     surveyName: string;
     maxScore: number;
     questionList: Question[];
+    isDeleted: boolean;
   }

@@ -12,8 +12,7 @@ import BlogDetail from "./pages/BlogDetail/index";
 import Document from "./pages/Document/index";
 import DocumentDetail from "./pages/DocumentDetail/index";
 import "./main.css"
-import AssessmentList from "./pages/SurveyListUser";
-import GAD7Form from "./pages/SurveyForm";
+import SurveyListPage from "./pages/SurveyListUser";
 import SurveyResult from "./components/SurveyResult/SurveyResult";
 import ProgramPage from "./pages/Program/index";
 import ProgramDetail from "./pages/ProgramDetail/index";
@@ -27,6 +26,7 @@ import Psychologist from "./pages/Psychologist";
 
 import SurveyTypeManagementPage from "./pages/SurveyTypeManagement";
 import SurveyManagementPage from "./pages/SurveyManagement";
+import TakeSurveyPage from "./pages/TakeSurvey";
 
 const router = createBrowserRouter([
   {
@@ -44,15 +44,15 @@ const router = createBrowserRouter([
       { path: "blog/:id", element: <BlogDetail /> },
       { path: "tai-lieu", element: <Document /> },
       { path: "tai-lieu/:id", element: <DocumentDetail /> },
-      { path: "survey", element: <AssessmentList /> },
-      { path: "survey/:id", element: <GAD7Form /> },
+      { path: "survey", element: <SurveyListPage /> },
+      { path: "take-survey/:id", element: <TakeSurveyPage /> },
       { path: "survey_result", element: <SurveyResult /> },
       { path: "dich-vu", element: <ProgramPage /> },
       { path: "danh-gia/:id", element: <ProgramDetail /> },
       { path: "reset-password", element: <ResetPassword /> },
 
       { path: "manage/SurveyTypeManagement", element: <SurveyTypeManagementPage /> },
-      { path: "manage/survey-management/:surveyTypeId", element: <SurveyManagementPage /> },
+      { path: "manage/survey-management/:surveyId", element: <SurveyManagementPage /> },
       {
         path: "manage",
         element: (
