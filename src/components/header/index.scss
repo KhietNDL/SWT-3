@@ -112,7 +112,7 @@
         color: #333;
       }
     }
-
+    
     .dropdown-content {
       display: none;
       position: absolute;
@@ -148,6 +148,27 @@
       display: block;
     }
   }
-
+  .header__right {
+    display: flex;
+    align-items: center;
+    gap: 20px; // Khoảng cách giữa thông báo và avatar
+  }
+  
+  .notification-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .notification-icon {
+    font-size: 24px; // Kích thước icon chuông
+    cursor: pointer;
+  }
+  
+  .ant-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   
 }

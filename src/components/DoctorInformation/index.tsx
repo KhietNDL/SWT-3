@@ -20,6 +20,7 @@ function DoctorInfo() {
   const times = ["8:00 AM", "10:00 AM", "13:00 PM", "15:00 PM", "17:00 PM"];
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
+  const [bookingContent, setBookingContent] = useState(""); // Thêm state cho nội dung đặt lịch
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -88,8 +89,9 @@ function DoctorInfo() {
 
     // Tạo object đặt lịch với thông tin cần thiết
     const appointmentObj = {
-      accountId: user?.id,           // Chỉnh sửa nếu tên thuộc tính khác
-      psychologistId: id,      // Hoặc dùng id từ params nếu phù hợp
+      accountId: user?.id,
+      psychologistId: id,
+      content: bookingContent, // Thêm nội dung đặt lịch
       appointmentDate: appointmentDateISO
     };
 
@@ -287,7 +289,12 @@ function DoctorInfo() {
 
           <div className="booking-note">
             <h3>Yêu cầu khám</h3>
-            <textarea placeholder="Nhập yêu cầu khám của bạn..." rows={4} />
+            <textarea
+              placeholder="Nhập yêu cầu khám của bạn..."
+              rows={4}
+              value={bookingContent}
+              onChange={(e) => setBookingContent(e.target.value)} // Cập nhật state khi nhập liệu
+            />
           </div>
 
           <Button

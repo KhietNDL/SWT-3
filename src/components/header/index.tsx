@@ -1,30 +1,36 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../images/Logo.png";
 import "./index.scss";
-import { Button } from "antd";
+import { Button, Badge, Dropdown, Menu } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/features/userSlice";
 import { RootState } from "../../redux/Store";
-import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, BellOutlined } from "@ant-design/icons";
+
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 100);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetch(`http://localhost:5199/Appointment/${user.id}/Account`)
+        .then((res) => res.json())
+        .then((data) => setNotifications(data))
+        .catch((err) => console.error("Error fetching appointments:", err));
+    }
+  }, [user]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -32,7 +38,21 @@ function Header() {
     navigate("/");
   };
 
-  
+  const notificationMenu = (
+    <Menu>
+      {notifications.length > 0 ? (
+        notifications.map((appointment, index) => (
+          <Menu.Item key={index}>
+            <strong>{appointment.psychologist.name}</strong> -{" "}
+            {appointment.appointmentDate}
+            <p>{appointment.content}</p>
+          </Menu.Item>
+        ))
+      ) : (
+        <Menu.Item>Không có thông báo</Menu.Item>
+      )}
+    </Menu>
+  );
 
   return (
     <header className={`header ${isScrolled ? "fixed" : ""}`}>
@@ -49,11 +69,10 @@ function Header() {
           <li>
             <Link to="/dich-vu">Dịch vụ</Link>
           </li>
-
-          <li className="dropdown">
+          <li>
             <Link to="/survey">Quiz</Link>
           </li>
-          <li className="dropdown">
+          <li>
             <Link to="/booking">Đặt lịch</Link>
           </li>
           <li className="dropdown">
@@ -74,24 +93,27 @@ function Header() {
       </nav>
 
       {user ? (
-        <div className="user-menu dropdown">
+        <div className="header__right">
+        <div className="notification-container">
+          <Dropdown overlay={notificationMenu} trigger={["click"]}>
+            <Badge count={notifications.length} offset={[8, 0]}>
+              <BellOutlined className="notification-icon" />
+            </Badge>
+          </Dropdown>
+        </div>
+      
+        <div className="user-menu">
           <div className="user-avatar">
-            <img src={`http://localhost:5199${user.imgUrl}`}/>
+            <img src={`http://localhost:5199${user.imgUrl}`} alt="User Avatar" />
             <span className="user-name">{user.userName}</span>
           </div>
           <ul className="dropdown-content">
-            <li>
-              <Link to="/info-user">
-                <UserOutlined/> Thông tin 
-              </Link>
-            </li>
-            <li>
-              <button onClick={handleLogout}>
-              <LogoutOutlined /> Đăng xuất
-              </button>
-            </li>
+            <li><Link to="/info-user"><UserOutlined/> Thông tin</Link></li>
+            <li><button onClick={handleLogout}><LogoutOutlined /> Đăng xuất</button></li>
           </ul>
         </div>
+      </div>
+      
       ) : (
         <Link to="/login">
           <Button type="primary" className="login-button">
