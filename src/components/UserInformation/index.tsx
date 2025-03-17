@@ -5,12 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/Store"; // Điều chỉnh đường dẫn nếu cần
 import axios from "axios";
 import { updateUserInfo } from "../../redux/features/userSlice";
-
+import { toast } from "react-toastify";
+import { toastConfig } from "../../types/toastConfig";
+import "react-toastify/dist/ReactToastify.css";
 function UserInformation() {
   // Lấy thông tin user từ Redux
   const reduxUser = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  
+
   // Nếu cần giữ các state riêng cho input để cho phép chỉnh sửa
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
@@ -63,12 +65,15 @@ function UserInformation() {
         `http://localhost:5199/Account/${reduxUser.id}`,
         updatedData
       );
+
       console.log("User information updated:", response.data);
       console.log("User information updated:", reduxUser);
-      dispatch(updateUserInfo(response.data));
+      
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error updating user information:", error);
     }
+    
   };
 
   const handleUpdatePassword = async () => {
@@ -109,7 +114,7 @@ function UserInformation() {
       alert("Vui lòng chọn ảnh trước khi tải lên!");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", selectedFile);
 
@@ -127,7 +132,6 @@ function UserInformation() {
       console.error("Lỗi khi cập nhật avatar:", error);
       alert("Cập nhật avatar thất bại!");
     }
-    
   };
   // Render form thông tin người dùng và đổi mật khẩu
   const renderUserInfoForm = () => (
@@ -170,15 +174,16 @@ function UserInformation() {
         <div className="avatar-section">
           <label>Hình đại diện</label>
           <div className="avatar-container">
-            <img
-              src={`http://localhost:5199/${avatarUrl}`}
-              alt="avatar"
-            />
+            <img src={`http://localhost:5199/${avatarUrl}`} alt="avatar" />
           </div>
           <input type="file" accept="image/*" onChange={handleAvatarChange} />
-            <Button type="primary" className="update-btn" onClick={handleUploadAvatar}>
-              Cập nhật Avatar
-            </Button>
+          <Button
+            type="primary"
+            className="update-btn"
+            onClick={handleUploadAvatar}
+          >
+            Cập nhật Avatar
+          </Button>
         </div>
 
         <div className="form-group">
@@ -189,7 +194,6 @@ function UserInformation() {
             onChange={(e) => setFullname(e.target.value)}
           />
         </div>
-        
 
         <div className="form-group">
           <label>Địa chỉ</label>

@@ -20,7 +20,7 @@ const userSlice = createSlice({
     },
     updateUserInfo: (state, action) => {
       // Cập nhật các thuộc tính của user theo dữ liệu mới
-      state.userName = action.payload.username || state.userName;
+      state.userName = action.payload.userName || state.userName;
       state.fullname = action.payload.fullname || state.fullname;
       state.email = action.payload.email || state.email;
       state.phone = action.payload.phone || state.phone;
