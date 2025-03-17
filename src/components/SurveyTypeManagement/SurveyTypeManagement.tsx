@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FiEdit2, FiTrash2, FiSearch, FiX } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiSearch, FiX, FiPlus } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { toastConfig } from "../../types/toastConfig";
@@ -20,12 +20,18 @@ interface EditSurveyForm {
   surveyName: string;
 }
 
+interface AddSurveyForm {
+  surveyName: string;
+  maxScore: number;
+}
+
 const SurveyTypeManagement: React.FC = () => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [surveyTypes, setSurveyTypes] = useState<SurveyType[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const { surveyTypeId } = useParams<{ surveyTypeId: string }>();
+  const [newSurvey, setNewSurvey] = useState<string>("");
 
   // States for the unified popup
   const [showEditPopup, setShowEditPopup] = useState(false);
@@ -37,14 +43,34 @@ const SurveyTypeManagement: React.FC = () => {
   });
   const [currentSurveyType, setCurrentSurveyType] = useState<SurveyType | null>(null);
 
+  // States for add survey popup
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [addForm, setAddForm] = useState<AddSurveyForm>({
+    surveyName: "",
+    maxScore: 100
+  });
+
   useEffect(() => {
     fetchSurveyTypes();
     fetchSurveys();
   }, []);
 
+  // Set up axios with authentication token
+  const getAuthAxios = () => {
+    const token = sessionStorage.getItem('token');
+    return axios.create({
+      baseURL: "http://localhost:5199",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+  };
+
   const fetchSurveys = async () => {
     try {
-      const response = await axios.get("http://localhost:5199/Survey");
+      const authAxios = getAuthAxios();
+      const response = await authAxios.get("/Survey");
       setSurveys(response.data);
     } catch (error) {
       toast.error("Lỗi khi lấy danh sách khảo sát", toastConfig);
@@ -53,7 +79,8 @@ const SurveyTypeManagement: React.FC = () => {
 
   const fetchSurveyTypes = async () => {
     try {
-      const response = await axios.get("http://localhost:5199/SurveyType");
+      const authAxios = getAuthAxios();
+      const response = await authAxios.get("/SurveyType");
       setSurveyTypes(response.data);
       return response.data; // Trả về danh sách survey types
     } catch (error) {
@@ -65,7 +92,8 @@ const SurveyTypeManagement: React.FC = () => {
   // Fetch a single survey by ID
   const fetchSurveyById = async (id: string) => {
     try {
-      const response = await axios.get(`http://localhost:5199/Survey/${id}`);
+      const authAxios = getAuthAxios();
+      const response = await authAxios.get(`/Survey/${id}`);
       return response.data;
     } catch (error) {
       toast.error("Lỗi khi lấy thông tin khảo sát", toastConfig);
@@ -114,13 +142,27 @@ const SurveyTypeManagement: React.FC = () => {
     setShowEditPopup(true);
   };
 
-  // Close the popup
+  // Open add survey popup
+  const openAddPopup = () => {
+    setAddForm({
+      surveyName: "",
+      maxScore: 100
+    });
+    setShowAddPopup(true);
+  };
+
+  // Close edit popup
   const closeEditPopup = () => {
     setShowEditPopup(false);
     setEditingSurvey(null);
   };
 
-  // Handle form input changes
+  // Close add popup
+  const closeAddPopup = () => {
+    setShowAddPopup(false);
+  };
+
+  // Handle form input changes for edit form
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditForm({
@@ -129,19 +171,77 @@ const SurveyTypeManagement: React.FC = () => {
     });
   };
 
+  // Handle form input changes for add form
+  const handleAddFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAddForm({
+      ...addForm,
+      [name]: name === "maxScore" ? Number(value) : value,
+    });
+  };
+
+  // Handle add new survey submission
+  const handleAddSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!addForm.surveyName.trim()) {
+      toast.error("Vui lòng nhập tên loại khảo sát", toastConfig);
+      return;
+    }
+
+    try {
+      const authAxios = getAuthAxios();
+      
+      // Bước 1: Gửi yêu cầu tạo SurveyType mới
+      const surveyTypeResponse = await authAxios.post("/SurveyType", {
+        surveyName: addForm.surveyName,
+      });
+
+      if (!surveyTypeResponse.data) {
+        throw new Error("Không nhận được phản hồi từ server khi tạo loại khảo sát");
+      }
+
+      // Bước 2: Lấy danh sách SurveyType để lấy surveyTypeId mới
+      const surveyTypesResponse = await authAxios.get("/SurveyType");
+      const createdSurveyType = surveyTypesResponse.data.find(
+        (type: SurveyType) => type.surveyName === addForm.surveyName
+      );
+
+      if (!createdSurveyType) {
+        throw new Error("Không tìm thấy loại khảo sát vừa tạo");
+      }
+
+      // Bước 3: Gửi yêu cầu tạo Survey mới với surveyTypeId
+      await authAxios.post("/Survey", {
+        maxScore: addForm.maxScore,
+        surveyTypeId: createdSurveyType.id,
+        questionList: [],
+      });
+
+      toast.success("Tạo khảo sát mới thành công!", toastConfig);
+      fetchSurveys(); // Cập nhật lại danh sách
+      closeAddPopup();
+    } catch (error) {
+      toast.error("Lỗi khi tạo khảo sát mới", toastConfig);
+      console.error(error);
+    }
+  };
+
   // Submit the unified edit form
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingSurvey) return;
 
     try {
+      const authAxios = getAuthAxios();
+      
       // Cập nhật survey (chỉ maxScore)
-      await axios.put(`http://localhost:5199/Survey/${editingSurvey.id}`, {
+      await authAxios.put(`/Survey/${editingSurvey.id}`, {
         maxScore: editForm.maxScore
       });
 
       // Cập nhật surveyType (chỉ surveyName)
-      await axios.put(`http://localhost:5199/SurveyType/${editForm.surveyTypeId}`, {
+      await authAxios.put(`/SurveyType/${editForm.surveyTypeId}`, {
         surveyName: editForm.surveyName
       });
 
@@ -159,7 +259,8 @@ const SurveyTypeManagement: React.FC = () => {
 
   const handleDelete = async (surveyId: string) => {
     try {
-      await axios.delete(`http://localhost:5199/Survey/${surveyId}`);
+      const authAxios = getAuthAxios();
+      await authAxios.delete(`/Survey/${surveyId}`);
       toast.success("Xóa khảo sát thành công!", toastConfig);
       fetchSurveys();
     } catch (error) {
@@ -182,7 +283,11 @@ const SurveyTypeManagement: React.FC = () => {
         <FiSearch className="search-icon" />
       </div>
 
-      <button onClick={() => navigate("/path/to/new-survey-page")}>Thêm Bài Khảo Sát</button>
+      <div className="button-container">
+        <button className="add-button" onClick={openAddPopup}>
+          <FiPlus /> Thêm Bài Khảo Sát
+        </button>
+      </div>
 
       <table>
         <thead>
@@ -222,13 +327,12 @@ const SurveyTypeManagement: React.FC = () => {
                   View
                 </i>
               </td>
-
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Unified Edit Popup Modal */}
+      {/* Edit Popup Modal */}
       {showEditPopup && editingSurvey && (
         <div className="popup-overlay">
           <div className="popup-content">
@@ -266,6 +370,52 @@ const SurveyTypeManagement: React.FC = () => {
                   Lưu
                 </button>
                 <button type="button" className="cancel-button" onClick={closeEditPopup}>
+                  Hủy
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Survey Popup Modal */}
+      {showAddPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <div className="popup-header">
+              <h2>Thêm Khảo Sát Mới</h2>
+              <button className="close-button" onClick={closeAddPopup}>
+                <FiX />
+              </button>
+            </div>
+            <form onSubmit={handleAddSubmit}>
+              <div className="form-group">
+                <label htmlFor="addSurveyName">Tên loại khảo sát:</label>
+                <input
+                  type="text"
+                  id="addSurveyName"
+                  name="surveyName"
+                  value={addForm.surveyName}
+                  onChange={handleAddFormChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="addMaxScore">Điểm tối đa:</label>
+                <input
+                  type="number"
+                  id="addMaxScore"
+                  name="maxScore"
+                  value={addForm.maxScore}
+                  onChange={handleAddFormChange}
+                  required
+                />
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="save-button">
+                  Tạo mới
+                </button>
+                <button type="button" className="cancel-button" onClick={closeAddPopup}>
                   Hủy
                 </button>
               </div>
