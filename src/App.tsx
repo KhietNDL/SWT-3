@@ -25,11 +25,8 @@ import RequireManager from "./components/RequireManager";
 import Psychologist from "./pages/Psychologist";
 import SurveyTypeManagementPage from "./pages/SurveyTypeManagement";
 import SurveyManagementPage from "./pages/SurveyManagement";
-<<<<<<< HEAD
 import PaymentPage from "./pages/Payment";
-=======
 import TakeSurveyPage from "./pages/TakeSurvey";
->>>>>>> Quiz
 
 const router = createBrowserRouter([
   {
