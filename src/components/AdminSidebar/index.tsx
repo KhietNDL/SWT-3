@@ -9,16 +9,14 @@ import SubscriptionManagement from "../ProgramManagement";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/features/userSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
 const Sidebar = () => {
   const [activePage, setActivePage] = useState<string | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (location.pathname === "/manage") {
-      setActivePage("Users");
-    }
-  }, [location.pathname]);
+  const User = useSelector((state: RootState) => state.user);
+  
 
   const handleLogout = () => {
       dispatch(logout());
@@ -54,8 +52,17 @@ const Sidebar = () => {
             <Calendar /> <span>Appointments</span>
           </li>
         </ul>
-        <div className="logout">
-          <span onClick={handleLogout}>Log out</span>
+        <div className="consultant-info">
+          <img className="consultant-avatar" src={`http://localhost:5199${User?.imgUrl}`} alt="Avatar" />
+
+          <div className="consultant-details">
+            <strong>{User?.userName}</strong>
+            <p>{User?.roleName}</p>
+          </div>
+        </div>
+
+        <div className="logout" onClick={handleLogout}>
+          <LogOut /> <span>Sign out</span>
         </div>
       </div>
 

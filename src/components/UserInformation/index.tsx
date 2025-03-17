@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/Store"; // Điều chỉnh đường dẫn nếu cần
 import axios from "axios";
 import { updateUserInfo } from "../../redux/features/userSlice";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function UserInformation() {
   // Lấy thông tin user từ Redux
   const reduxUser = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  
+
   // Nếu cần giữ các state riêng cho input để cho phép chỉnh sửa
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
@@ -63,17 +64,21 @@ function UserInformation() {
         `http://localhost:5199/Account/${reduxUser.id}`,
         updatedData
       );
+
       console.log("User information updated:", response.data);
       console.log("User information updated:", reduxUser);
-      dispatch(updateUserInfo(response.data));
+      
+      toast.success("Cập nhật thông tin thành công!");
     } catch (error) {
+      toast.error("Cập nhật thông tin thất bại!");
       console.error("Error updating user information:", error);
     }
+    
   };
 
   const handleUpdatePassword = async () => {
     if (newPassword !== confirmPassword) {
-      alert("Mật khẩu xác nhận không khớp!");
+      toast.error("Mật khẩu mới không khớp. Vui lòng kiểm tra lại!");
       return;
     }
     try {
@@ -87,14 +92,14 @@ function UserInformation() {
         payload
       );
       console.log("Password updated successfully:", response.data);
-      alert("Cập nhật mật khẩu thành công!");
+      toast.success("Cập nhật mật khẩu thành công!");
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setIsChangePassword(false);
     } catch (error) {
       console.error("Error updating password:", error);
-      alert("Cập nhật mật khẩu thất bại. Vui lòng kiểm tra lại mật khẩu cũ.");
+      toast.error("Cập nhật mật khẩu thất bại!");
     }
   };
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,10 +111,10 @@ function UserInformation() {
 
   const handleUploadAvatar = async () => {
     if (!selectedFile) {
-      alert("Vui lòng chọn ảnh trước khi tải lên!");
+      alert("Vui lòng chọn file ảnh trước khi cập nhật!");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", selectedFile);
 
@@ -119,15 +124,14 @@ function UserInformation() {
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-      console.log(response.data);
+      console.log("Cập nhật avatar thành công");
       setAvatarUrl(response.data.avatarUrl);
       dispatch(updateUserInfo(response.data));
       alert("Cập nhật avatar thành công!");
     } catch (error) {
       console.error("Lỗi khi cập nhật avatar:", error);
-      alert("Cập nhật avatar thất bại!");
+      alert("Cập nhật avatar thất ");
     }
-    
   };
   // Render form thông tin người dùng và đổi mật khẩu
   const renderUserInfoForm = () => (
@@ -170,15 +174,16 @@ function UserInformation() {
         <div className="avatar-section">
           <label>Hình đại diện</label>
           <div className="avatar-container">
-            <img
-              src={`http://localhost:5199/${avatarUrl}`}
-              alt="avatar"
-            />
+            <img src={`http://localhost:5199/${avatarUrl}`} alt="avatar" />
           </div>
           <input type="file" accept="image/*" onChange={handleAvatarChange} />
-            <Button type="primary" className="update-btn" onClick={handleUploadAvatar}>
-              Cập nhật Avatar
-            </Button>
+          <Button
+            type="primary"
+            className="update-btn"
+            onClick={handleUploadAvatar}
+          >
+            Cập nhật Avatar
+          </Button>
         </div>
 
         <div className="form-group">
@@ -189,7 +194,6 @@ function UserInformation() {
             onChange={(e) => setFullname(e.target.value)}
           />
         </div>
-        
 
         <div className="form-group">
           <label>Địa chỉ</label>

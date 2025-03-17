@@ -9,7 +9,8 @@ import { vi } from "date-fns/locale"; // Import locale tiếng Việt
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/Store";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function DoctorInfo() {
   const [doctor, setDoctor] = useState<DoctorType | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -19,10 +20,12 @@ function DoctorInfo() {
   const times = ["8:00 AM", "10:00 AM", "13:00 PM", "15:00 PM", "17:00 PM"];
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
+  const [bookingContent, setBookingContent] = useState(""); // Thêm state cho nội dung đặt lịch
+
   useEffect(() => {
     const fetchDoctor = async () => {
       const response = await axios.get(
-        `https://679e3cf1946b0e23c062eb69.mockapi.io/Doctor/${id}`
+        `http://localhost:5199/api/Psychologist/${id}`
       );
       setDoctor(response.data);
     };
@@ -30,7 +33,7 @@ function DoctorInfo() {
     fetchDoctor();
   }, [id]);
 
-  // Thay thế mảng dates cứng
+  // Tạo mảng ngày mới thay cho mảng dates cứng
   const generateDates = () => {
     const today = new Date();
     const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 }); // Bắt đầu từ thứ 2
@@ -47,19 +50,79 @@ function DoctorInfo() {
 
   const [dates, setDates] = useState(generateDates());
 
-  // Cập nhật dates mỗi khi sang tuần mới
+  // Cập nhật dates mỗi khi sang tuần mới (mỗi giờ)
   useEffect(() => {
     const timer = setInterval(() => {
       setDates(generateDates());
-    }, 1000 * 60 * 60); // Cập nhật mỗi giờ
+    }, 1000 * 60 * 60);
 
     return () => clearInterval(timer);
   }, []);
 
-  const handleSubmit = () => {
-    console.log("Đặt lịch:", { selectedDate, selectedTime });
+  const handleSubmit = async () => {
+    if (!selectedDate || !selectedTime) {
+      return;
+    }
+
+    // Lấy đối tượng ngày tương ứng từ mảng dates
+    const selectedDateObj = dates.find((d) => d.displayDate === selectedDate);
+    if (!selectedDateObj) {
+      console.error("Không tìm thấy ngày phù hợp");
+      return;
+    }
+
+    // Phân tích selectedTime (ví dụ: "8:00 AM")
+    const [timePart, period] = selectedTime.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+    if (period === "PM" && hours < 12) {
+      hours += 12;
+    }
+    if (period === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    // Tạo đối tượng Date cho appointment và set giờ, phút
+    const appointmentDate = new Date(selectedDateObj.fullDate);
+    appointmentDate.setHours(hours, minutes, 0, 0);
+    appointmentDate.setHours(appointmentDate.getHours() + 7); // UTC+7
+    const appointmentDateISO = appointmentDate.toISOString();
+
+    // Tạo object đặt lịch với thông tin cần thiết
+    const appointmentObj = {
+      accountId: user?.id,
+      psychologistId: id,
+      content: bookingContent, // Thêm nội dung đặt lịch
+      appointmentDate: appointmentDateISO
+    };
+
+    // Gửi request POST đến API
+    try {
+      const response = await axios.post("http://localhost:5199/Appointment", appointmentObj);
+      toast.success("Đặt lịch thành công!", {
+        position: "top-right",
+        autoClose: 3000, // Đóng sau 3 giây
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      // Thêm thông báo thành công hoặc chuyển trang nếu cần
+    } catch (error) {
+      console.error("Lỗi khi đặt lịch:", error);
+      toast.error("Đặt lịch thất bại! Vui lòng thử lại.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+
     setIsBookingOpen(false);
   };
+
   const handleBookingClick = () => {
     if (!user) {
       Modal.warning({
@@ -74,6 +137,7 @@ function DoctorInfo() {
       setIsBookingOpen(true);
     }
   };
+
   return (
     <>
       <div className="doctor-information">
@@ -162,7 +226,7 @@ function DoctorInfo() {
 
           <button
             className="book-button"
-            onClick={handleBookingClick} // Thay đổi ở đây
+            onClick={handleBookingClick}
           >
             Đặt lịch
           </button>
@@ -225,7 +289,12 @@ function DoctorInfo() {
 
           <div className="booking-note">
             <h3>Yêu cầu khám</h3>
-            <textarea placeholder="Nhập yêu cầu khám của bạn..." rows={4} />
+            <textarea
+              placeholder="Nhập yêu cầu khám của bạn..."
+              rows={4}
+              value={bookingContent}
+              onChange={(e) => setBookingContent(e.target.value)} // Cập nhật state khi nhập liệu
+            />
           </div>
 
           <Button

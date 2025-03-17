@@ -125,7 +125,7 @@ const RegistrationForm: React.FC = () => {
             address: formData.address,
             passwordHash: formData.passwordHash,
             confirmPassword: formData.confirmPassword,
-            roleName: formData.roleName,
+            roleName: formData.roleName
             // DoB: formData.DoB,
           }),
         });
