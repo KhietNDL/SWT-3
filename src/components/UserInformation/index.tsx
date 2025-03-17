@@ -6,7 +6,6 @@ import { RootState } from "../../redux/Store"; // Điều chỉnh đường dẫ
 import axios from "axios";
 import { updateUserInfo } from "../../redux/features/userSlice";
 import { toast } from "react-toastify";
-import { toastConfig } from "../../types/toastConfig";
 import "react-toastify/dist/ReactToastify.css";
 function UserInformation() {
   // Lấy thông tin user từ Redux
@@ -69,8 +68,9 @@ function UserInformation() {
       console.log("User information updated:", response.data);
       console.log("User information updated:", reduxUser);
       
-      toast.success(response.data.message);
+      toast.success("Cập nhật thông tin thành công!");
     } catch (error) {
+      toast.error("Cập nhật thông tin thất bại!");
       console.error("Error updating user information:", error);
     }
     
@@ -78,7 +78,7 @@ function UserInformation() {
 
   const handleUpdatePassword = async () => {
     if (newPassword !== confirmPassword) {
-      alert("Mật khẩu xác nhận không khớp!");
+      toast.error("Mật khẩu mới không khớp. Vui lòng kiểm tra lại!");
       return;
     }
     try {
@@ -92,14 +92,14 @@ function UserInformation() {
         payload
       );
       console.log("Password updated successfully:", response.data);
-      alert("Cập nhật mật khẩu thành công!");
+      toast.success("Cập nhật mật khẩu thành công!");
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setIsChangePassword(false);
     } catch (error) {
       console.error("Error updating password:", error);
-      alert("Cập nhật mật khẩu thất bại. Vui lòng kiểm tra lại mật khẩu cũ.");
+      toast.error("Cập nhật mật khẩu thất bại!");
     }
   };
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +111,7 @@ function UserInformation() {
 
   const handleUploadAvatar = async () => {
     if (!selectedFile) {
-      alert("Vui lòng chọn ảnh trước khi tải lên!");
+      alert("Vui lòng chọn file ảnh trước khi cập nhật!");
       return;
     }
   
@@ -124,13 +124,13 @@ function UserInformation() {
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-      console.log(response.data);
+      console.log("Cập nhật avatar thành công");
       setAvatarUrl(response.data.avatarUrl);
       dispatch(updateUserInfo(response.data));
       alert("Cập nhật avatar thành công!");
     } catch (error) {
       console.error("Lỗi khi cập nhật avatar:", error);
-      alert("Cập nhật avatar thất bại!");
+      alert("Cập nhật avatar thất ");
     }
   };
   // Render form thông tin người dùng và đổi mật khẩu
