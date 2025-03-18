@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../images/Logo.png";
 import "./index.scss";
-import { Button, Badge, Dropdown, Menu } from "antd";
+import { Button, Badge, Dropdown, Menu, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/features/userSlice";
 import { RootState } from "../../redux/Store";
 import { UserOutlined, LogoutOutlined, BellOutlined } from "@ant-design/icons";
-
+import { formatDate } from "../moment.js";
 import { setOrder } from "../../redux/features/orderSlice";
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,14 +40,46 @@ function Header() {
     navigate("/");
   };
 
+  const handleCancelAppointment = (appointmentID: number) => {
+    Modal.confirm({
+      title: "Xác nhận hủy cuộc hẹn",
+      content: "Bạn có chắc chắn muốn hủy cuộc hẹn này không?",
+      okText: "Hủy cuộc hẹn",
+      cancelText: "Không",
+      okType: "danger",
+      onOk: () => {
+        fetch(`http://localhost:5199/Appointment/${appointmentID}`, {
+          method: "DELETE",
+        })
+          .then((res) => {
+            if (res.ok) {
+              setNotifications((prevNotifications) =>
+                prevNotifications.filter((appointment) => appointment.id !== appointmentID)
+              );
+            } else {
+              console.error("Hủy cuộc hẹn thất bại");
+            }
+          })
+          .catch((err) => console.error("Lỗi khi hủy cuộc hẹn:", err));
+      },
+    });
+  };
+  
   const notificationMenu = (
     <Menu>
       {notifications.length > 0 ? (
         notifications.map((appointment, index) => (
           <Menu.Item key={index}>
-            <strong>{appointment.psychologist.name}</strong> -{" "}
-            {appointment.appointmentDate}
+            <h3>Lịch khám</h3>
+            <strong>{appointment.psychologist.name}</strong> - {formatDate(appointment.appointmentDate)}
             <p>{appointment.content}</p>
+            <Button
+              type="link"
+              danger
+              onClick={() => handleCancelAppointment(appointment.id)}
+            >
+              Hủy cuộc hẹn
+            </Button>
           </Menu.Item>
         ))
       ) : (

@@ -84,7 +84,7 @@ function DoctorInfo() {
     // Tạo đối tượng Date cho appointment và set giờ, phút
     const appointmentDate = new Date(selectedDateObj.fullDate);
     appointmentDate.setHours(hours, minutes, 0, 0);
-    appointmentDate.setHours(appointmentDate.getHours() + 7); // UTC+7
+    appointmentDate.setHours(appointmentDate.getHours()); // UTC+7
     const appointmentDateISO = appointmentDate.toISOString();
 
     // Tạo object đặt lịch với thông tin cần thiết
