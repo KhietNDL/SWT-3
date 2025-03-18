@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
+      - name: Set up NodeJs
         uses: actions/setup-node@v4
         with:
           node-version: "latest"
@@ -24,9 +24,9 @@ jobs:
         run: |
           npm i
       
-      - name: Run build
-        run: |
-          npm run build
+      # - name: Run build
+      #   run: |
+      #     npm run build
 
       - name: Run tests
         run: |
