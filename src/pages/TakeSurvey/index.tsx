@@ -1,15 +1,15 @@
 import Footer from "../../components/Footer"
-import GAD7FormPage from "../../components/SurveyForm/GAD7Form"
 import Header from "../../components/Header"
+import TakeSurvey from "../../components/TakeSurvey/TakeSurvey";
 
-function GAD7Form() {
+function TakeSurveyPage() {
   return (
     <div>
       <header>
         <Header />
       </header>
       <main>
-        <GAD7FormPage />
+        <TakeSurvey />
       </main>
       <footer>
         <Footer />
@@ -18,4 +18,4 @@ function GAD7Form() {
   );
 }
 
-export default GAD7Form;
+export default TakeSurveyPage;

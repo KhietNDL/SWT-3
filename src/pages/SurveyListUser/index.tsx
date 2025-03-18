@@ -1,16 +1,16 @@
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
-import AssessmentList from "../../components/SurveyListUser/AssessmentList"
+import UserSurveyList from "../../components/SurveyListUser/UserSurveyList"
 
 
-function SurveyOption() {
+function SurveyListPage() {
   return (
     <div>
       <header>
         <Header />
       </header>
       <main>
-        <AssessmentList />
+        <UserSurveyList />
       </main>
       <footer>
         <Footer />
@@ -19,4 +19,4 @@ function SurveyOption() {
   );
 }
 
-export default SurveyOption;
+export default SurveyListPage;
