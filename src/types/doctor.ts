@@ -4,4 +4,7 @@ export interface DoctorType {
   email: string;
   phoneNumber: string;
   specialization: string;
+  description: string;
+  achievements: string;
+  imgUrl: string;
 } 

@@ -8,6 +8,7 @@ import { logout } from "../../redux/features/userSlice";
 import logo from "../../images/Logo.png";
 import WeeklySchedule from "../WeeklyCalendar";
 import { RootState } from "../../redux/Store";
+import Notification from "../AppointmentNoti";
 
 const ConsultantSidebar = () => {
   const [activePage, setActivePage] = useState("Schedule");
@@ -58,6 +59,7 @@ const ConsultantSidebar = () => {
 
       <div className="content">
         {activePage === "Schedule" && <WeeklySchedule />}
+        {activePage === "Notifications" && <Notification />}
       </div>
     </div>
   );

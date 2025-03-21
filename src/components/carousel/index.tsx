@@ -9,26 +9,17 @@ import "./index.scss";
 
 // import required modules
 import { Autoplay, Navigation } from "swiper/modules";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { PosterType, CarouselProps } from "../../types/carousel";
+import { CarouselProps } from "../../types/carousel";
+import Carousel1 from "../../images/Screenshot 2025-03-21 081912.png";
+import Carousel2 from "../../images/Screenshot 2025-03-21 081935.png";
+import Carousel3 from "../../images/Screenshot 2025-03-21 082003.png";
 
 export default function Carousel({
   numberOfSlides = 1,
   autoplay = false,
 }: CarouselProps) {
-  const [poster, setPoster] = useState<PosterType[]>([]);
+  const localImages = [Carousel1, Carousel2, Carousel3];
 
-  const fetchMovies = async () => {
-    const response = await axios.get(
-      "https://67825c7ac51d092c3dcf3248.mockapi.io/SS"
-    );
-    console.log();
-    setPoster(response.data);
-  };
-  useEffect(() => {
-    fetchMovies();
-  }, []);
   return (
     <>
       <Swiper
@@ -41,9 +32,9 @@ export default function Carousel({
         modules={autoplay ? [Navigation, Autoplay] : [Navigation]}
         className={`carousel ${numberOfSlides > 1 ? "multi" : ""}`}
       >
-        {poster.map((Poster) => (
-          <SwiperSlide>
-            <img src={Poster.poster_path} />
+        {localImages.map((image, index) => (
+          <SwiperSlide key={index}>
+            <img src={image} alt={`Carousel ${index + 1}`} />
           </SwiperSlide>
         ))}
       </Swiper>

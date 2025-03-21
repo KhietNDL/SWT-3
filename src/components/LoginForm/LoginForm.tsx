@@ -57,7 +57,13 @@ const LoginPage: React.FC = () => {
     try {
       const userData = await handleLogin(formData.email, formData.password);
       localStorage.setItem("token", userData.token);
-      navigate("/");
+      if (userData.roleName === "Manager") {
+        navigate("/manage");
+      } else if (userData.roleName === "Psychologist") {
+        navigate("/Psychologist");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       setErrors({ auth: "Đăng nhập thất bại. Vui lòng thử lại." });
     } finally {
@@ -103,7 +109,9 @@ const LoginPage: React.FC = () => {
 
       const decodedToken: any = jwtDecode(token);
       const userId = decodedToken.sub || "unknown"; // Lấy ID của user
+
       console.log("🆔 User ID:", userId);
+
       const fetchUserInfo = async (userId: string) => {
         try {
           const response = await fetch(
@@ -137,7 +145,7 @@ const LoginPage: React.FC = () => {
       sessionStorage.setItem("token", token)
 
       dispatch(login(userInfo));
-      navigate("/");
+      
 
       return userInfo;
     } catch (err) {

@@ -60,7 +60,7 @@ const router = createBrowserRouter([
           </RequireManager>
         ),
       },
-      { path: "Psycologist", element: <Psychologist /> },
+      { path: "Psychologist", element: <Psychologist /> },
       { path: "order-detail/:id", element: <OrderDetailPage /> },
       { path: "payment", element: <PaymentPage /> },
     ],

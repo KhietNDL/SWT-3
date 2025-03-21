@@ -92,12 +92,15 @@ function DoctorInfo() {
       accountId: user?.id,
       psychologistId: id,
       content: bookingContent, // Thêm nội dung đặt lịch
-      appointmentDate: appointmentDateISO
+      appointmentDate: appointmentDateISO,
+      status: "pending"
     };
 
     // Gửi request POST đến API
     try {
+      console.log("Đang đặt lịch:", appointmentObj);
       const response = await axios.post("http://localhost:5199/Appointment", appointmentObj);
+      console.log("Đặt lịch thành công:", response.data);
       toast.success("Đặt lịch thành công!", {
         position: "top-right",
         autoClose: 3000, // Đóng sau 3 giây
@@ -143,22 +146,18 @@ function DoctorInfo() {
       <div className="doctor-information">
         <div className="doctor-profile">
           <div className="doctor-image">
-            <img src={doctor?.poster_path} alt={doctor?.name} />
+            <img src={doctor?.imgUrl} alt={doctor?.name} />
           </div>
-          <h2 className="doctor-name">TS. BSCK II NGUYỄN VĂN DŨNG</h2>
+          <h2 className="doctor-name">{doctor?.name}</h2>
           <p className="doctor-position">
-            Phó viện trưởng Viện sức khỏe tâm thần Bệnh viện Bạch Mai Hà Nội
+            {doctor?.specialization}
           </p>
 
           <div className="profile-section">
             <h3 className="section-title">LÝ LỊCH CÁ NHÂN</h3>
             <div className="info-item">
               <div className="label">Họ và tên:</div>
-              <div className="value">Nguyễn Văn Dũng</div>
-            </div>
-            <div className="info-item">
-              <div className="label">Nơi đào tạo:</div>
-              <div className="value">Trường Đại học Y Hà Nội</div>
+              <div className="value">{doctor?.name}</div>
             </div>
           </div>
 
@@ -166,13 +165,7 @@ function DoctorInfo() {
             <h3 className="section-title">THÀNH TÍCH</h3>
             <div className="info-item">
               <div className="value">
-                - Bằng khen của chủ tịch nước, của tổng bí thư và phó thủ tướng
-                nước CNHXCN Việt Nam trao tặng
-              </div>
-            </div>
-            <div className="info-item">
-              <div className="value">
-                - Bằng khen của bộ trưởng bộ y tế... và các cấp khác
+                {doctor?.achievements}
               </div>
             </div>
           </div>
@@ -180,19 +173,14 @@ function DoctorInfo() {
           <div className="profile-section">
             <h3 className="section-title">THÔNG TIN LIÊN HỆ</h3>
             <div className="info-item">
-              <div className="label">Địa chỉ:</div>
+              <div className="label">SĐT:</div>
               <div className="value">
-                Tầng 7 tòa nhà 59 Võ Chí Công, Phường Nghĩa Đô, Quận Cầu Giấy,
-                Tp. Hà Nội, Việt Nam
+                {doctor?.phoneNumber}
               </div>
             </div>
             <div className="info-item">
-              <div className="label">Tổng đài tư vấn:</div>
-              <div className="value">19003307</div>
-            </div>
-            <div className="info-item">
               <div className="label">Email:</div>
-              <div className="value">lienhe@braincare.vn</div>
+              <div className="value">{doctor?.email}</div>
             </div>
             <div className="info-item">
               <div className="label">Website:</div>
@@ -206,20 +194,7 @@ function DoctorInfo() {
             <h3 className="section-title">KINH NGHIỆM LÀM VIỆC CÁ NHÂN</h3>
             <div className="content">
               <p>
-                Tiến sĩ Bác sĩ Chuyên khoa 2 Nguyễn Văn Dũng là bác sĩ Cao cấp
-                hàng đầu của Viện sức khỏe tâm thần – Bệnh viện Bạch Mai.
-              </p>
-              <p>
-                Là người thầy luôn tận tâm với bệnh nhân, với nhiều năm kinh
-                nghiệm công tác tại các Bệnh viện tuyến đầu Việt Nam về lĩnh vực
-                "Sức khỏe tâm thần" đã giúp cho rất nhiều bệnh nhân có thể trở
-                lại cuộc sống bình thường.
-              </p>
-              <p>
-                TS. BSCK II Nguyễn Văn Dũng trong quá trình công tác của mình đã
-                có rất nhiều "Bằng khen" mà trong đó có danh hiệu rất cao quý
-                của người thầy thuốc: "Thầy thuốc Ưu tú" do Thủ tướng chính phủ
-                nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam khen tặng.
+                {doctor?.description}
               </p>
             </div>
           </div>

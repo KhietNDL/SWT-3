@@ -72,7 +72,7 @@ function Header() {
           <Menu.Item key={index}>
             <h3>Lịch khám</h3>
             <strong>{appointment.psychologist.name}</strong> - {formatDate(appointment.appointmentDate)}
-            <p>{appointment.content}</p>
+            <p>{appointment.content}  ({appointment.status})</p>
             <Button
               type="link"
               danger
